@@ -141,10 +141,35 @@
 
 # 👨‍👩‍👧‍👦 개발 멤버 및 역할분담
 
-|                                                                             **[정유진](https://github.com/breadbirds)**                                                                             |                                                                                           **[김성수]()**                                                                                            |                                                                                           **[김정언]()**                                                                                            |                                                                                           **[도승국]()**                                                                                            |                                                                                           **[이상혁]()**                                                                                            |                                                                                           **[이송희]()**                                                                                            |
-| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/d133ed351edaa7dcc1fa7e2c2d38826d/%EC%A0%95%EC%9C%A0%EC%A7%84.png" width="800" height="800" style="object-fit: cover;"> | <img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/8530717db2391c0185e8e20df9f3c8af/%EA%B9%80%EC%84%B1%EC%88%98.png" width="800" height="800" style="object-fit: cover;"> | <img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/eadaad75c6a97002348a7ce31c94271d/%EA%B9%80%EC%A0%95%EC%96%B8.png" width="800" height="800" style="object-fit: cover;"> | <img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/82b7121599bcc7b174aedb3600f6ce2b/%EB%8F%84%EC%8A%B9%EA%B5%AD.png" width="800" height="800" style="object-fit: cover;"> | <img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/d8fe9aca9307af2d17c50f5181a481b2/%EC%9D%B4%EC%83%81%ED%98%81.png" width="800" height="800" style="object-fit: cover;"> | <img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/d524386635e6548591ff1eaa50b459f0/%EC%9D%B4%EC%86%A1%ED%9D%AC.png" width="800" height="800" style="object-fit: cover;"> |
-|                                                                                       Leader & Frontend & AI                                                                                        |                                                                                               Backend                                                                                               |                                                                                                 AI                                                                                                  |                                                                                                Infra                                                                                                |                                                                                              Frontend                                                                                               |                                                                                              Frontend                                                                                               |
+<table style="width: 100%; text-align: center;">
+  <tr>
+    <th>구분</th>
+    <th>정유진</th>
+    <th>김성수</th>
+    <th>김정언</th>
+    <th>도승국</th>
+    <th>이상혁</th>
+    <th>이송희</th>
+  </tr>
+  <tr>
+    <td><b>사진</b></td>
+    <td><img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/d133ed351edaa7dcc1fa7e2c2d38826d/%EC%A0%95%EC%9C%A0%EC%A7%84.png" width="300"></td>
+    <td><img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/8530717db2391c0185e8e20df9f3c8af/%EA%B9%80%EC%84%B1%EC%88%98.png" width="300"></td>
+    <td><img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/eadaad75c6a97002348a7ce31c94271d/%EA%B9%80%EC%A0%95%EC%96%B8.png" width="300"></td>
+    <td><img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/82b7121599bcc7b174aedb3600f6ce2b/%EB%8F%84%EC%8A%B9%EA%B5%AD.png" width="300"></td>
+    <td><img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/d8fe9aca9307af2d17c50f5181a481b2/%EC%9D%B4%EC%83%81%ED%98%81.png" width="300"></td>
+    <td><img src="https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/uploads/d524386635e6548591ff1eaa50b459f0/%EC%9D%B4%EC%86%A1%ED%9D%AC.png" width="300"></td>
+  </tr>
+  <tr>
+    <td><b>역할</b></td>
+    <td>Leader & Frontend & AI</td>
+    <td>Backend</td>
+    <td>AI</td>
+    <td>Infra</td>
+    <td>Frontend</td>
+    <td>Frontend</td>
+  </tr>
+</table>
 
 <br/>
 
