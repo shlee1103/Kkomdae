@@ -132,6 +132,9 @@
 
 ## Git
 
+-   [Git Convention 노션](https://thinkable-bear-51d.notion.site/1a4c2f3f4a77815299c7feb0724d372c?pvs=4)
+-   [Git Wiki](https://lab.ssafy.com/s12-ai-image-sub1/S12P21D101/-/wikis/Git)
+
 <br/>
 
 <div id="6"></div>
