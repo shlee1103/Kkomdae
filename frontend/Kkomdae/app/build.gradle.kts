@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.gms.google-services")
+   // id("com.google.gms.google-services")
 }
 
 val localProperties = Properties()
@@ -14,7 +14,7 @@ if(localPropertiesFile.exists()){
 
 android {
     namespace = "com.pizza.kkomdae"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.pizza.kkomdae"
