@@ -1,14 +1,382 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainFragment">
+    android:background="@color/white"
+    tools:context=".MainActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_top_bar"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_height="40dp">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/iv_logo_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_logo_small"/>
+
+        <TextView
+            android:id="@+id/tv_welcome_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이송희님 안녕하세요!"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/iv_logo_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="12dp"/>
+
+        <ImageView
+            android:id="@+id/iv_logout_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_logout"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_sub"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_top_bar">
+
+                <TextView
+                    android:layout_marginStart="24dp"
+                    android:id="@+id/tv_sub_message_part1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="보이지 않는 흠집까지,"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_sub_message_part2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:textSize="24sp"
+                    android:id="@+id/tv_sub_message_part2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="꼼대"
+                    android:textStyle="bold"
+                    android:textColor="#3B82F6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/tv_sub_message_part1"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_sub_message_part1" />
+
+                <TextView
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:id="@+id/tv_sub_message_part3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가 찾아드려요."
+                    app:layout_constraintBottom_toBottomOf="@id/tv_sub_message_part2"
+                    app:layout_constraintStart_toEndOf="@id/tv_sub_message_part2"
+                    app:layout_constraintTop_toTopOf="@id/tv_sub_message_part2" />
+
+                <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_sub_message_part3"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_logo_big"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_marginStart="24dp"
+                android:id="@+id/tv_register_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대여 기기 등록"
+                app:layout_constraintTop_toBottomOf="@id/cl_sub"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"/>
+
+            <HorizontalScrollView
+                android:id="@+id/sv_register"
+                android:layout_width="match_parent"
+                android:scrollbars="none"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_register_title"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_laptop"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_width="300dp"
+                        android:layout_height="200dp"
+                        app:cardCornerRadius="16dp"
+                        android:layout_marginStart="24dp"
+                        app:cardElevation="6dp"
+                        android:backgroundTint="#FFF6DA"
+                        android:layout_marginBottom="32dp"
+                        android:layout_marginTop="14dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:cardBackgroundColor="@color/white">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/tv_laptop_title"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginStart="20dp"
+                                android:textStyle="bold"
+                                android:textSize="26sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="노트북"/>
+
+                            <TextView
+                                android:id="@+id/tv_laptop_sub"
+                                android:layout_width="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="#8A8A8A"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="@id/tv_laptop_title"
+                                app:layout_constraintTop_toBottomOf="@id/tv_laptop_title"
+                                android:text="6개월 간 어쩌고 저쩌고"/>
+
+                            <ImageView
+                                android:layout_width="110dp"
+                                android:src="@drawable/ic_laptap_big"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_height="110dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="기기 등록하기"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginBottom="16dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:paddingVertical="5dp"
+                                android:paddingHorizontal="7dp"
+                                android:background="#C4D3E2"
+                                android:layout_marginStart="20dp"/>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_mobile"
+                        android:layout_width="300dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="32dp"
+                        android:backgroundTint="#C9F7D5"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="6dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cv_laptop"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/tv_mobile_title"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginStart="20dp"
+                                android:textStyle="bold"
+                                android:textSize="26sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="모바일"/>
+
+                            <TextView
+                                android:id="@+id/tv_mobile_sub"
+                                android:layout_width="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="#8A8A8A"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="@id/tv_mobile_title"
+                                app:layout_constraintTop_toBottomOf="@id/tv_mobile_title"
+                                android:text="6개월 간 어쩌고 저쩌고"/>
+
+                            <ImageView
+                                android:layout_width="110dp"
+                                android:src="@drawable/ic_laptap_big"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_height="110dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="기기 등록하기"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginBottom="16dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:paddingVertical="5dp"
+                                android:paddingHorizontal="7dp"
+                                android:background="#C4D3E2"
+                                android:layout_marginStart="20dp"/>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cv_iot"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_width="300dp"
+                        android:layout_height="200dp"
+                        app:cardCornerRadius="16dp"
+                        android:layout_marginStart="24dp"
+                        app:cardElevation="6dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="32dp"
+                        android:layout_marginTop="14dp"
+                        app:layout_constraintStart_toEndOf="@id/cv_mobile"
+                        app:cardBackgroundColor="#FBE6E2">
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/tv_iot_title"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:layout_marginTop="16dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginStart="20dp"
+                                android:textStyle="bold"
+                                android:textSize="26sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Iot"/>
+
+                            <TextView
+                                android:id="@+id/tv_iot_sub"
+                                android:layout_width="wrap_content"
+                                android:textSize="14sp"
+                                android:textColor="#8A8A8A"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="@id/tv_iot_title"
+                                app:layout_constraintTop_toBottomOf="@id/tv_iot_title"
+                                android:text="6개월 간 어쩌고 저쩌고"/>
+
+                            <ImageView
+                                android:layout_width="110dp"
+                                android:src="@drawable/ic_laptap_big"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_height="110dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="기기 등록하기"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                android:layout_marginBottom="16dp"
+                                android:textSize="12sp"
+                                android:textColor="@color/white"
+                                android:paddingVertical="5dp"
+                                android:paddingHorizontal="7dp"
+                                android:background="#C4D3E2"
+                                android:layout_marginStart="20dp"/>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </HorizontalScrollView>
+
+
+            <TextView
+                android:layout_marginStart="24dp"
+                android:id="@+id/tv_submission_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대여 기기 등록"
+                app:layout_constraintTop_toBottomOf="@id/sv_register"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_submission"
+                android:layout_width="0dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="14dp"
+                tools:listitem="@layout/item_submission"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_submission_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
