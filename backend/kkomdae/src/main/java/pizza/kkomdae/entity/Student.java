@@ -1,17 +1,17 @@
 package pizza.kkomdae.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long studentId;
-    String name;
-    int studentNum;
-    String region;
-    int classNum;
+    private long studentId;
+    private String name;
+    private int studentNum;
+    private String region;
+    private int classNum;
+    @OneToOne
+    @JoinColumn(name = "rent_id")
+    private Rent rent;
 }
