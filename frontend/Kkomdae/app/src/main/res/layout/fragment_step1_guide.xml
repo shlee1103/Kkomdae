@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.guide.Step1GuideFragment">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_register_top_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_step"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="44dp"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        android:layout_height="wrap_content">
+    <include
+        layout="@layout/layout_step_guide"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/cl_step"
+       android:layout_marginTop="20dp"
+       >
+       <ImageView
+           android:id="@+id/iv_frame_icon"
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:src="@drawable/ic_shot_guide1"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"/>
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+
+           android:layout_width="0dp"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="24dp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/iv_frame_icon">
+
+           <ImageView
+               android:id="@+id/iv_icon1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_shot_guide2"
+               app:layout_constraintEnd_toEndOf="@id/tv_description1"
+               app:layout_constraintStart_toStartOf="@id/tv_description1"
+               app:layout_constraintTop_toTopOf="parent" />
+
+           <TextView
+               android:id="@+id/tv_description1"
+               style="@style/Title1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:gravity="center"
+               android:lineSpacingExtra="-5dp"
+               android:text="가로로\n촬영하세요."
+               android:textColor="@color/gray700"
+               app:layout_constraintEnd_toStartOf="@+id/tv_description2"
+               app:layout_constraintHorizontal_bias="0.5"
+               app:layout_constraintHorizontal_chainStyle="spread"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@id/iv_icon1" />
+
+           <ImageView
+               android:id="@+id/iv_icon2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_shot_guide3"
+               app:layout_constraintEnd_toEndOf="@id/tv_description2"
+               app:layout_constraintStart_toStartOf="@id/tv_description2"
+               app:layout_constraintTop_toTopOf="parent" />
+
+           <TextView
+               android:id="@+id/tv_description2"
+               style="@style/Title2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:gravity="center"
+               android:lineSpacingExtra="-5dp"
+               android:text="밝은 배경에서\n촬영하세요"
+               app:layout_constraintEnd_toStartOf="@+id/tv_description3"
+               app:layout_constraintHorizontal_bias="0.5"
+               app:layout_constraintStart_toEndOf="@+id/tv_description1"
+               app:layout_constraintTop_toBottomOf="@id/iv_icon2" />
+
+           <ImageView
+               android:id="@+id/iv_icon3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/ic_shot_guide4"
+               app:layout_constraintEnd_toEndOf="@id/tv_description3"
+               app:layout_constraintStart_toStartOf="@id/tv_description3"
+               app:layout_constraintTop_toTopOf="parent" />
+
+           <TextView
+               android:id="@+id/tv_description3"
+               style="@style/Title1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:gravity="center"
+               android:lineSpacingExtra="-5dp"
+               android:text="밝은 배경에서\n촬영하세요"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintHorizontal_bias="0.5"
+               app:layout_constraintStart_toEndOf="@+id/tv_description2"
+               app:layout_constraintTop_toBottomOf="@id/iv_icon3" />
+
+           <TextView
+               android:id="@+id/tv_description4"
+               style="@style/Title3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="24dp"
+               android:text="복사본이나 사진은 사용할 수 없습니다."
+               android:textColor="@color/gray300"
+               app:layout_constraintStart_toStartOf="@id/tv_description1"
+               app:layout_constraintTop_toBottomOf="@id/tv_description2" />
+
+           <TextView
+               android:id="@+id/tv_description5"
+               style="@style/Title3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="자신의 노트북으로 촬영하세요."
+               android:textColor="@color/blue300"
+               app:layout_constraintStart_toStartOf="@id/tv_description1"
+               app:layout_constraintTop_toBottomOf="@id/tv_description4" />
+
+           <TextView
+               android:id="@+id/tv_description6"
+               style="@style/Title3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="12dp"
+               android:lineSpacingExtra="-10dp"
+               android:text="노트북의 상태를 정확히 확인할 수 없는 경우"
+               android:textColor="@color/gray300"
+               app:layout_constraintStart_toStartOf="@id/tv_description1"
+               app:layout_constraintTop_toBottomOf="@id/tv_description5" />
+
+           <TextView
+               android:id="@+id/tv_description7"
+               style="@style/Title3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:lineSpacingExtra="-10dp"
+               android:text="대여 심사에 영황을 미칠 수 있습니다."
+               android:textColor="@color/gray300"
+               app:layout_constraintStart_toStartOf="@id/tv_description1"
+               app:layout_constraintTop_toBottomOf="@id/tv_description6" />
+
+           <TextView
+               android:id="@+id/tv_description8"
+               style="@style/Title3"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="불이익이 없도록 선명하게 촬영해 주세요."
+               android:textColor="@color/blue300"
+               app:layout_constraintStart_toStartOf="@id/tv_description1"
+               app:layout_constraintTop_toBottomOf="@id/tv_description7" />
+
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+<Button
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/blue300"
+    android:textColor="@color/white"
+    android:text="다음"
+    android:layout_margin="24dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
