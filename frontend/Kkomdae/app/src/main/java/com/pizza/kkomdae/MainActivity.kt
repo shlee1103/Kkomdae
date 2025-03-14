@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.pizza.kkomdae.databinding.ActivityMainBinding
+import com.pizza.kkomdae.ui.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,5 +16,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+        val transaction = supportFragmentManager.beginTransaction()
+        supportFragmentManager.popBackStack()
+        transaction.replace(R.id.fl_main, MainFragment())
+        transaction.commit()
     }
 }
