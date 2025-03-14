@@ -33,8 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="이송희님 안녕하세요!"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            style="@style/Display3"
             app:layout_constraintStart_toEndOf="@id/iv_logo_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -67,32 +66,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="보이지 않는 흠집까지,"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    style="@style/Headline2"
                     app:layout_constraintBottom_toTopOf="@+id/tv_sub_message_part2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:textSize="24sp"
                     android:id="@+id/tv_sub_message_part2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="꼼대"
-                    android:textStyle="bold"
+                    style="@style/Display2"
                     android:textColor="#3B82F6"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_sub_message_part1"
                     app:layout_constraintTop_toBottomOf="@+id/tv_sub_message_part1" />
 
                 <TextView
-                    android:textSize="24sp"
-                    android:textStyle="bold"
                     android:id="@+id/tv_sub_message_part3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="가 찾아드려요."
+                    style="@style/Display2"
+                    android:textColor="@color/gray700"
                     app:layout_constraintBottom_toBottomOf="@id/tv_sub_message_part2"
                     app:layout_constraintStart_toEndOf="@id/tv_sub_message_part2"
                     app:layout_constraintTop_toTopOf="@id/tv_sub_message_part2" />
@@ -111,6 +108,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                style="@style/Headline2"
                 android:layout_marginStart="24dp"
                 android:id="@+id/tv_register_title"
                 android:layout_width="wrap_content"
@@ -118,8 +116,6 @@
                 android:text="대여 기기 등록"
                 app:layout_constraintTop_toBottomOf="@id/cl_sub"
                 app:layout_constraintStart_toStartOf="parent"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 android:layout_marginTop="24dp"/>
 
             <HorizontalScrollView
@@ -154,13 +150,13 @@
                             android:layout_height="match_parent">
 
                             <TextView
+                                style="@style/Display1"
+                                android:textColor="@color/gray700"
                                 android:id="@+id/tv_laptop_title"
                                 app:layout_constraintTop_toTopOf="parent"
                                 android:layout_marginTop="16dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginStart="20dp"
-                                android:textStyle="bold"
-                                android:textSize="26sp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="노트북"/>
@@ -168,8 +164,7 @@
                             <TextView
                                 android:id="@+id/tv_laptop_sub"
                                 android:layout_width="wrap_content"
-                                android:textSize="14sp"
-                                android:textColor="#8A8A8A"
+                                style="@style/Body1"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintStart_toStartOf="@id/tv_laptop_title"
                                 app:layout_constraintTop_toBottomOf="@id/tv_laptop_title"
@@ -191,11 +186,13 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginBottom="16dp"
-                                android:textSize="12sp"
+                                style="@style/Label3"
+
                                 android:textColor="@color/white"
                                 android:paddingVertical="5dp"
                                 android:paddingHorizontal="7dp"
-                                android:background="#C4D3E2"
+                                android:backgroundTint="@color/gray200"
+                                android:background="@drawable/border_gray_rounded"
                                 android:layout_marginStart="20dp"/>
 
 
@@ -229,21 +226,20 @@
                                 android:layout_marginTop="16dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginStart="20dp"
-                                android:textStyle="bold"
-                                android:textSize="26sp"
+                                style="@style/Display1"
+                                android:textColor="@color/gray700"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="모바일"/>
 
                             <TextView
                                 android:id="@+id/tv_mobile_sub"
+                                style="@style/Body1"
                                 android:layout_width="wrap_content"
-                                android:textSize="14sp"
-                                android:textColor="#8A8A8A"
                                 android:layout_height="wrap_content"
+                                android:text="6개월 간 어쩌고 저쩌고"
                                 app:layout_constraintStart_toStartOf="@id/tv_mobile_title"
-                                app:layout_constraintTop_toBottomOf="@id/tv_mobile_title"
-                                android:text="6개월 간 어쩌고 저쩌고"/>
+                                app:layout_constraintTop_toBottomOf="@id/tv_mobile_title" />
 
                             <ImageView
                                 android:layout_width="110dp"
@@ -261,7 +257,7 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginBottom="16dp"
-                                android:textSize="12sp"
+                                style="@style/Label3"
                                 android:textColor="@color/white"
                                 android:paddingVertical="5dp"
                                 android:paddingHorizontal="7dp"
@@ -308,7 +304,7 @@
                             <TextView
                                 android:id="@+id/tv_iot_sub"
                                 android:layout_width="wrap_content"
-                                android:textSize="14sp"
+                                style="@style/Body1"
                                 android:textColor="#8A8A8A"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintStart_toStartOf="@id/tv_iot_title"
@@ -331,11 +327,12 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginBottom="16dp"
-                                android:textSize="12sp"
+                                style="@style/Label3"
                                 android:textColor="@color/white"
                                 android:paddingVertical="5dp"
                                 android:paddingHorizontal="7dp"
-                                android:background="#C4D3E2"
+                                android:backgroundTint="@color/gray200"
+                                android:background="@drawable/border_gray_rounded"
                                 android:layout_marginStart="20dp"/>
 
 
@@ -349,6 +346,7 @@
 
 
             <TextView
+                style="@style/Headline2"
                 android:layout_marginStart="24dp"
                 android:id="@+id/tv_submission_title"
                 android:layout_width="wrap_content"
@@ -356,8 +354,7 @@
                 android:text="대여 기기 등록"
                 app:layout_constraintTop_toBottomOf="@id/sv_register"
                 app:layout_constraintStart_toStartOf="parent"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+               />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_submission"

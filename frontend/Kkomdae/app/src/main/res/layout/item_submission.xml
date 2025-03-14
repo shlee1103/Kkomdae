@@ -20,8 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="NT761XDA-X07/C(11세대)"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        style="@style/Title1"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
@@ -31,6 +30,7 @@
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Body2"
         app:layout_constraintStart_toStartOf="@id/tv_model_number"
         app:layout_constraintTop_toBottomOf="@id/tv_model_number"
         android:text="대여일자 : "
@@ -41,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2025.01.03"
+        style="@style/Body2"
         app:layout_constraintStart_toEndOf="@id/tv_date"
         app:layout_constraintTop_toTopOf="@id/tv_date"
         app:layout_constraintBottom_toBottomOf="@id/tv_date"/>
@@ -56,9 +57,9 @@
 
     <TextView
         android:id="@+id/bt_file_download"
-        android:textSize="12sp"
+       style="@style/Label3"
         android:textColor="#474B52"
-        android:textStyle="bold"
+
         android:background="@drawable/border_gray_rounded"
         android:layout_width="130dp"
         android:layout_height="30dp"
@@ -78,8 +79,7 @@
         android:background="@drawable/border_orange_rounded"
         android:text="반납하기"
         android:textColor="#E4614F"
-        android:textSize="12sp"
-        android:textStyle="bold"
+        style="@style/Label3"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/bt_file_download"
