@@ -58,7 +58,7 @@
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxStrokeColor="@color/gray400"
-                android:hintEnabled="false">
+               >
 
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -94,7 +94,7 @@
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxStrokeColor="@color/gray400"
-                android:hintEnabled="false">
+               >
 
 
                 <com.google.android.material.textfield.TextInputEditText

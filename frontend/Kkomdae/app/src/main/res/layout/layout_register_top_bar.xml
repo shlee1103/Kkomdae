@@ -16,6 +16,18 @@
         android:layout_marginStart="24dp"/>
 
     <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="타이틀"
+        app:layout_constraintStart_toEndOf="@id/btn_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_step"
+        style="@style/Display3"/>
+
+    <TextView
+        android:id="@+id/tv_step"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3/3"
