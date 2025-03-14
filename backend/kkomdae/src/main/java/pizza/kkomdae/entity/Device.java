@@ -1,11 +1,13 @@
 package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import pizza.kkomdae.enums.DeviceType;
 
 import java.util.List;
 
 @Entity
+@Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "device_type")
 public class Device {
@@ -17,4 +19,6 @@ public class Device {
     private List<PhoneTestResult> phoneTestResults;
     @OneToMany(mappedBy = "device")
     private List<LaptopTestResult> laptopTestResults;
+    @OneToMany(mappedBy = "device")
+    private List<Rent> rent;
 }

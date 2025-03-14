@@ -8,6 +8,9 @@ public class Rent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rentId;
     private boolean release;
-    @OneToOne(mappedBy = "rent")
+    @ManyToOne
     private Student student;
+    @ManyToOne
+    private Device device;
+
 }

@@ -1,8 +1,12 @@
 package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+
+import java.util.List;
 
 @Entity
+@Getter
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,7 +15,6 @@ public class Student {
     private int studentNum;
     private String region;
     private int classNum;
-    @OneToOne
-    @JoinColumn(name = "rent_id")
-    private Rent rent;
+    @OneToMany(mappedBy = "student")
+    private List<Rent> rent;
 }

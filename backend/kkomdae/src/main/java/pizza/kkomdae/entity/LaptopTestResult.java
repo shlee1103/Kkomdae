@@ -1,11 +1,13 @@
 package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Getter
 public class LaptopTestResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

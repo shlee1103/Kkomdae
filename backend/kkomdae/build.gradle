@@ -32,10 +32,8 @@ dependencies {
 //  PDF
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.3'
     implementation 'com.itextpdf:itext7-core:7.2.6'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-//  JSP
-    runtimeOnly 'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0'
-    implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
 
     compileOnly 'org.projectlombok:lombok'
 
