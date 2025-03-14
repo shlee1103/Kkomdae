@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
         transaction.replace(R.id.fl_main, Step1GuideFragment())
+
         transaction.commit()
     }
 }

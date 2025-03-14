@@ -39,7 +39,9 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.topBar.tvStep.text = "외관 촬영 가이드"
+        binding.topBar.tvTitle.text = "외관 촬영 가이드"
+        binding.topBar.pbStep.progress=100/3
+        binding.topBar.tvStep.text="1/3"
     }
 
     companion object {
