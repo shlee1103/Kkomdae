@@ -1,12 +1,14 @@
 package pizza.kkomdae.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.expression.spel.ast.Projection;
 import pizza.kkomdae.entity.*;
 
 import java.util.List;
 
-public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestResultRepository{
+public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestResultRepository {
 
     private final JPAQueryFactory query;
 
@@ -15,17 +17,15 @@ public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestRes
     }
 
     @Override
-    public List<LaptopTestResult> getByStudent(Student student) {
+    public List<LaptopTestResult> getByStudent(long studentId) {
         QLaptopTestResult laptopTestResult = QLaptopTestResult.laptopTestResult;
         QDevice device = QDevice.device;
         QRent rent = QRent.rent;
-        QStudent qStudent = QStudent.student;
-        return query.select(laptopTestResult)
-                .from(laptopTestResult)
-                .leftJoin(device).on(laptopTestResult.device.eq(device))
-                .leftJoin(rent).on(device.eq(rent.device))
-//                .leftJoin(qStudent).on(rent.student.eq(qStudent))
-                .where(rent.student.eq(student))
+        return query
+                .selectFrom(laptopTestResult)
+                .join(laptopTestResult.device, device).fetchJoin()
+                .join(device.rent, rent)
+                .where(rent.student.studentId.eq(studentId))
                 .fetch();
     }
 }

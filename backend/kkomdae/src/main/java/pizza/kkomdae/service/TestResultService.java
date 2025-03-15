@@ -14,8 +14,8 @@ import java.util.List;
 public class TestResultService {
     private final LapTopTestResultRepository lapTopTestResultRepository;
     private final StudentRepository studentRepository;
-    public List<LaptopTestResult> getByStudent(long studentId) {
-        Student student = studentRepository.getReferenceById(studentId);
-        return lapTopTestResultRepository.getByStudent(student);
+    public List<LaptopTestResult> getByStudentOrDevice(Long studentId, Long deviceId) {
+
+        return lapTopTestResultRepository.getByStudent(studentId);
     }
 }

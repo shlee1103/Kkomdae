@@ -3,22 +3,25 @@ package pizza.kkomdae.repository;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import pizza.kkomdae.entity.QRent;
 import pizza.kkomdae.entity.QStudent;
 import pizza.kkomdae.entity.Student;
 
 import java.util.List;
 
-public class CustomStudentRepositoryImpl implements CustomStudentRepository{
+public class CustomStudentRepositoryImpl implements CustomStudentRepository {
 
     private final JPAQueryFactory query;
 
     public CustomStudentRepositoryImpl(EntityManager em) {
         this.query = new JPAQueryFactory(em);
     }
+
     @Override
-    public List<Student> findByKeyword(String searchType, String searchKeyword) {
+    public List<Student> findByKeywordWithStatus(String searchType, String searchKeyword) {
         return query.selectFrom(QStudent.student)
-                .where(isCondition(searchType,searchKeyword))
+                .leftJoin(QStudent.student.rent, QRent.rent).fetchJoin()
+                .where(isCondition(searchType, searchKeyword))
                 .orderBy(QStudent.student.studentNum.asc())
                 .fetch();
     }

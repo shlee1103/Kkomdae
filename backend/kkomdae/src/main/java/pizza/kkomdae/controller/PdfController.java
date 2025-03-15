@@ -366,7 +366,7 @@ public class PdfController {
                 .setVerticalAlignment(VerticalAlignment.MIDDLE);
 
         // 이미지 추가
-        String imagePath = PdfController.class.getClassLoader().getResource("test.jpg").getPath();
+        String imagePath = PdfController.class.getClassLoader().getResource("static/test.jpg").getPath();
         Image image = new Image(ImageDataFactory.create(imagePath));
 
         // 이미지 크기와 정렬 설정

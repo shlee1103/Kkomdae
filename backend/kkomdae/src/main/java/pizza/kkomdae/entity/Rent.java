@@ -1,8 +1,10 @@
 package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

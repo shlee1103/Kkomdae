@@ -5,5 +5,5 @@ import pizza.kkomdae.entity.Student;
 import java.util.List;
 
 public interface CustomStudentRepository {
-    List<Student> findByKeyword(String searchType, String searchKeyword);
+    List<Student> findByKeywordWithStatus(String searchType, String searchKeyword);
 }
