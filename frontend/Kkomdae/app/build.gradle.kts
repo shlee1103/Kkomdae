@@ -89,6 +89,7 @@ dependencies {
     implementation("io.coil-kt:coil:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
 
+
     // Progress Bar
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
         exclude(group = "com.android.support")
