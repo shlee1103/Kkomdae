@@ -89,6 +89,9 @@ dependencies {
     implementation("io.coil-kt:coil:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
 
+    // glide
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+
 
     // Progress Bar
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
