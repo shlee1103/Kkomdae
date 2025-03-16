@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pizza.kkomdae.dto.request.DeviceCond;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
+import pizza.kkomdae.dto.respond.DeviceWithStatus;
 import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.entity.*;
 import pizza.kkomdae.service.*;
@@ -59,9 +61,10 @@ public class AdminController {
     }
 
     @GetMapping("/devices")
-    public String devices(@RequestParam(required = false) String type, Model model) {
-        List<Laptop> results = deviceService.getLaptops();
-        model.addAttribute("laptopList", results);
+    public String devices(DeviceCond deviceCond, Model model) {
+        log.info("{} {}", deviceCond.getSearchKeyword(),deviceCond.getSearchType());
+        List<DeviceWithStatus> results = deviceService.getDevicesWithCond(deviceCond);
+        model.addAttribute("deviceList", results);
         return "devices";
     }
 
