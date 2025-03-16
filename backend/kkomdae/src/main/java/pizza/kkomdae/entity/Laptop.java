@@ -6,7 +6,5 @@ import lombok.Getter;
 @Entity
 @Getter
 public class Laptop extends Device{
-    String serialNum;
-    String barcodeNum;
-    String modelCode;
+    String laptopBarcodeNum;
 }

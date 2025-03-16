@@ -4,17 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pizza.kkomdae.dto.StudentResult;
+import pizza.kkomdae.dto.request.StudentWithRentCond;
+import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.entity.*;
-import pizza.kkomdae.service.AdminService;
-import pizza.kkomdae.service.DeviceService;
-import pizza.kkomdae.service.StudentService;
-import pizza.kkomdae.service.TestResultService;
+import pizza.kkomdae.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +24,10 @@ public class AdminController {
     private final StudentService studentService;
     private final AdminService adminService;
     private final DeviceService deviceService;
+    private final RentService rentService;
 
     // 관리자 로그인 페이지
-    @GetMapping("/index.do")
+    @GetMapping("/index")
     public String login() {
         return "index";
     }
@@ -53,38 +49,41 @@ public class AdminController {
         }
     }
 
+    // 학생목록 + 학생 별 대여 품목
     @GetMapping("/students")
-    public String students(@RequestParam(required = false) String searchType, @RequestParam(required = false) String searchKeyword, Model model) {
-
-
-        List<StudentResult> results = studentService.findByKeyword(searchType, searchKeyword);
-
-        model.addAttribute("reulstList", results);
+    public String students(StudentWithRentCond studentWithRentCond, Model model) {
+        List<StudentWithRent> results = rentService.getRentByStudent(studentWithRentCond);
+        log.info("{}",results.size());
+        model.addAttribute("students", results);
         return "students";
-    }
-
-    @GetMapping("/test-results")
-    public String testResults(@RequestParam(required = false) Long studentId,@RequestParam(required = false) Long deviceId , Model model) {
-        List<LaptopTestResult> results = testResultService.getByStudentOrDevice(studentId,deviceId);
-        model.addAttribute("resultList", results);
-        return "test-results";
     }
 
     @GetMapping("/devices")
     public String devices(@RequestParam(required = false) String type, Model model) {
-        List<Laptop>results = deviceService.getLaptops();
+        List<Laptop> results = deviceService.getLaptops();
         model.addAttribute("laptopList", results);
         return "devices";
     }
 
+    @GetMapping("/test-results")
+    public String testResults(@RequestParam(required = false) Long studentId, @RequestParam(required = false) Long deviceId, Model model) {
+        List<LaptopTestResult> results = testResultService.getByStudentOrDevice(studentId, deviceId);
+        model.addAttribute("resultList", results);
+        return "test-results";
+    }
+    
     @GetMapping("/photos")
     public String photos(@RequestParam long testResultId, @RequestParam String deviceType, Model model) {
         List<String> photoUrls = new ArrayList<>();
         photoUrls.add("/test.jpg");
-        photoUrls.add("/test.jpg");photoUrls.add("/test.jpg");photoUrls.add("/test.jpg");photoUrls.add("/test.jpg");
+        photoUrls.add("/test.jpg");
+        photoUrls.add("/test.jpg");
+        photoUrls.add("/test.jpg");
+        photoUrls.add("/test.jpg");
         log.info("urls size : {}", photoUrls.size());
-        model.addAttribute("photoUrls",photoUrls);
+        model.addAttribute("photoUrls", photoUrls);
         return "photos";
     }
+
 
 }

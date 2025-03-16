@@ -3,8 +3,7 @@ package pizza.kkomdae.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pizza.kkomdae.entity.LaptopTestResult;
-import pizza.kkomdae.entity.Student;
-import pizza.kkomdae.repository.LapTopTestResultRepository;
+import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 import pizza.kkomdae.repository.StudentRepository;
 
 import java.util.List;

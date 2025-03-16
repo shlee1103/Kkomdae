@@ -12,7 +12,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentId;
     private String name;
-    private int studentNum;
+    private String studentNum;
     private String region;
     private int classNum;
     @OneToMany(mappedBy = "student")

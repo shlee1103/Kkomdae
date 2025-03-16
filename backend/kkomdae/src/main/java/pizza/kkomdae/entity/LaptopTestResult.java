@@ -12,7 +12,7 @@ public class LaptopTestResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long laptopTestResultId;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     Device device;
     private boolean release;
     private boolean keyboardStatus;

@@ -1,4 +1,4 @@
-package pizza.kkomdae.repository;
+package pizza.kkomdae.repository.laptop;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -19,7 +19,8 @@ public class CustomStudentRepositoryImpl implements CustomStudentRepository {
 
     @Override
     public List<Student> findByKeywordWithStatus(String searchType, String searchKeyword) {
-        return query.selectFrom(QStudent.student)
+        return query.select(QStudent.student)
+                .from(QStudent.student)
                 .leftJoin(QStudent.student.rent, QRent.rent).fetchJoin()
                 .where(isCondition(searchType, searchKeyword))
                 .orderBy(QStudent.student.studentNum.asc())

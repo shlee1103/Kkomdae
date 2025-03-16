@@ -2,10 +2,8 @@ package pizza.kkomdae.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pizza.kkomdae.entity.Device;
 import pizza.kkomdae.entity.Laptop;
-import pizza.kkomdae.repository.DeviceRepository;
-import pizza.kkomdae.repository.LaptopRepository;
+import pizza.kkomdae.repository.laptop.LaptopRepository;
 
 import java.util.List;
 

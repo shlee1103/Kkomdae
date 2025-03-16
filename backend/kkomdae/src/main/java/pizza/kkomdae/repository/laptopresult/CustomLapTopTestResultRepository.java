@@ -1,8 +1,7 @@
-package pizza.kkomdae.repository;
+package pizza.kkomdae.repository.laptopresult;
 
 
 import pizza.kkomdae.entity.LaptopTestResult;
-import pizza.kkomdae.entity.Student;
 
 import java.util.List;
 

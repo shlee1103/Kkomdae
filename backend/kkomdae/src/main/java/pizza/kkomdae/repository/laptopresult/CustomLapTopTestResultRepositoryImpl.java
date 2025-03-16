@@ -1,9 +1,7 @@
-package pizza.kkomdae.repository;
+package pizza.kkomdae.repository.laptopresult;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.expression.spel.ast.Projection;
 import pizza.kkomdae.entity.*;
 
 import java.util.List;
