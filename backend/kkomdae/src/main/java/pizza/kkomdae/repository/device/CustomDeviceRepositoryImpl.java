@@ -20,9 +20,14 @@ public class CustomDeviceRepositoryImpl implements CustomDeviceRepository {
     public List<Device> getDeviceWithStatusByCond(DeviceCond deviceCond) {
         QDevice device = QDevice.device;
         return query.selectFrom(device)
-                .where(isCond(deviceCond.getSearchType(), deviceCond.getSearchKeyword()))
+                .where(isCond(deviceCond.getSearchType(), deviceCond.getSearchKeyword()),isType(deviceCond.getDeviceType()))
                 .orderBy(device.deviceId.asc())
                 .fetch();
+    }
+
+    private Predicate isType(String deviceType) {
+        if(deviceType!=null&&!deviceType.isBlank()) return QDevice.device.deviceType.eq(deviceType);
+        return null;
     }
 
     private Predicate isCond(String searchType, String keyword) {

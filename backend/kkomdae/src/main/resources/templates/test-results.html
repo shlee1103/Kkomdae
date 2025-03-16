@@ -55,7 +55,7 @@
 <body>
 <div class="container">
     <div class="admin-actions">
-        <a th:href="@{/admin/students}" class="btn btn-primary">회원 목록으로 돌아기기</a>
+        <a th:href="${referer}" class="btn btn-primary">돌아기기</a>
     </div>
     <br>
     <div class="table-container">
@@ -112,7 +112,7 @@
                 </td>
                 <td th:text="${result.step}">단계</td>
                 <td th:text="${result.date}">날짜</td>
-                <td><a class="btn btn-sm btn-primary" href="#" role="button">사진 상세</a></td>
+                <td><a class="btn btn-sm btn-primary" th:href="@{/admin/photos(testResultId=${result.getLaptopTestResultId()})}" role="button">사진 상세</a></td>
             </tr>
             </tbody>
         </table>

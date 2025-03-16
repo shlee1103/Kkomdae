@@ -34,11 +34,13 @@ public class StudentWithRent {
 
     @Getter
     public static class DeviceRentHistory {
+        private final long deviceId;
         private final String type;
         private final String modelCode;
         private final String serialNum;
 
         public DeviceRentHistory(Device device) {
+            this.deviceId=device.getDeviceId();
             if (device instanceof Laptop) {
                 Laptop laptop = (Laptop) device;
                 this.type = laptop.getDeviceType();

@@ -1,5 +1,6 @@
 package pizza.kkomdae.repository.laptopresult;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import pizza.kkomdae.entity.*;
@@ -15,15 +16,24 @@ public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestRes
     }
 
     @Override
-    public List<LaptopTestResult> getByStudent(long studentId) {
-        QLaptopTestResult laptopTestResult = QLaptopTestResult.laptopTestResult;
-        QDevice device = QDevice.device;
-        QRent rent = QRent.rent;
-        return query
-                .selectFrom(laptopTestResult)
-                .join(laptopTestResult.device, device).fetchJoin()
-                .join(device.rent, rent)
-                .where(rent.student.studentId.eq(studentId))
-                .fetch();
+    public List<LaptopTestResult> findByStudentOrDevice(Student student, Device device) {
+        return query.selectFrom(QLaptopTestResult.laptopTestResult)
+                .join(QLaptopTestResult.laptopTestResult.device, QDevice.device)
+                .join(QDevice.device.rent, QRent.rent)
+                .join(QRent.rent.student, QStudent.student)
+                .where(isCond(student,device))
+                .fetch()
+                ;
+    }
+
+    private Predicate isCond(Student student, Device device) {
+        if(student!=null && device!=null){
+            return QStudent.student.eq(student).and(QDevice.device.eq(device));
+        } else if (student!=null) {
+            return QStudent.student.eq(student);
+        } else if (device!=null) {
+            return QDevice.device.eq(device);
+        }
+        return null;
     }
 }

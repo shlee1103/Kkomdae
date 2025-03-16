@@ -1,5 +1,6 @@
 package pizza.kkomdae.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -55,28 +56,33 @@ public class AdminController {
     @GetMapping("/students")
     public String students(StudentWithRentCond studentWithRentCond, Model model) {
         List<StudentWithRent> results = rentService.getRentByStudent(studentWithRentCond);
-        log.info("{}",results.size());
+        log.info("{}", results.size());
         model.addAttribute("students", results);
         return "students";
     }
 
     @GetMapping("/devices")
     public String devices(DeviceCond deviceCond, Model model) {
-        log.info("{} {}", deviceCond.getSearchKeyword(),deviceCond.getSearchType());
+        log.info("{} {}", deviceCond.getSearchKeyword(), deviceCond.getSearchType());
         List<DeviceWithStatus> results = deviceService.getDevicesWithCond(deviceCond);
         model.addAttribute("deviceList", results);
         return "devices";
     }
 
     @GetMapping("/test-results")
-    public String testResults(@RequestParam(required = false) Long studentId, @RequestParam(required = false) Long deviceId, Model model) {
-        List<LaptopTestResult> results = testResultService.getByStudentOrDevice(studentId, deviceId);
+    public String testResults(HttpServletRequest request, @RequestParam(required = false) Long studentId,
+                              @RequestParam(required = false) Long deviceId, @RequestParam String deviceType, Model model) {
+        List<LaptopTestResult> results = testResultService.getByStudentOrDevice(studentId, deviceId, deviceType);
+        String referer = request.getHeader("referer");
+        model.addAttribute("referer", referer);
         model.addAttribute("resultList", results);
+        model.addAttribute("studentId", studentId);
+        model.addAttribute("deviceId", deviceId);
         return "test-results";
     }
-    
+
     @GetMapping("/photos")
-    public String photos(@RequestParam long testResultId, @RequestParam String deviceType, Model model) {
+    public String photos(@RequestParam long testResultId, Model model) {
         List<String> photoUrls = new ArrayList<>();
         photoUrls.add("/test.jpg");
         photoUrls.add("/test.jpg");

@@ -33,6 +33,13 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">기기 목록 페이지</h2>
+        <div>
+            <div class="col-md-12 mb-3">
+                <a href="/admin/students" class="btn btn-secondary me-2">
+                    <i class="fas fa-users me-1"></i> 학생 목록
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- 검색 필터 섹션 -->
@@ -40,7 +47,6 @@
         <div class="row g-3 align-items-end">
             <!-- 검색 유형 선택 -->
             <div class="col-md-2">
-                <label class="form-label">검색 조건</label>
                 <select class="form-select" name="searchType" id="selectedSearchType">
                     <option value="시리얼 번호">시리얼 번호</option>
                     <option value="모델코드">모델코드</option>
@@ -49,13 +55,13 @@
 
             <!-- 키워드 입력 -->
             <div class="col-md-8">
-                <label class="form-label">검색어</label>
                 <input type="text" class="form-control"
                        name="searchKeyword"
                        id="searchKeyword"
                        placeholder="검색어 입력"
                        oninput="validateSearch()">
             </div>
+
 
             <!-- 검색 버튼 -->
             <div class="col-md-2">
@@ -93,7 +99,7 @@
                 <span th:if="${device.isRelease() == true}" class="badge bg-success">사용 가능</span>
             </td>
             <td>
-                <a th:href="@{/admin/test-results(deviceId=${device.getDeviceId()})}" class="btn btn-sm btn-outline-primary">
+                <a th:href="@{/admin/test-results(deviceId=${device.getDeviceId()},deviceType=${device.getDeviceType()})}" class="btn btn-sm btn-outline-primary">
                     <i class="fas fa-info-circle"></i> 상세
                 </a>
             </td>

@@ -8,4 +8,5 @@ import lombok.Setter;
 public class DeviceCond {
     private String searchType;
     private String searchKeyword;
+    private String deviceType;
 }
