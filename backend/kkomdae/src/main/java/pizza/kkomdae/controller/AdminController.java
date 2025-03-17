@@ -52,6 +52,12 @@ public class AdminController {
             return "redirect:/error";
         }
     }
+    // 세션 삭제
+    @PostMapping("/logout")
+    public String logout() {
+        //Todo 세션 삭제
+        return "redirect:/admin/index";
+    }
 
     // 학생목록 + 학생 별 대여 품목
     @GetMapping("/students")
@@ -94,6 +100,5 @@ public class AdminController {
         model.addAttribute("photoUrls", photoUrls);
         return "photos";
     }
-
 
 }
