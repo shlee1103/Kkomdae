@@ -19,6 +19,7 @@ import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private lateinit var mainActivity: MainActivity
+
 class FontResultFragment : BaseFragment<FragmentFontResultBinding>(
     FragmentFontResultBinding::bind,
     R.layout.fragment_font_result

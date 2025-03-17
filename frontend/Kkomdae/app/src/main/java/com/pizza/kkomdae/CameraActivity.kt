@@ -1,29 +1,24 @@
 package com.pizza.kkomdae
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.pizza.kkomdae.databinding.ActivityCameraBinding
 import com.pizza.kkomdae.databinding.ActivityMainBinding
-import com.pizza.kkomdae.ui.LaptopInfoInputFragment
-import com.pizza.kkomdae.ui.MainFragment
-import com.pizza.kkomdae.ui.OathFragment
-import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
 import com.pizza.kkomdae.ui.guide.FontShotGuideFragment
 import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
-import com.pizza.kkomdae.ui.step1.FontResultFragment
-import com.pizza.kkomdae.ui.step1.Step1ResultFragment
-import com.pizza.kkomdae.ui.step3.FinalResultFragment
 
-class MainActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
+    private val binding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_camera)
+
 
         setContentView(binding.root)
         val transaction = supportFragmentManager.beginTransaction()
@@ -31,14 +26,9 @@ class MainActivity : AppCompatActivity() {
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_main, Step1GuideFragment())
+        transaction.replace(R.id.fl_camera, ScreenShotGuideFragment())
 
         transaction.commit()
 
-    }
-
-    fun next(){
-       val intent = Intent(this, CameraActivity::class.java)
-        startActivity(intent)
     }
 }
