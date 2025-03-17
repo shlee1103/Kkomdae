@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.pizza.kkomdae.databinding.ActivityCameraBinding
 import com.pizza.kkomdae.databinding.ActivityMainBinding
 import com.pizza.kkomdae.ui.guide.FontShotGuideFragment
+import com.pizza.kkomdae.ui.guide.KeypadGuideFragment
 import com.pizza.kkomdae.ui.guide.LeftGuideFragment
 import com.pizza.kkomdae.ui.guide.RightGuideFragment
 import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
@@ -28,7 +29,7 @@ class CameraActivity : AppCompatActivity() {
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_camera, RightGuideFragment())
+        transaction.replace(R.id.fl_camera, KeypadGuideFragment())
 
         transaction.commit()
 
