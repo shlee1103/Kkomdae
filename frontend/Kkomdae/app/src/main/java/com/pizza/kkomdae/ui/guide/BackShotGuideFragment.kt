@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 
@@ -16,7 +17,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-private lateinit var mainActivity: MainActivity
+private lateinit var cameraActivity: CameraActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -30,7 +31,7 @@ class BackShotGuideFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainActivity = context as MainActivity
+        cameraActivity = context as CameraActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +72,6 @@ class BackShotGuideFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        mainActivity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        cameraActivity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 }
