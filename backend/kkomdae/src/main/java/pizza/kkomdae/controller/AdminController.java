@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pizza.kkomdae.dto.request.DeviceCond;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.dto.respond.DeviceWithStatus;
+import pizza.kkomdae.dto.respond.LaptopTestResultWithStudent;
 import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.entity.*;
 import pizza.kkomdae.service.*;
@@ -72,10 +73,10 @@ public class AdminController {
     @GetMapping("/test-results")
     public String testResults(HttpServletRequest request, @RequestParam(required = false) Long studentId,
                               @RequestParam(required = false) Long deviceId, @RequestParam String deviceType, Model model) {
-        List<LaptopTestResult> results = testResultService.getByStudentOrDevice(studentId, deviceId, deviceType);
+        List<LaptopTestResultWithStudent> laptopTestResultWithStudent = testResultService.getByStudentOrDevice(studentId, deviceId, deviceType);
         String referer = request.getHeader("referer");
         model.addAttribute("referer", referer);
-        model.addAttribute("resultList", results);
+        model.addAttribute("laptopTestResultWithStudent", laptopTestResultWithStudent);
         model.addAttribute("studentId", studentId);
         model.addAttribute("deviceId", deviceId);
         return "test-results";
