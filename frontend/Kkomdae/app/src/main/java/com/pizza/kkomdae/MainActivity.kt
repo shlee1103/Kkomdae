@@ -9,6 +9,7 @@ import com.pizza.kkomdae.databinding.ActivityMainBinding
 import com.pizza.kkomdae.ui.LaptopInfoInputFragment
 import com.pizza.kkomdae.ui.MainFragment
 import com.pizza.kkomdae.ui.OathFragment
+import com.pizza.kkomdae.ui.guide.FontShotGuideFragment
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import com.pizza.kkomdae.ui.step1.FontResultFragment
 import com.pizza.kkomdae.ui.step1.Step1ResultFragment
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_main, FinalResultFragment())
+        transaction.replace(R.id.fl_main, FontShotGuideFragment())
 
         transaction.commit()
     }

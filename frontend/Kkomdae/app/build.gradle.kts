@@ -93,6 +93,11 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.14.2")
 
 
+    implementation ("androidx.camera:camera-core:1.3.0")
+    implementation ("androidx.camera:camera-lifecycle:1.3.0")
+    implementation ("androidx.camera:camera-view:1.3.0")
+
+
     // Progress Bar
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
         exclude(group = "com.android.support")
