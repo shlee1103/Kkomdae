@@ -68,6 +68,7 @@ public class AdminController {
         model.addAttribute("students", results);
         return "students";
     }
+    
 
     @GetMapping("/devices")
     public String devices(DeviceCond deviceCond, Model model) {
