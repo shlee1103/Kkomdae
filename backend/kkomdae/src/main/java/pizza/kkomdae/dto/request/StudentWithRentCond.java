@@ -2,6 +2,7 @@ package pizza.kkomdae.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
+import pizza.kkomdae.entity.Student;
 
 @Getter
 @Setter

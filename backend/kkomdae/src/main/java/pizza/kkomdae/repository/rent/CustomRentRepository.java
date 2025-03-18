@@ -6,5 +6,5 @@ import pizza.kkomdae.entity.Rent;
 import java.util.List;
 
 public interface CustomRentRepository {
-    List<Rent> getRentByStudentInfo(StudentWithRentCond studentWithRentCond);
+    List<Rent> getRentsByStudentInfo(StudentWithRentCond studentWithRentCond);
 }

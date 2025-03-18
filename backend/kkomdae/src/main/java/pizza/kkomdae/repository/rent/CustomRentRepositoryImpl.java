@@ -18,7 +18,7 @@ public class CustomRentRepositoryImpl implements CustomRentRepository {
 
 
     @Override
-    public List<Rent> getRentByStudentInfo(StudentWithRentCond studentWithRentCond) {
+    public List<Rent> getRentsByStudentInfo(StudentWithRentCond studentWithRentCond) {
         QRent rent = QRent.rent;
         QStudent student = QStudent.student;
         QDevice device = QDevice.device;
@@ -27,7 +27,8 @@ public class CustomRentRepositoryImpl implements CustomRentRepository {
                 .join(rent.device, device).fetchJoin()
                 .orderBy(student.studentNum.asc())
                 .where(isKeyword(studentWithRentCond.getKeyword(), studentWithRentCond.getSearchType()),
-                        isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassNum()))
+                        isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassNum())
+                )
                 .fetch()
                 ;
     }

@@ -12,9 +12,12 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentId;
     private String name;
+    private String email;
+    private Integer edu;
     private String studentNum;
     private String region;
-    private int classNum;
+    private Integer classNum;
+    private Boolean retireYn;
     @OneToMany(mappedBy = "student")
     private List<Rent> rent;
     @OneToMany(mappedBy = "student")
