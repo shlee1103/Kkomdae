@@ -7,7 +7,7 @@ import pizza.kkomdae.entity.Device;
 import pizza.kkomdae.entity.LaptopTestResult;
 import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.device.DeviceRepository;
-import pizza.kkomdae.repository.StudentRepository;
+import pizza.kkomdae.repository.student.StudentRepository;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 
 import java.util.ArrayList;

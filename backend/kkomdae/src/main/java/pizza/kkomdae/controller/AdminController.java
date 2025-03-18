@@ -44,8 +44,9 @@ public class AdminController {
 
     // adminCode 확인로직
     @PostMapping("/verify")
-    public String verify(@RequestParam String adminCode, RedirectAttributes redirectAttributes) {
+    public String verify(@RequestParam String adminCode) {
         Admin byCode = adminService.getByCode(adminCode);
+        //TODO 레디스 세션 추가
         if (byCode != null) {
             return "redirect:/admin/students";
         } else {
@@ -70,7 +71,6 @@ public class AdminController {
 
     @GetMapping("/devices")
     public String devices(DeviceCond deviceCond, Model model) {
-        log.info("{} {}", deviceCond.getSearchKeyword(), deviceCond.getSearchType());
         List<DeviceWithStatus> results = deviceService.getDevicesWithCond(deviceCond);
         model.addAttribute("deviceList", results);
         return "devices";
@@ -101,4 +101,13 @@ public class AdminController {
         return "photos";
     }
 
+    @GetMapping("/index-hj")
+    public String indexHj() {
+        return "index-hj";
+    }
+
+    @GetMapping("/login-hj")
+    public String loginHj() {
+        return "login-hj";
+    }
 }

@@ -1,4 +1,4 @@
-package pizza.kkomdae.repository;
+package pizza.kkomdae.repository.student;
 
 import pizza.kkomdae.entity.Student;
 
