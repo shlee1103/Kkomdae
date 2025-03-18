@@ -13,6 +13,7 @@ import com.pizza.kkomdae.ui.guide.LeftGuideFragment
 import com.pizza.kkomdae.ui.guide.RightGuideFragment
 import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
+import com.pizza.kkomdae.ui.step1.CameraBigFrameFragment
 
 class CameraActivity : AppCompatActivity() {
 
@@ -29,9 +30,10 @@ class CameraActivity : AppCompatActivity() {
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_camera, KeypadGuideFragment())
+        transaction.replace(R.id.fl_camera, CameraBigFrameFragment())
 
         transaction.commit()
 
     }
+
 }
