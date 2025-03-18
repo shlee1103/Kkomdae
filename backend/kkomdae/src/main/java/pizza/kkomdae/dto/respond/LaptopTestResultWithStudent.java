@@ -1,0 +1,37 @@
+package pizza.kkomdae.dto.respond;
+
+import lombok.Getter;
+import pizza.kkomdae.entity.LaptopTestResult;
+import pizza.kkomdae.entity.Student;
+
+import java.time.LocalDate;
+@Getter
+public class LaptopTestResultWithStudent {
+    private final long laptopTestId;
+    private final boolean release;
+    private final String studentRegion;
+    private final String studentName;
+    private final String studentNum;
+    private final String failedKeys;
+    private final String failedPorts;
+    private final boolean cameraStatus;
+    private final String batteryPdfUrl;
+    private final String resultPdfUrl;
+    private final LocalDate date;
+
+    public LaptopTestResultWithStudent(LaptopTestResult laptopTestResult) {
+        this.laptopTestId = laptopTestResult.getLaptopTestResultId();
+        this.studentRegion = laptopTestResult.getStudent().getRegion();
+        this.studentName = laptopTestResult.getStudent().getName();
+        this.studentNum = laptopTestResult.getStudent().getStudentNum();
+        this.release = laptopTestResult.isRelease();
+        this.failedKeys = laptopTestResult.getFailedKeys();
+        this.failedPorts = laptopTestResult.getFailedPorts();
+        this.cameraStatus = laptopTestResult.isCameraStatus();
+        this.batteryPdfUrl = laptopTestResult.getBatteryReportUrl();
+        this.resultPdfUrl = laptopTestResult.getPdfUrl();
+        this.date = laptopTestResult.getDate();
+    }
+
+
+}

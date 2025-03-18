@@ -93,8 +93,16 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.14.2")
 
 
+    // CameraX 핵심 라이브러리
     implementation ("androidx.camera:camera-core:1.3.0")
+
+    // CameraX - Camera2 기본 구현 (이게 없어서 오류 발생!)
+    implementation ("androidx.camera:camera-camera2:1.3.0")
+
+    // CameraX - 생명주기 처리 (Activity/Fragment에서 사용 가능)
     implementation ("androidx.camera:camera-lifecycle:1.3.0")
+
+    // CameraX - 미리보기
     implementation ("androidx.camera:camera-view:1.3.0")
 
 

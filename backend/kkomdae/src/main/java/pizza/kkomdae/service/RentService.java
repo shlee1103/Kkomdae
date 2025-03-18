@@ -3,7 +3,6 @@ package pizza.kkomdae.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pizza.kkomdae.dto.RentResults;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.entity.*;

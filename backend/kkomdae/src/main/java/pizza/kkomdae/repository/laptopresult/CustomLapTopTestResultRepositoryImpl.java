@@ -19,9 +19,9 @@ public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestRes
     public List<LaptopTestResult> findByStudentOrDevice(Student student, Device device) {
         return query.selectFrom(QLaptopTestResult.laptopTestResult)
                 .join(QLaptopTestResult.laptopTestResult.device, QDevice.device)
-                .join(QDevice.device.rent, QRent.rent)
-                .join(QRent.rent.student, QStudent.student)
+                .join(QLaptopTestResult.laptopTestResult.student,QStudent.student).fetchJoin()
                 .where(isCond(student,device))
+                .orderBy(QLaptopTestResult.laptopTestResult.date.desc())
                 .fetch()
                 ;
     }
