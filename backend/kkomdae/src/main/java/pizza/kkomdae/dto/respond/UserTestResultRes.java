@@ -1,18 +1,16 @@
 package pizza.kkomdae.dto.respond;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
-import pizza.kkomdae.entity.LaptopTestResult;
 import pizza.kkomdae.entity.Rent;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class UserTestResultRes {
-    private String modelCode;
-    private LocalDateTime dateTime;
-    private boolean release;
-    private String rentPdfUrl;
+    private final String modelCode;
+    private final LocalDateTime dateTime;
+    private final boolean release;
+    private final String rentPdfUrl;
     private String releasePdfUrl;
 
     public UserTestResultRes(Rent rent) {
