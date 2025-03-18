@@ -20,7 +20,6 @@ class CameraActivity : AppCompatActivity() {
     private val binding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_camera)
 
 
@@ -30,7 +29,7 @@ class CameraActivity : AppCompatActivity() {
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_camera, CameraBigFrameFragment())
+        transaction.replace(R.id.fl_camera, FontShotGuideFragment())
 
         transaction.commit()
 
