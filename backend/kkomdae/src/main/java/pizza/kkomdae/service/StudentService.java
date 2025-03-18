@@ -7,7 +7,6 @@ import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.dto.respond.LoginRes;
 import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.dto.respond.UserTestResultRes;
-import pizza.kkomdae.entity.LaptopTestResult;
 import pizza.kkomdae.entity.Rent;
 import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
@@ -48,8 +47,9 @@ public class StudentService {
         return null;
     }
 
-    public List<UserTestResultRes> getUserRentInfo() {
-        Student student = studentRepository.findByEmail("sskim629@gmail.com");
+    public List<UserTestResultRes> getUserRentInfo(long studentId) {
+        Student student = studentRepository.findById(studentId).orElseThrow();
+//        Student student = studentRepository.findByEmail("sskim629@gmail.com"); TODO jwt에서 추출한 이메일로 변경
         StudentWithRentCond cond = new StudentWithRentCond();
         cond.setStudent(student);
         List<Rent> laptopTestResults = rentRepository.getRentsByStudentInfo(cond);
