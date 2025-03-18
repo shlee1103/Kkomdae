@@ -11,4 +11,5 @@ public class StudentWithRentCond {
     private Integer classNum;
     private String searchType; //학번, 이름
     private String keyword;
+    private Student student;
 }

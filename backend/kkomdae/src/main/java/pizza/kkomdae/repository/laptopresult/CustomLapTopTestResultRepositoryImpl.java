@@ -1,8 +1,10 @@
 package pizza.kkomdae.repository.laptopresult;
 
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import pizza.kkomdae.dto.respond.UserTestResultRes;
 import pizza.kkomdae.entity.*;
 
 import java.util.List;
@@ -18,8 +20,9 @@ public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestRes
     @Override
     public List<LaptopTestResult> findByStudentOrDevice(Student student, Device device) {
         return query.selectFrom(QLaptopTestResult.laptopTestResult)
-                .join(QLaptopTestResult.laptopTestResult.device, QDevice.device)
+                .join(QLaptopTestResult.laptopTestResult.device, QDevice.device).fetchJoin()
                 .join(QLaptopTestResult.laptopTestResult.student,QStudent.student).fetchJoin()
+                .join(QDevice.device.rent,QRent.rent).fetchJoin()
                 .where(isCond(student,device))
                 .orderBy(QLaptopTestResult.laptopTestResult.date.desc())
                 .fetch()

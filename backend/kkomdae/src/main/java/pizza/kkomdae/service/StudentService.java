@@ -3,10 +3,14 @@ package pizza.kkomdae.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pizza.kkomdae.dto.request.LoginInfo;
+import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.dto.respond.LoginRes;
 import pizza.kkomdae.dto.respond.StudentWithRent;
+import pizza.kkomdae.dto.respond.UserTestResultRes;
+import pizza.kkomdae.entity.LaptopTestResult;
 import pizza.kkomdae.entity.Rent;
 import pizza.kkomdae.entity.Student;
+import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 import pizza.kkomdae.repository.rent.RentRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
 
@@ -19,6 +23,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final RentRepository rentRepository;
+    private final LapTopTestResultRepository lapTopTestResultRepository;
 
     // 노트북 현황은 반납하지 않은 rent 값이 true인 것이 있으면
     public List<StudentWithRent> findByKeyword(String searchType, String searchKeyword) {
@@ -43,7 +48,16 @@ public class StudentService {
         return null;
     }
 
-    public void getUserRentInfo() {
-//        rentRepository.getRentsByStudentInfo()
+    public List<UserTestResultRes> getUserRentInfo() {
+        Student student = studentRepository.findByEmail("sskim629@gmail.com");
+        StudentWithRentCond cond = new StudentWithRentCond();
+        cond.setStudent(student);
+        List<Rent> laptopTestResults = rentRepository.getRentsByStudentInfo(cond);
+        List<UserTestResultRes> results = new ArrayList<>();
+        for (Rent rent : laptopTestResults) {
+            results.add(new UserTestResultRes(rent));
+        }
+        return results;
+
     }
 }
