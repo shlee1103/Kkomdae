@@ -17,4 +17,6 @@ public class Student {
     private int classNum;
     @OneToMany(mappedBy = "student")
     private List<Rent> rent;
+    @OneToMany(mappedBy = "student")
+    private List<LaptopTestResult> laptopTestResults;
 }

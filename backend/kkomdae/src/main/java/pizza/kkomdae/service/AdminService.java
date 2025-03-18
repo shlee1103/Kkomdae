@@ -9,9 +9,7 @@ import pizza.kkomdae.repository.AdminRepository;
 @RequiredArgsConstructor
 public class AdminService {
 
-
     private final AdminRepository adminRepository;
-
     public Admin getByCode(String adminCode) {
         return adminRepository.getByCode(adminCode);
     }

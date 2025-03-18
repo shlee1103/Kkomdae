@@ -1,7 +1,5 @@
 package pizza.kkomdae.repository.rent;
 
-
-import pizza.kkomdae.dto.RentResults;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.entity.Rent;
 

@@ -28,5 +28,7 @@ public class LaptopTestResult {
     private int step;
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Student student;
     // Todo ai 결과를 어떻게 저장할 지 고민
 }

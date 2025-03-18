@@ -1,4 +1,4 @@
-package pizza.kkomdae.repository;
+package pizza.kkomdae.repository.student;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;

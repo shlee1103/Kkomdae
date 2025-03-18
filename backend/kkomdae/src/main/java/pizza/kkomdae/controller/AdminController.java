@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pizza.kkomdae.dto.request.DeviceCond;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.dto.respond.DeviceWithStatus;
+import pizza.kkomdae.dto.respond.LaptopTestResultWithStudent;
 import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.entity.*;
 import pizza.kkomdae.service.*;
@@ -43,13 +44,20 @@ public class AdminController {
 
     // adminCode 확인로직
     @PostMapping("/verify")
-    public String verify(@RequestParam String adminCode, RedirectAttributes redirectAttributes) {
+    public String verify(@RequestParam String adminCode) {
         Admin byCode = adminService.getByCode(adminCode);
+        //TODO 레디스 세션 추가
         if (byCode != null) {
             return "redirect:/admin/students";
         } else {
             return "redirect:/error";
         }
+    }
+    // 세션 삭제
+    @PostMapping("/logout")
+    public String logout() {
+        //Todo 세션 삭제
+        return "redirect:/admin/index";
     }
 
     // 학생목록 + 학생 별 대여 품목
@@ -63,7 +71,6 @@ public class AdminController {
 
     @GetMapping("/devices")
     public String devices(DeviceCond deviceCond, Model model) {
-        log.info("{} {}", deviceCond.getSearchKeyword(), deviceCond.getSearchType());
         List<DeviceWithStatus> results = deviceService.getDevicesWithCond(deviceCond);
         model.addAttribute("deviceList", results);
         return "devices";
@@ -72,10 +79,10 @@ public class AdminController {
     @GetMapping("/test-results")
     public String testResults(HttpServletRequest request, @RequestParam(required = false) Long studentId,
                               @RequestParam(required = false) Long deviceId, @RequestParam String deviceType, Model model) {
-        List<LaptopTestResult> results = testResultService.getByStudentOrDevice(studentId, deviceId, deviceType);
+        List<LaptopTestResultWithStudent> laptopTestResultWithStudent = testResultService.getByStudentOrDevice(studentId, deviceId, deviceType);
         String referer = request.getHeader("referer");
         model.addAttribute("referer", referer);
-        model.addAttribute("resultList", results);
+        model.addAttribute("laptopTestResultWithStudent", laptopTestResultWithStudent);
         model.addAttribute("studentId", studentId);
         model.addAttribute("deviceId", deviceId);
         return "test-results";
@@ -94,5 +101,13 @@ public class AdminController {
         return "photos";
     }
 
+    @GetMapping("/index-hj")
+    public String indexHj() {
+        return "index-hj";
+    }
 
+    @GetMapping("/login-hj")
+    public String loginHj() {
+        return "login-hj";
+    }
 }

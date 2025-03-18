@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pizza.kkomdae.dto.respond.StudentWithRent;
 import pizza.kkomdae.entity.Rent;
 import pizza.kkomdae.entity.Student;
-import pizza.kkomdae.repository.StudentRepository;
+import pizza.kkomdae.repository.student.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
