@@ -18,18 +18,29 @@ public class CustomRentRepositoryImpl implements CustomRentRepository {
 
 
     @Override
-    public List<Rent> getRentByStudentInfo(StudentWithRentCond studentWithRentCond) {
+    public List<Rent> getRentsByStudentInfo(StudentWithRentCond studentWithRentCond) {
         QRent rent = QRent.rent;
         QStudent student = QStudent.student;
         QDevice device = QDevice.device;
         return query.selectFrom(rent)
+                .distinct()
                 .join(rent.student, student).fetchJoin()
                 .join(rent.device, device).fetchJoin()
+                .join(rent.device.laptopTestResults,QLaptopTestResult.laptopTestResult).fetchJoin()
                 .orderBy(student.studentNum.asc())
                 .where(isKeyword(studentWithRentCond.getKeyword(), studentWithRentCond.getSearchType()),
-                        isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassNum()))
+                        isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassNum())
+                        ,isStudent(studentWithRentCond.getStudent())
+                ).orderBy(student.studentNum.asc(),QLaptopTestResult.laptopTestResult.laptopTestResultId.asc())
                 .fetch()
                 ;
+    }
+
+    private Predicate isStudent(Student student) {
+        if (student != null) {
+            return QStudent.student.eq(student);
+        }
+        return null;
     }
 
     private Predicate isRegion(String region, Integer classNum) {

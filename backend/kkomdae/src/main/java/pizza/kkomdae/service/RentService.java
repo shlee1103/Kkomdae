@@ -19,7 +19,7 @@ public class RentService {
 
 
     public List<StudentWithRent> getRentByStudent(StudentWithRentCond studentWithRentCond) {
-        List<Rent> rents = rentRepository.getRentByStudentInfo(studentWithRentCond);
+        List<Rent> rents = rentRepository.getRentsByStudentInfo(studentWithRentCond);
 
         List<StudentWithRent> results = new ArrayList<>();
         Student student = null;
@@ -34,12 +34,12 @@ public class RentService {
                 studentWithRent = new StudentWithRent(student);
             }
             StudentWithRent.DeviceRentHistory deviceRentHistory = new StudentWithRent.DeviceRentHistory(rent.getDevice());
-            if(!rent.isRelease())studentWithRent.setStatus(false);
+            if (rent.getReleaseDateTime() == null) studentWithRent.setStatus(false);
             studentWithRent.getDeviceRentHistory().add(deviceRentHistory);
-            log.info("{} {} {}",rent.getDevice().isRelease(),deviceRentHistory.getModelCode(), rent.getDevice().getDeviceType());
+            log.info("{} {} {}", rent.getDevice().isRelease(), deviceRentHistory.getModelCode(), rent.getDevice().getDeviceType());
 
         }
-        if(studentWithRent!=null)results.add(studentWithRent);
+        if (studentWithRent != null) results.add(studentWithRent);
         return results;
     }
 }
