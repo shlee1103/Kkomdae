@@ -6,14 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.guide.FontShotGuideFragment">
 
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:id="@+id/fl_camera"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+    <!-- 📸 카메라 미리보기 뷰 -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 📌 오버레이: 네모 틀과 반투명 검은색 배경 -->
+    <com.pizza.kkomdae.ui.CameraOverlayView
+        android:id="@+id/overlayView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
 
     <ImageButton
         android:id="@+id/btn_shot"
@@ -25,6 +31,24 @@
         android:layout_marginEnd="24dp"
         android:src="@drawable/ic_camera_btn"
         android:background="?attr/selectableItemBackgroundBorderless"/>
+
+    <ImageButton
+        android:id="@+id/btn_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_guide_info"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
@@ -38,7 +62,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_camera_step"
+        android:src="@drawable/ic_camera_step2"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,10 +116,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_text1"
-        android:layout_width="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintStart_toEndOf="@id/cl_frame"
         app:layout_constraintTop_toBottomOf="@id/tv_text1"
-        android:layout_marginStart="42dp"
+        android:layout_marginStart="20dp"
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_image1"
@@ -109,9 +135,8 @@
             />
 
         <TextView
-            style="@style/Body1"
             android:layout_marginStart="12dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="하판 전체가 프레임 안에 배치되도록 하세요"
@@ -214,6 +239,6 @@
         android:backgroundTint="@color/blue300"
         android:layout_marginEnd="50dp"/>
 
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

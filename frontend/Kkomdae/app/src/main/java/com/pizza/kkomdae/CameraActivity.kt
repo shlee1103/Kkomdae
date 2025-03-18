@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.pizza.kkomdae.databinding.ActivityCameraBinding
 import com.pizza.kkomdae.databinding.ActivityMainBinding
+import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
 import com.pizza.kkomdae.ui.guide.FontShotGuideFragment
 import com.pizza.kkomdae.ui.guide.KeypadGuideFragment
 import com.pizza.kkomdae.ui.guide.LeftGuideFragment
@@ -22,14 +23,13 @@ class CameraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-
         setContentView(binding.root)
         val transaction = supportFragmentManager.beginTransaction()
         supportFragmentManager.popBackStack()
 //        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_camera, FontShotGuideFragment())
+        transaction.replace(R.id.fl_camera, BackShotGuideFragment())
 
         transaction.commit()
 

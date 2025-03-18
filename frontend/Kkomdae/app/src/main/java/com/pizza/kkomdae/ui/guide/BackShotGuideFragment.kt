@@ -3,18 +3,28 @@ package com.pizza.kkomdae.ui.guide
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
+import com.pizza.kkomdae.base.BaseFragment
+import com.pizza.kkomdae.databinding.FragmentBackShotGuideBinding
+import com.pizza.kkomdae.databinding.FragmentFontShotGuideBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private var camera: Camera? = null
 
 
 private lateinit var cameraActivity: CameraActivity
@@ -24,7 +34,10 @@ private lateinit var cameraActivity: CameraActivity
  * Use the [BackShotGuideFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BackShotGuideFragment : Fragment() {
+class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
+    FragmentBackShotGuideBinding::bind,
+    R.layout.fragment_back_shot_guide
+) {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -42,12 +55,20 @@ class BackShotGuideFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_back_shot_guide, container, false)
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        startCamera()
+        binding.btnCancel?.setOnClickListener {
+            binding.clGuide?.isVisible = false
+            binding.overlayView?.isVisible=true
+        }
+
+        binding.btnGuide?.setOnClickListener {
+            binding.clGuide?.isVisible = true
+            binding.overlayView?.isVisible=false
+        }
     }
 
     companion object {
@@ -69,6 +90,30 @@ class BackShotGuideFragment : Fragment() {
                 }
             }
     }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            val preview = androidx.camera.core.Preview.Builder()
+                .build()
+                .also { it.setSurfaceProvider(binding.previewView?.surfaceProvider) }
+
+            try {
+                cameraProvider.unbindAll()
+                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview)
+            } catch (e: Exception) {
+                Log.e("CameraBigFrameFragment", "카메라 실행 오류: ${e.message}")
+            }
+
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+
 
     override fun onResume() {
         super.onResume()
