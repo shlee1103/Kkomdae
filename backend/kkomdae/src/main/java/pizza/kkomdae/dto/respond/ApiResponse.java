@@ -1,7 +1,9 @@
 package pizza.kkomdae.dto.respond;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ApiResponse {
     private boolean success;
     private HttpStatus status = HttpStatus.OK;

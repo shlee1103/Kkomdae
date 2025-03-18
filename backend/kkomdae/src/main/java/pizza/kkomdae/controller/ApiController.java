@@ -21,8 +21,9 @@ public class ApiController {
     }
 
     @GetMapping("/user-info")
-    public void userInfo(){
-        studentService.getUserRentInfo();
+    
+    public ApiResponse userInfo(){
+        return new ApiResponse(true,"조회 성공",studentService.getUserRentInfo());
     }
 
     @PostMapping("/test")
