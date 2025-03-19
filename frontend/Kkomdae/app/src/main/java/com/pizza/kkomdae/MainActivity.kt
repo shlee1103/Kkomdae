@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val transaction = supportFragmentManager.beginTransaction()
         supportFragmentManager.popBackStack()
-//        transaction.replace(R.id.fl_main, MainFragment())
+        transaction.replace(R.id.fl_main, MainFragment())
 //        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
 //        transaction.replace(R.id.fl_main, Step1GuideFragment())
-        transaction.replace(R.id.fl_main, Step1GuideFragment())
+//        transaction.replace(R.id.fl_main, Step1GuideFragment())
 
         transaction.commit()
         checkCameraPermission()
