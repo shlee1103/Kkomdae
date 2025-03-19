@@ -6,6 +6,9 @@ import com.pizza.kkomdae.base.BaseActivity
 import com.pizza.kkomdae.databinding.ActivityCameraBinding
 import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
 import com.pizza.kkomdae.ui.guide.FrontShotGuideFragment
+import com.pizza.kkomdae.ui.guide.LeftGuideFragment
+import com.pizza.kkomdae.ui.guide.RightGuideFragment
+import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.step1.ResultFragment
 
 class CameraActivity : BaseActivity() {
@@ -50,6 +53,23 @@ class CameraActivity : BaseActivity() {
                     .addToBackStack("sadfa")
                     .commit()
             }
+            3->{ // 좌측 촬영 가이드
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_camera, LeftGuideFragment())
+                    .addToBackStack("sadfa")
+                    .commit()
+            }
+            4->{ // 우측 촬영 가이드
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_camera, RightGuideFragment())
+                    .addToBackStack("sadfa")
+                    .commit()
+            }5->{ // 화면 촬영 가이드
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_camera, ScreenShotGuideFragment())
+                .addToBackStack("sadfa")
+                .commit()
+        }
 
         }
     }

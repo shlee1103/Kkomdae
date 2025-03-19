@@ -27,6 +27,14 @@ class MyAndroidViewModel(application: Application) : AndroidViewModel(applicatio
     val backUri: LiveData<Uri?>
         get() = _backUri
 
+    private val _leftUri = MutableLiveData<Uri?>()
+    val leftUri: LiveData<Uri?>
+        get() = _leftUri
+
+    private val _rightUri = MutableLiveData<Uri?>()
+    val rightUri: LiveData<Uri?>
+        get() = _rightUri
+
     // ✅ 사진 저장 메서드
     fun setFront(uri: Uri) {
         _frontUri.value = uri
@@ -34,6 +42,14 @@ class MyAndroidViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun setBack(uri: Uri) {
         _backUri.value = uri
+    }
+
+    fun setLeft(uri: Uri) {
+        _leftUri.value = uri
+    }
+
+    fun setRight(uri: Uri) {
+        _rightUri.value = uri
     }
 
     // ✅ 사진 저장 메서드

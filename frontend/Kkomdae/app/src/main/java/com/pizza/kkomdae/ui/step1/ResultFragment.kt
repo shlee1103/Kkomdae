@@ -56,11 +56,16 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
 
+        Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
         var url :Uri? = null
         if(viewModel.step.value ==1){
             url = viewModel.frontUri.value
         }else if (viewModel.step.value ==2){
             url = viewModel.backUri.value
+        }else if (viewModel.step.value ==3){
+            url = viewModel.leftUri.value
+        }else if (viewModel.step.value ==4){
+            url = viewModel.rightUri.value
         }
         binding.ivProduct?.let {
             Log.d(TAG, "CameraFragment: ")
