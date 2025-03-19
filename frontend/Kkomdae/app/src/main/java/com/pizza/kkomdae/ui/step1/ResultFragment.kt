@@ -66,6 +66,10 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
             url = viewModel.leftUri.value
         }else if (viewModel.step.value ==4){
             url = viewModel.rightUri.value
+        }else if (viewModel.step.value ==5){
+            url = viewModel.screenUri.value
+        }else if (viewModel.step.value ==6){
+            url = viewModel.keypadUri.value
         }
         binding.ivProduct?.let {
             Log.d(TAG, "CameraFragment: ")
@@ -78,6 +82,9 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
             cameraActivity.changeFragment(viewModel.step.value?:0)
         }
         binding.btnCheck?.setOnClickListener {
+            if(viewModel.step.value == 6){
+
+            }
             cameraActivity.changeFragment((viewModel.step.value?:-1)+1)
         }
     }

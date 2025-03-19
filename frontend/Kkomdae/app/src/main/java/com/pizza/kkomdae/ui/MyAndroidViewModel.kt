@@ -35,6 +35,14 @@ class MyAndroidViewModel(application: Application) : AndroidViewModel(applicatio
     val rightUri: LiveData<Uri?>
         get() = _rightUri
 
+    private val _screenUri = MutableLiveData<Uri?>()
+    val screenUri: LiveData<Uri?>
+        get() = _screenUri
+
+    private val _keypadUri = MutableLiveData<Uri?>()
+    val keypadUri: LiveData<Uri?>
+        get() = _keypadUri
+
     // ✅ 사진 저장 메서드
     fun setFront(uri: Uri) {
         _frontUri.value = uri
@@ -50,6 +58,14 @@ class MyAndroidViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun setRight(uri: Uri) {
         _rightUri.value = uri
+    }
+
+    fun setScreen(uri: Uri) {
+        _screenUri.value = uri
+    }
+
+    fun setKeypad(uri: Uri) {
+        _keypadUri.value = uri
     }
 
     // ✅ 사진 저장 메서드

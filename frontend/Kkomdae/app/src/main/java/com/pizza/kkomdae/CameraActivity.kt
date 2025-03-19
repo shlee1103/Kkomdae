@@ -6,6 +6,7 @@ import com.pizza.kkomdae.base.BaseActivity
 import com.pizza.kkomdae.databinding.ActivityCameraBinding
 import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
 import com.pizza.kkomdae.ui.guide.FrontShotGuideFragment
+import com.pizza.kkomdae.ui.guide.KeypadGuideFragment
 import com.pizza.kkomdae.ui.guide.LeftGuideFragment
 import com.pizza.kkomdae.ui.guide.RightGuideFragment
 import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
@@ -67,6 +68,11 @@ class CameraActivity : BaseActivity() {
             }5->{ // 화면 촬영 가이드
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_camera, ScreenShotGuideFragment())
+                .addToBackStack("sadfa")
+                .commit()
+            }6->{ // 키패드 촬영 가이드
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_camera, KeypadGuideFragment())
                 .addToBackStack("sadfa")
                 .commit()
         }
