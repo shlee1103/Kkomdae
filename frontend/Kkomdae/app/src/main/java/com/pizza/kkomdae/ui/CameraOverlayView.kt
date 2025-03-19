@@ -10,7 +10,7 @@ class CameraOverlayView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val overlayPaint = Paint().apply {
-        color = Color.parseColor("#80000000")  // 검은색 50% 투명 (#80 = 50% 투명도)
+        color = Color.parseColor("#80000000") // 검은색 50% 투명 (#80 = 50% 투명도)
         style = Paint.Style.FILL
     }
 
@@ -33,16 +33,8 @@ class CameraOverlayView @JvmOverloads constructor(
         val overlayMargin = if (isLandscape) width * 0.2f else height * 0.1f  // ✅ 네모 틀 마진 조정
 
         // 16:9 비율로 크기 설정
-        val rectWidth: Float
-        val rectHeight: Float
-
-        if (isLandscape) {
-            rectWidth = width - overlayMargin * 2
-            rectHeight = rectWidth / 356.6f * 229.1f   // 16:9 비율 유지
-        } else {
-            rectWidth = width - overlayMargin * 2
-            rectHeight = rectWidth /  356.6f * 229.1f // 16:9 비율 유지
-        }
+        val rectWidth = width - overlayMargin * 2
+        val rectHeight = rectWidth / 356.6f * 229.1f  // 16:9 비율 유지
 
         val left = (width - rectWidth) / 2
         val top = (height - rectHeight) / 2
@@ -51,13 +43,19 @@ class CameraOverlayView @JvmOverloads constructor(
 
         rect.set(left, top, right, bottom)
 
-        // 바깥 영역을 반투명하게 채우기
-        canvas.drawRect(0f, 0f, width, top, overlayPaint)
-        canvas.drawRect(0f, bottom, width, height, overlayPaint)
-        canvas.drawRect(0f, top, left, bottom, overlayPaint)
-        canvas.drawRect(right, top, width, bottom, overlayPaint)
+        // 🔹 1️⃣ 전체 반투명 배경을 먼저 채운다
+        val path = Path().apply {
+            addRoundRect(rect, 30f, 30f, Path.Direction.CW) // ✅ 둥근 모서리 적용된 네모 틀
+        }
 
-        // 네모 틀 그리기 (둥근 모서리 적용)
-        canvas.drawRoundRect(rect, 20f, 20f, borderPaint)
+        val overlayPath = Path().apply {
+            addRect(0f, 0f, width, height, Path.Direction.CW)
+            op(path, Path.Op.DIFFERENCE) // ✅ 네모 틀 부분을 깎아서 투명하게 만듦
+        }
+
+        canvas.drawPath(overlayPath, overlayPaint)
+
+        // 🔹 2️⃣ 네모 테두리를 그린다
+        canvas.drawRoundRect(rect, 30f, 30f, borderPaint)
     }
 }

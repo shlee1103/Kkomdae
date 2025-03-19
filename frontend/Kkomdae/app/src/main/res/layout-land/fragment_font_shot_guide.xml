@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.guide.FontShotGuideFragment">
+    tools:context=".ui.guide.FrontShotGuideFragment">
 
 
     <!-- 📸 카메라 미리보기 뷰 -->
@@ -23,6 +23,7 @@
 
 
     <ImageButton
+        android:visibility="gone"
         android:id="@+id/btn_shot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
 
     <ImageButton
         android:id="@+id/btn_guide"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_guide_info"
@@ -44,10 +46,22 @@
         android:layout_margin="20dp"
         />
 
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_margin="24dp"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_guide"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
 
 
@@ -93,6 +107,7 @@
             android:src="@drawable/ic_camera_image"/>
 
         <ImageView
+            android:id="@+id/image"
             android:layout_margin="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

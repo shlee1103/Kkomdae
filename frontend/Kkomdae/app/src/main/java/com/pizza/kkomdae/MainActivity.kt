@@ -2,22 +2,10 @@ package com.pizza.kkomdae
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.pizza.kkomdae.databinding.ActivityMainBinding
-import com.pizza.kkomdae.ui.LaptopInfoInputFragment
-import com.pizza.kkomdae.ui.MainFragment
-import com.pizza.kkomdae.ui.OathFragment
-import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
-import com.pizza.kkomdae.ui.guide.FontShotGuideFragment
-import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
-import com.pizza.kkomdae.ui.step1.FontResultFragment
-import com.pizza.kkomdae.ui.step1.Step1ResultFragment
-import com.pizza.kkomdae.ui.step3.FinalResultFragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.widget.Toast

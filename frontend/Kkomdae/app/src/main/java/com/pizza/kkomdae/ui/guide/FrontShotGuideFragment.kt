@@ -1,14 +1,11 @@
 package com.pizza.kkomdae.ui.guide
 
 import android.content.Context
-import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -18,12 +15,12 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.pizza.kkomdae.CameraActivity
-import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.databinding.FragmentBackShotGuideBinding
 import com.pizza.kkomdae.databinding.FragmentFontShotGuideBinding
 import com.pizza.kkomdae.ui.MyAndroidViewModel
 import java.io.File
@@ -34,18 +31,16 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private var imageCapture: ImageCapture? = null
 private var camera: Camera? = null
-
-
 private lateinit var cameraActivity: CameraActivity
 
 /**
  * A simple [Fragment] subclass.
- * Use the [BackShotGuideFragment.newInstance] factory method to
+ * Use the [FrontShotGuideFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
-    FragmentBackShotGuideBinding::bind,
-    R.layout.fragment_back_shot_guide
+class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
+    FragmentFontShotGuideBinding::bind,
+    R.layout.fragment_font_shot_guide
 ) {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -71,6 +66,7 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startCamera()
+
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
         // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
@@ -89,6 +85,7 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
             binding.btnShot?.isVisible = false
             binding?.btnGuide?.isVisible = false
         }
+
         // 뒤로 가기 버튼 눌렀을 때
         binding.btnBack?.setOnClickListener {
             cameraActivity.moveToBack()
@@ -98,26 +95,6 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
             takePhoto()
         }
 
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BackShotGuideFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BackShotGuideFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     private fun startCamera() {
@@ -151,6 +128,8 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+
+
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
@@ -166,12 +145,12 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
                     Log.d("CameraFragment", "사진 저장됨: $savedUri")
 
                     // ✅ ViewModel에 사진 저장
-                    viewModel.setBack(savedUri)
-                    viewModel.setStep(2)
+                    viewModel.setFront(savedUri)
+                    viewModel.setStep(1)
 
 
 
-                    cameraActivity.changeFragment(0)
+                   cameraActivity.changeFragment(0)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -180,10 +159,25 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
             })
     }
 
-
-
-    override fun onResume() {
-        super.onResume()
-        cameraActivity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment FontShotGuideFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            FrontShotGuideFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
+
+
 }
