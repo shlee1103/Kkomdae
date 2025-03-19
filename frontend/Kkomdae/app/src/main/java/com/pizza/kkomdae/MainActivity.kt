@@ -12,10 +12,8 @@ import com.pizza.kkomdae.ui.LaptopInfoInputFragment
 import com.pizza.kkomdae.ui.MainFragment
 import com.pizza.kkomdae.ui.OathFragment
 import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
-import com.pizza.kkomdae.ui.guide.FontShotGuideFragment
 import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
-import com.pizza.kkomdae.ui.step1.FontResultFragment
 import com.pizza.kkomdae.ui.step1.Step1ResultFragment
 import com.pizza.kkomdae.ui.step3.FinalResultFragment
 import android.Manifest
