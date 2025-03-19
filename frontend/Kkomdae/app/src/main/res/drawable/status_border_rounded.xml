@@ -6,9 +6,9 @@
     <!-- 테두리 설정 -->
     <stroke
         android:width="1dp"
-        android:color="#D9D9D9"/>  <!-- 테두리 색 (파란색 예제) -->
+        android:color="@color/blue300"/>  <!-- 테두리 색 (파란색 예제) -->
 
     <!-- 모서리 둥글게 설정 -->
-    <corners android:radius="25dp"/>
+    <corners android:radius="4dp"/>
 
 </shape>

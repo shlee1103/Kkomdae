@@ -9,10 +9,10 @@
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/tv_model_number"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="28dp"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_date"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_laptap_small"/>
     <TextView
@@ -21,32 +21,31 @@
         android:layout_height="wrap_content"
         android:text="NT761XDA-X07/C(11세대)"
         style="@style/Title1"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+        app:layout_constraintTop_toTopOf="@id/iv_icon"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/iv_icon"/>
 
     <TextView
-        android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Body2"
-        app:layout_constraintStart_toStartOf="@id/tv_model_number"
-        app:layout_constraintTop_toBottomOf="@id/tv_model_number"
-        android:text="대여일자 : "
-        />
+        android:text="대여중"
+        style="@style/Label1"
+        android:padding="4dp"
+        android:textColor="@color/blue300"
+        android:background="@drawable/status_border_rounded"
+        app:layout_constraintStart_toEndOf="@id/tv_model_number"
+        app:layout_constraintTop_toTopOf="@id/tv_model_number"
+        app:layout_constraintBottom_toBottomOf="@id/tv_model_number"
+       app:layout_constraintEnd_toStartOf="@id/btn_down"/>
 
-    <TextView
-        android:id="@+id/tv_date_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2025.01.03"
-        style="@style/Body2"
-        app:layout_constraintStart_toEndOf="@id/tv_date"
-        app:layout_constraintTop_toTopOf="@id/tv_date"
-        app:layout_constraintBottom_toBottomOf="@id/tv_date"/>
+
+
+
+
 
     <ImageView
+        android:id="@+id/btn_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_down"
@@ -55,34 +54,71 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="20dp"/>
 
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_icon"
+        android:background="@color/gray100"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="대여 : "
+        app:layout_constraintTop_toTopOf="@id/line"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        style="@style/Label4"
+        android:textColor="@color/gray400"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25/01/03"
+        style="@style/Label4"
+        app:layout_constraintTop_toTopOf="@id/tv_date"
+        app:layout_constraintStart_toEndOf="@id/tv_date"
+        android:id="@+id/tv_input_date"/>
+
+
     <TextView
         android:id="@+id/bt_file_download"
-       style="@style/Label3"
-        android:textColor="#474B52"
-
+       style="@style/Label1"
+        android:textColor="#3391FF"
+        android:padding="12dp"
         android:background="@drawable/border_gray_rounded"
-        android:layout_width="130dp"
-        android:layout_height="30dp"
+        android:backgroundTint="@color/blue100"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@id/bt_return_download"
-        app:layout_constraintTop_toBottomOf="@id/tv_date"
+        app:layout_constraintTop_toBottomOf="@id/line"
         android:text="대여 파일 다운로드"/>
 
     <TextView
         android:id="@+id/bt_return_download"
-        android:layout_width="130dp"
-        android:layout_height="30dp"
-        android:background="@drawable/border_orange_rounded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_gray_rounded"
+        android:backgroundTint="#FBE6E2"
         android:text="반납하기"
         android:textColor="#E4614F"
-        style="@style/Label3"
+        android:padding="12dp"
+        style="@style/Label1"
         android:gravity="center"
+        android:layout_marginEnd="28dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/bt_file_download"
        app:layout_constraintTop_toTopOf="@id/bt_file_download" />
 
 
