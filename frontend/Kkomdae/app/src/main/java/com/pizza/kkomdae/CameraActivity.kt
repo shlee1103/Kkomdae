@@ -1,9 +1,13 @@
 package com.pizza.kkomdae
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.pizza.kkomdae.base.BaseActivity
 import com.pizza.kkomdae.databinding.ActivityCameraBinding
+import com.pizza.kkomdae.ui.MyAndroidViewModel
 import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
 import com.pizza.kkomdae.ui.guide.FrontShotGuideFragment
 import com.pizza.kkomdae.ui.guide.KeypadGuideFragment
@@ -13,6 +17,7 @@ import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.step1.ResultFragment
 
 class CameraActivity : BaseActivity() {
+    private lateinit var myAndroidViewModel: MyAndroidViewModel
 
     private val binding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +32,11 @@ class CameraActivity : BaseActivity() {
 
         setContentView(binding.root)
         changeFragment(1)
+
+        myAndroidViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(MyAndroidViewModel::class.java)
 
     }
 
@@ -75,6 +85,12 @@ class CameraActivity : BaseActivity() {
                 .replace(R.id.fl_camera, KeypadGuideFragment())
                 .addToBackStack("sadfa")
                 .commit()
+        }7->{ // 키패드 촬영 가이드
+            val resultIntent = Intent().apply {
+                putExtra("PHOTO_URI", 1)  // ✅ URI 값을 전달
+            }
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
         }
 
         }

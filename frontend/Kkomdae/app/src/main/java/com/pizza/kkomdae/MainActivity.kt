@@ -9,17 +9,45 @@ import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
+import com.pizza.kkomdae.ui.MyAndroidViewModel
+import com.pizza.kkomdae.ui.step1.Step1ResultFragment
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     private val REQUEST_CAMERA_PERMISSION = 1001
+    private lateinit var myAndroidViewModel: MyAndroidViewModel
+
+    private val cameraResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val photoUri = result.data?.getIntExtra("PHOTO_URI",0)
+            if(photoUri==1){
+                val transaction = supportFragmentManager.beginTransaction()
+                supportFragmentManager.popBackStack()
+//        transaction.replace(R.id.fl_main, MainFragment())
+//        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
+//        transaction.replace(R.id.fl_main, Step1GuideFragment())
+                transaction.replace(R.id.fl_main, Step1ResultFragment())
+
+                transaction.commit()
+                checkCameraPermission()
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+
+
+
         val transaction = supportFragmentManager.beginTransaction()
         supportFragmentManager.popBackStack()
 //        transaction.replace(R.id.fl_main, MainFragment())
@@ -33,8 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     fun next(){
        val intent = Intent(this, CameraActivity::class.java)
-        startActivity(intent)
+        cameraResultLauncher.launch(intent)
     }
+
 
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)

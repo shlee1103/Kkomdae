@@ -82,9 +82,6 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
             cameraActivity.changeFragment(viewModel.step.value?:0)
         }
         binding.btnCheck?.setOnClickListener {
-            if(viewModel.step.value == 6){
-
-            }
             cameraActivity.changeFragment((viewModel.step.value?:-1)+1)
         }
     }

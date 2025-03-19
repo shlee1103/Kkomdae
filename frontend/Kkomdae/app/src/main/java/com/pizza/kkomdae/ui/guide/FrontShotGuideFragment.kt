@@ -67,6 +67,8 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         startCamera()
 
+
+
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
         // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
