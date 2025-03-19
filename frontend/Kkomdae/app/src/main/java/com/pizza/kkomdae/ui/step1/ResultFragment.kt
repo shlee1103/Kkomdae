@@ -2,29 +2,35 @@ package com.pizza.kkomdae.ui.step1
 
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import com.pizza.kkomdae.MainActivity
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentFontResultBinding
-import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
+import com.pizza.kkomdae.ui.MyAndroidViewModel
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
+import kotlin.math.log
 
 /**
  * A simple [Fragment] subclass.
- * Use the [FontResultFragment.newInstance] factory method to
+ * Use the [ResultFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+private const val TAG = "ResultFragment"
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var mainActivity: MainActivity
+private lateinit var cameraActivity: CameraActivity
 
-class FontResultFragment : BaseFragment<FragmentFontResultBinding>(
+class ResultFragment : BaseFragment<FragmentFontResultBinding>(
     FragmentFontResultBinding::bind,
     R.layout.fragment_font_result
 ){
-
+    private lateinit var viewModel: MyAndroidViewModel
 
 
 
@@ -35,7 +41,7 @@ class FontResultFragment : BaseFragment<FragmentFontResultBinding>(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainActivity = context as MainActivity
+        cameraActivity = context as CameraActivity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +54,36 @@ class FontResultFragment : BaseFragment<FragmentFontResultBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
 
+        Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
+        var url :Uri? = null
+        if(viewModel.step.value ==1){
+            url = viewModel.frontUri.value
+        }else if (viewModel.step.value ==2){
+            url = viewModel.backUri.value
+        }else if (viewModel.step.value ==3){
+            url = viewModel.leftUri.value
+        }else if (viewModel.step.value ==4){
+            url = viewModel.rightUri.value
+        }else if (viewModel.step.value ==5){
+            url = viewModel.screenUri.value
+        }else if (viewModel.step.value ==6){
+            url = viewModel.keypadUri.value
+        }
+        binding.ivProduct?.let {
+            Log.d(TAG, "CameraFragment: ")
+            Glide.with(it)
+                .load(url)
+                .into(it)
+        }
+
+        binding.btnBack?.setOnClickListener {
+            cameraActivity.changeFragment(viewModel.step.value?:0)
+        }
+        binding.btnCheck?.setOnClickListener {
+            cameraActivity.changeFragment((viewModel.step.value?:-1)+1)
+        }
     }
 
     companion object {
@@ -74,7 +109,7 @@ class FontResultFragment : BaseFragment<FragmentFontResultBinding>(
 
     override fun onResume() {
         super.onResume()
-        mainActivity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        cameraActivity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 
 

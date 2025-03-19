@@ -5,9 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -17,12 +15,13 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentFontShotGuideBinding
-import com.pizza.kkomdae.databinding.FragmentLeftGuideBinding
 import com.pizza.kkomdae.ui.MyAndroidViewModel
 import java.io.File
 
@@ -33,19 +32,22 @@ private const val ARG_PARAM2 = "param2"
 private var imageCapture: ImageCapture? = null
 private var camera: Camera? = null
 private lateinit var cameraActivity: CameraActivity
-private lateinit var viewModel: MyAndroidViewModel
+
 /**
  * A simple [Fragment] subclass.
- * Use the [LeftGuideFragment.newInstance] factory method to
+ * Use the [FrontShotGuideFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
-    FragmentLeftGuideBinding::bind,
-    R.layout.fragment_left_guide
+class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
+    FragmentFontShotGuideBinding::bind,
+    R.layout.fragment_font_shot_guide
 ) {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var viewModel: MyAndroidViewModel
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         cameraActivity = context as CameraActivity
@@ -63,9 +65,12 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        startCamera()
+
+
 
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
-
+        // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false
             binding.overlayView?.isVisible=true
@@ -82,11 +87,16 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
             binding.btnShot?.isVisible = false
             binding?.btnGuide?.isVisible = false
         }
-        startCamera()
 
-        binding.btnShot.setOnClickListener {
+        // 뒤로 가기 버튼 눌렀을 때
+        binding.btnBack?.setOnClickListener {
+            cameraActivity.moveToBack()
+        }
+
+        binding.btnShot?.setOnClickListener {
             takePhoto()
         }
+
     }
 
     private fun startCamera() {
@@ -137,12 +147,12 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
                     Log.d("CameraFragment", "사진 저장됨: $savedUri")
 
                     // ✅ ViewModel에 사진 저장
-                    viewModel.setLeft(savedUri)
-                    viewModel.setStep(3)
+                    viewModel.setFront(savedUri)
+                    viewModel.setStep(1)
 
 
 
-                    cameraActivity.changeFragment(0)
+                   cameraActivity.changeFragment(0)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -158,16 +168,18 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment LeftGuideFragment.
+         * @return A new instance of fragment FontShotGuideFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            LeftGuideFragment().apply {
+            FrontShotGuideFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
             }
     }
+
+
 }

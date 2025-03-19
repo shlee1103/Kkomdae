@@ -5,7 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
-class CameraOverlayView @JvmOverloads constructor(
+class CameraSideOverlayView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
@@ -30,11 +30,11 @@ class CameraOverlayView @JvmOverloads constructor(
         val height = height.toFloat()
         val isLandscape = width > height  // ✅ 가로 모드인지 체크
 
-        val overlayMargin = if (isLandscape) width * 0.2f else height * 0.1f  // ✅ 네모 틀 마진 조정
+        val overlayMargin = if (isLandscape) width * 0.15f else height * 0.1f  // ✅ 네모 틀 마진 조정
 
         // 16:9 비율로 크기 설정
         val rectWidth = width - overlayMargin * 2
-        val rectHeight = rectWidth / 356.6f * 229.1f  // 16:9 비율 유지
+        val rectHeight = rectWidth / 229.1f * 20f  // 16:9 비율 유지
 
         val left = (width - rectWidth) / 2
         val top = (height - rectHeight) / 2
