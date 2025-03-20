@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val transaction = supportFragmentManager.beginTransaction()
         supportFragmentManager.popBackStack()
-        transaction.replace(R.id.fl_main, QrScanFragment())
+        transaction.replace(R.id.fl_main, MainFragment())
 
         transaction.commit()
         checkCameraPermission()
