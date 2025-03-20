@@ -82,8 +82,8 @@
                         android:layout_height="32dp"
                         android:background="@drawable/circle_gray_background"
                         android:text="1"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
+                        style="@style/Title1"
+                        android:textColor="@color/blue500"
                         android:gravity="center"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -163,8 +163,8 @@
                         android:layout_height="32dp"
                         android:background="@drawable/circle_gray_background"
                         android:text="2"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
+                        style="@style/Title1"
+                        android:textColor="@color/blue500"
                         android:gravity="center"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -231,8 +231,8 @@
                         android:layout_height="32dp"
                         android:background="@drawable/circle_gray_background"
                         android:text="3"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"
+                        style="@style/Title1"
+                        android:textColor="@color/blue500"
                         android:gravity="center"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -265,18 +265,19 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
-                android:id="@+id/btn_complete"
+                android:id="@+id/btn_Start"
                 android:layout_width="0dp"
-                android:layout_height="51dp"
+                android:layout_height="56dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/steps_layout"
-                android:layout_marginBottom="24dp"
-                android:text="다음"
+                android:text="등록 시작하기"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
-                android:backgroundTint="@color/blue200"
+                android:backgroundTint="@color/blue500"
                 style="@style/Title1"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

@@ -23,6 +23,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Display3"/>
+        style="@style/Headline1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

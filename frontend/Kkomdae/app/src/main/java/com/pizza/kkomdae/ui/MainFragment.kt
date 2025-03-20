@@ -66,10 +66,9 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
 
         // 노트북 카드뷰 클릭 이벤트
         binding.cvLaptop.setOnClickListener {
-            // OathFragment로 전환
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fl_main, OathFragment())
-            transaction.addToBackStack(null) // 뒤로가기 지원
+            transaction.addToBackStack(null)
             transaction.commit()
         }
     }

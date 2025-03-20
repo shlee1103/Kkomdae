@@ -5,10 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
+import com.pizza.kkomdae.data.Submission
 import com.pizza.kkomdae.databinding.FragmentAllStepGuideBinding
 import com.pizza.kkomdae.databinding.FragmentMainBinding
+import com.pizza.kkomdae.ui.MainFragment
+import com.pizza.kkomdae.ui.OathFragment
+import com.pizza.kkomdae.ui.SubmissionAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,13 +42,26 @@ class AllStepGuideFragment : BaseFragment<FragmentAllStepGuideBinding>(
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_step_guide, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val topBarTitle = view.findViewById<View>(R.id.top_bar).findViewById<TextView>(R.id.tv_title)
+        topBarTitle.text = "기기 등록 절차"
+
+        binding.topBar.btnBack.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, OathFragment())
+            transaction.commit()
+        }
+
+        binding.btnStart.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, Step1GuideFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
+
 
     companion object {
         /**

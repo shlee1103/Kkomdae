@@ -193,7 +193,7 @@
 <Button
     android:id="@+id/btn_next"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="56dp"
     android:backgroundTint="@color/blue300"
     android:textColor="@color/white"
     android:text="다음"
