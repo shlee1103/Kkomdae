@@ -40,25 +40,25 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/iv_icon" />
-
+햣
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_image"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginVertical="40dp"
         app:cardCornerRadius="40dp"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="356.6:229.1"
         app:layout_constraintEnd_toStartOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_front"
+            android:id="@+id/iv_product"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </androidx.cardview.widget.CardView>
 
     <ImageButton
@@ -69,11 +69,11 @@
         app:layout_constraintBottom_toBottomOf="@id/cv_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/btn_back"
         app:layout_constraintTop_toBottomOf="@+id/tv_text1" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btn_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_retake_btn"
