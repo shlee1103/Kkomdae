@@ -13,9 +13,9 @@ public class Rent {
     private long rentId;
     private LocalDateTime releaseDateTime;
     private LocalDateTime rentDateTime;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Student student;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Device device;
 
 }

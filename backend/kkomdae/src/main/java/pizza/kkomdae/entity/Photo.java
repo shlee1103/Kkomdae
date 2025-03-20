@@ -1,9 +1,16 @@
 package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import pizza.kkomdae.dto.request.AiPhotoInfo;
 import pizza.kkomdae.enums.PhotoType;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@Setter
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,9 +19,16 @@ public class Photo {
     @Enumerated(EnumType.STRING)
     private PhotoType type;
     private String url;
+    private String resultUrl;
     @ManyToOne
     private LaptopTestResult laptopTestResult;
     @ManyToOne
     private PhoneTestResult phoneTestResult;
+
+    public Photo(AiPhotoInfo aiPhotoInfo) {
+        this.name = aiPhotoInfo.getName();
+        this.type = aiPhotoInfo.getType();
+        this.url = aiPhotoInfo.getS3PicUrl();
+    }
 }
 

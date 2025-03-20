@@ -2,12 +2,14 @@ package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class LaptopTestResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +33,9 @@ public class LaptopTestResult {
     @ManyToOne(fetch = FetchType.LAZY)
     private Student student;
     // Todo ai 결과를 어떻게 저장할 지 고민
+
+    public LaptopTestResult(Student student) {
+        this.student = student;
+    }
+
 }

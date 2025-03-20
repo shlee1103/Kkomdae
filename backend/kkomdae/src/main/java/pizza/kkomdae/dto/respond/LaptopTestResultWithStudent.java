@@ -2,7 +2,6 @@ package pizza.kkomdae.dto.respond;
 
 import lombok.Getter;
 import pizza.kkomdae.entity.LaptopTestResult;
-import pizza.kkomdae.entity.Student;
 
 import java.time.LocalDate;
 @Getter
