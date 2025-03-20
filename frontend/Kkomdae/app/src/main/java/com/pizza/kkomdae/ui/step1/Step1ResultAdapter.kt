@@ -1,21 +1,50 @@
 package com.pizza.kkomdae.ui.step1
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
+import com.pizza.kkomdae.R
 import com.pizza.kkomdae.data.Step1Result
 import com.pizza.kkomdae.databinding.ItemStep1ResultBinding
 
-class Step1ResultAdapter(val list: List<Step1Result>): RecyclerView.Adapter<Step1ResultAdapter.Step1ResultViewHolder>() {
+class Step1ResultAdapter(val list: List<Step1Result>, val listen:(Int)->Unit): RecyclerView.Adapter<Step1ResultAdapter.Step1ResultViewHolder>() {
+    private var selectedPosition: Int = RecyclerView.NO_POSITION
+
     inner class Step1ResultViewHolder(val binding: ItemStep1ResultBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Step1Result){
+        fun bind(position: Int){
             Glide.with(binding.ivPosition)
-                .load(item.image)
+                .load(list[position].image)
                 .into(binding.ivPosition)
 
-            binding.tvPosition.text= item.name
+            if (position == selectedPosition) {
+                binding.root.scaleX = 1.2f  // 가로 크기 증가
+                binding.root.scaleY = 1.2f  // 세로 크기 증가
+                (binding.root as MaterialCardView).setStrokeColor(ContextCompat.getColor(binding.root.context, R.color.blue500))
+
+            } else {
+                binding.root.scaleX = 1.0f
+                binding.root.scaleY = 1.0f
+                (binding.root as MaterialCardView).setStrokeColor(ContextCompat.getColor(binding.root.context, R.color.gray200))
+            }
+
+
+            binding.tvPosition.text= list[position].name
+            binding.root.setOnClickListener {
+                listen(position)
+                val previousPosition = selectedPosition
+                selectedPosition = position  // 현재 선택한 아이템 저장
+
+                notifyItemChanged(previousPosition) // 이전 선택 해제
+                notifyItemChanged(selectedPosition) // 현재 선택 업데이트
+
+                listen(position)
+            }
+
         }
     }
 
@@ -35,6 +64,6 @@ class Step1ResultAdapter(val list: List<Step1Result>): RecyclerView.Adapter<Step
 
     override fun onBindViewHolder(holder: Step1ResultViewHolder, position: Int) {
 
-        holder.bind(list[position])
+        holder.bind(position)
     }
 }

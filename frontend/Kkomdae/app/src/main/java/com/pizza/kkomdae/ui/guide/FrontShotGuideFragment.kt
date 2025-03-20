@@ -109,13 +109,13 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
 
             // ✅ ImageCapture 설정 (16:9 비율 유지)
             imageCapture = ImageCapture.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_16_9) // 📌 비율 설정
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3) // 📌 비율 설정
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY) // 빠른 캡처 모드
                 .build()
 
             // ✅ Preview 설정 (16:9 비율 유지)
             val preview = Preview.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_16_9) // 📌 비율 설정
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3) // 📌 비율 설정
                 .build()
                 .also {
                     it.setSurfaceProvider(binding.previewView?.surfaceProvider)
