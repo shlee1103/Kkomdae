@@ -28,12 +28,11 @@
     <TextView
         android:id="@+id/tv_text1"
         app:layout_constraintBottom_toTopOf="@id/tv_text2"
-        android:layout_marginTop="85dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="사진을 제출하면"
+        android:text="노트북 촬영 완료!"
         style="@style/Display1"
         android:textColor="@color/gray700"/>
 
@@ -41,8 +40,8 @@
         android:id="@+id/tv_text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AI가 꼼꼼하게 분석할게요!"
-        app:layout_constraintBottom_toTopOf="@id/tv_text3"
+        android:text="AI가 꼼꼼하게 분석할게요"
+        app:layout_constraintBottom_toTopOf="@id/cv_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="20dp"
@@ -50,11 +49,12 @@
 
     <TextView
         android:id="@+id/tv_text3"
+        app:layout_goneMarginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AI가 자동으로 흠집을 검증합니다."
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toTopOf="@id/cv_image"
+        android:text="모든 면을 터치하여 확인하세요"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/Title2"
@@ -64,32 +64,67 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_image"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         app:cardCornerRadius="40dp"
         app:cardElevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="356.6:229.1">
+        app:layout_constraintBottom_toTopOf="@id/tv_text3">
         <ImageView
             android:id="@+id/iv_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:src="@color/blue500"
             />        
     </androidx.cardview.widget.CardView>
 
-    <androidx.viewpager2.widget.ViewPager2
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_position"
         android:layout_width="0dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_height="148dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_image" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginVertical="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_text3"
+        app:layout_constraintBottom_toTopOf="@id/cl_tip"/>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:id="@+id/cl_tip"
+        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/border_gray_rounded"
+        android:backgroundTint="#FFF8E1"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="12dp"
+            android:src="@drawable/ic_tip"/>
+
+        <TextView
+            app:layout_constraintStart_toEndOf="@id/iv_tip"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="AI 분석 결과는 최종결과 화면에서 확인 가능합니다."/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/button"

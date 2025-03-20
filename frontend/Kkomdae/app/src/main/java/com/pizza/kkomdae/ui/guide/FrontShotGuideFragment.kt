@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
@@ -149,6 +150,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
                     // ✅ ViewModel에 사진 저장
                     viewModel.setFront(savedUri)
                     viewModel.setStep(1)
+                    AppData.frontUri = savedUri
 
 
 
