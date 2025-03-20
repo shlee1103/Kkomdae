@@ -49,6 +49,11 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
         Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
+
+        binding.topBar.tvTitle.text=""
+        binding.topBar.pbStep.progress=100/3
+        binding.topBar.tvStep.text=""
+
         Glide.with(binding.ivImage)
             .load(AppData.frontUri)
             .into(binding.ivImage)
@@ -61,10 +66,33 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
             Step1Result(R.drawable.ic_guide_keypad, "키판"),
         )
 
-        binding.rvPosition.adapter = Step1ResultAdapter(data)
+        binding.rvPosition.adapter = Step1ResultAdapter(data, listen = {
+            changeImage(it)
+        })
         binding.rvPosition.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
 
+    }
+
+    fun changeImage(it: Int){
+        var a = AppData.frontUri
+
+        if(it ==1){
+            a=AppData.frontUri
+        }else if(it == 2){
+            a=AppData.backUri
+        }else if (it ==3){
+            a=AppData.leftUri
+        }else if (it ==4){
+            a=AppData.rightUri
+        }else if (it ==5){
+            a=AppData.screenUri
+        }else if (it ==6){
+            a=AppData.keypadUri
+        }
+        Glide.with(binding.ivImage)
+            .load(a)
+            .into(binding.ivImage)
     }
 
     companion object {
