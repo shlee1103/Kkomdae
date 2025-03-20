@@ -18,6 +18,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
@@ -139,6 +140,7 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
                     // ✅ ViewModel에 사진 저장
                     viewModel.setLeft(savedUri)
                     viewModel.setStep(3)
+                    AppData.leftUri = savedUri
 
 
 

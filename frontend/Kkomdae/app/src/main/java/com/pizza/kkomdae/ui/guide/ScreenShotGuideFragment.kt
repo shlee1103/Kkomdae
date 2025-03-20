@@ -19,6 +19,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
@@ -162,6 +163,7 @@ class ScreenShotGuideFragment :  BaseFragment<FragmentScreenShotGuideBinding>(
                     // ✅ ViewModel에 사진 저장
                     viewModel.setScreen(savedUri)
                     viewModel.setStep(5)
+                    AppData.screenUri = savedUri
 
 
 
