@@ -21,6 +21,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import com.pizza.kkomdae.ui.QrScanFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val transaction = supportFragmentManager.beginTransaction()
         supportFragmentManager.popBackStack()
-        transaction.replace(R.id.fl_main, MainFragment())
+        transaction.replace(R.id.fl_main, QrScanFragment())
 
         transaction.commit()
         checkCameraPermission()
