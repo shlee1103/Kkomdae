@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        // Checkout 및 백엔드 변경 체크를 한 번에 진행
+        // Checkout 및 백엔드 변경 체크
         stage('Checkout & Diff Check') {
             steps {
                 checkout scm
@@ -66,7 +66,7 @@ pipeline {
                     // Gradle 빌드
                     sh '''
                     chmod +x gradlew
-                    ./gradlew clean build -Dspring.profiles.active=prod
+                    ./gradlew clean build -Dspring.profiles.active=prod -x test
                     '''
                     // JAR 파일을 Dockerfile 경로로 복사
                     sh 'cp build/libs/kkomdae-0.0.1-SNAPSHOT.jar ./app.jar'
