@@ -27,13 +27,6 @@ pipeline {
     /////////////////////////////////////////////////////////////////////////
     stages {
 
-        stage('Cleanup Workspace') {
-            steps {
-                // 워크스페이스 전체를 삭제하여 이전 데이터 제거
-                deleteDir()
-            }
-        }
-
         // Checkout 및 백엔드 변경 체크
         stage('Checkout & Diff Check') {
             steps {
@@ -66,7 +59,7 @@ pipeline {
                     // Gradle 빌드
                     sh '''
                     chmod +x gradlew
-                    ./gradlew clean build -Dspring.profiles.active=prod -x test
+                    ./gradlew clean build -Dspring.profiles.active=prod
                     '''
                     // JAR 파일을 Dockerfile 경로로 복사
                     sh 'cp build/libs/kkomdae-0.0.1-SNAPSHOT.jar ./app.jar'
