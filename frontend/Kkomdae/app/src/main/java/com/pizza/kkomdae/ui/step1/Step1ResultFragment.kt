@@ -52,7 +52,6 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 
         binding.topBar.tvTitle.text=""
         binding.topBar.pbStep.progress=100/3
-        binding.topBar.tvStep.text=""
 
         Glide.with(binding.ivImage)
             .load(AppData.frontUri)

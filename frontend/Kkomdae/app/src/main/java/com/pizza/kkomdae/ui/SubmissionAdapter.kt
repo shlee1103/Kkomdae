@@ -2,9 +2,11 @@ package com.pizza.kkomdae.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.pizza.kkomdae.R
 import com.pizza.kkomdae.data.Submission
 import com.pizza.kkomdae.databinding.ItemSubmissionBinding
 
@@ -22,7 +24,10 @@ class SubmissionAdapter: ListAdapter<Submission, SubmissionAdapter.SubmissionVie
 
     inner class SubmissionViewHolder(val binding: ItemSubmissionBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
-
+            binding.btnDown.setOnClickListener {
+                binding.clMenu.isVisible=true
+                binding.btnDown.setImageResource(R.drawable.ic_up)
+            }
         }
     }
 
