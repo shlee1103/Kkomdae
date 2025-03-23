@@ -2,22 +2,24 @@ package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentId;
     private String name;
     private String email;
-    private Integer edu;
+    private String edu;
     private String studentNum;
     private String region;
-    private Integer classNum;
-    private Boolean retireYn;
+    private String classNum;
+    private String  retireYn;
     @OneToMany(mappedBy = "student")
     private List<Rent> rent;
     @OneToMany(mappedBy = "student")

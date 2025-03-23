@@ -18,7 +18,7 @@ public class StudentWithRent {
     private String studentNum;
     private String name;
     private String region;
-    private int classNum;
+    private String classNum;
     private boolean status;
     private List<DeviceRentHistory> deviceRentHistory;
 
