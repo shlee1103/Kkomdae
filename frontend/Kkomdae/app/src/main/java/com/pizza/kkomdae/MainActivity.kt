@@ -27,24 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
-    private val cameraResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val photoUri = result.data?.getIntExtra("PHOTO_URI",0)
-            if(photoUri==1){
-                val transaction = supportFragmentManager.beginTransaction()
-                supportFragmentManager.popBackStack()
-//        transaction.replace(R.id.fl_main, MainFragment())
-//        transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
-//        transaction.replace(R.id.fl_main, Step1GuideFragment())
-                transaction.replace(R.id.fl_main, Step1ResultFragment())
 
-                transaction.commit()
-                checkCameraPermission()
-            }
-        }
-    }
 
 
     private val REQUEST_CAMERA_PERMISSION = 1001
@@ -58,6 +41,11 @@ class MainActivity : AppCompatActivity() {
 
         transaction.commit()
         checkCameraPermission()
+    }
+
+    fun logout(){
+        startActivity(Intent(this,LoginActivity::class.java))
+        finish()
     }
 
     fun next(){
@@ -86,6 +74,22 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // ❌ 사용자가 권한을 거부했을 경우
                 showToast("카메라 권한이 필요합니다.")
+            }
+        }
+    }
+
+    private val cameraResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val photoUri = result.data?.getIntExtra("PHOTO_URI",0)
+            if(photoUri==1){
+                val transaction = supportFragmentManager.beginTransaction()
+                supportFragmentManager.popBackStack()
+                transaction.replace(R.id.fl_main, Step1ResultFragment())
+
+                transaction.commit()
+                checkCameraPermission()
             }
         }
     }

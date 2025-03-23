@@ -25,8 +25,17 @@ class SubmissionAdapter: ListAdapter<Submission, SubmissionAdapter.SubmissionVie
     inner class SubmissionViewHolder(val binding: ItemSubmissionBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             binding.btnDown.setOnClickListener {
+                binding.tvState.isVisible = false
                 binding.clMenu.isVisible=true
-                binding.btnDown.setImageResource(R.drawable.ic_up)
+                binding.btnUp.isVisible=true
+                binding.btnDown.isVisible=false
+            }
+
+            binding.btnUp.setOnClickListener {
+                binding.tvState.isVisible = true
+                binding.clMenu.isVisible=false
+                binding.btnUp.isVisible=false
+                binding.btnDown.isVisible=true
             }
         }
     }

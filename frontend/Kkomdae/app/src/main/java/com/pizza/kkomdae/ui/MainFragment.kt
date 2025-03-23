@@ -64,6 +64,10 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
 
         adapter.submitList(data)
 
+        binding.btnLogout.setOnClickListener {
+            mainActivity.logout()
+        }
+
         // 노트북 카드뷰 클릭 이벤트
         binding.cvLaptop.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
