@@ -74,7 +74,7 @@ public class StudentService {
             log.info("{} {} {} {}", userInfo.getName(),userInfo.getEmail(),userInfo.getEntRegn(),userInfo.getClss());
             student = new Student();
             student.setName(loginUserInfo.getName());
-            student.setEmail(loginUserInfo.getLoginId());
+            student.setEmail(userInfo.getEmail());
             student.setEdu(userInfo.getEdu());
             student.setRegion(userInfo.getEntRegn());
             student.setClassNum(userInfo.getClss());
