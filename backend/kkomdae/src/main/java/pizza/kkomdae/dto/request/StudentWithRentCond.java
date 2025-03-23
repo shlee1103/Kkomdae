@@ -8,7 +8,7 @@ import pizza.kkomdae.entity.Student;
 @Setter
 public class StudentWithRentCond {
     private String region;
-    private Integer classNum;
+    private String className;
     private String searchType; //학번, 이름
     private String keyword;
     private Student student;

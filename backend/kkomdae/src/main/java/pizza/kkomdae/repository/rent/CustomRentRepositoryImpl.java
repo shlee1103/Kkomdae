@@ -29,7 +29,7 @@ public class CustomRentRepositoryImpl implements CustomRentRepository {
                 .join(rent.device.laptopTestResults,QLaptopTestResult.laptopTestResult).fetchJoin()
                 .orderBy(student.studentNum.asc())
                 .where(isKeyword(studentWithRentCond.getKeyword(), studentWithRentCond.getSearchType()),
-                        isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassNum())
+                        isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassName())
                         ,isStudent(studentWithRentCond.getStudent())
                 ).orderBy(student.studentNum.asc(),QLaptopTestResult.laptopTestResult.laptopTestResultId.asc())
                 .fetch()
@@ -43,7 +43,7 @@ public class CustomRentRepositoryImpl implements CustomRentRepository {
         return null;
     }
 
-    private Predicate isRegion(String region, Integer classNum) {
+    private Predicate isRegion(String region, String classNum) {
         if (region != null && !region.isBlank() && classNum != null) {
             return QStudent.student.region.eq(region).and(QStudent.student.classNum.eq(classNum));
         } else if (region != null && !region.isBlank()) {

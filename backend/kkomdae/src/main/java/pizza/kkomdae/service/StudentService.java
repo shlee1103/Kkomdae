@@ -1,6 +1,7 @@
 package pizza.kkomdae.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pizza.kkomdae.dto.request.LoginInfo;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
@@ -12,10 +13,14 @@ import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 import pizza.kkomdae.repository.rent.RentRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
+import pizza.kkomdae.ssafyapi.SsafySsoService;
+import pizza.kkomdae.ssafyapi.UserInfo;
+import pizza.kkomdae.ssafyapi.UserRequestForSso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentService {
@@ -23,6 +28,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final RentRepository rentRepository;
     private final LapTopTestResultRepository lapTopTestResultRepository;
+    private final SsafySsoService ssafySsoService;
 
     // 노트북 현황은 반납하지 않은 rent 값이 true인 것이 있으면
     public List<StudentWithRent> findByKeyword(String searchType, String searchKeyword) {
@@ -59,5 +65,21 @@ public class StudentService {
         }
         return results;
 
+    }
+
+    public void checkStudentExist(UserRequestForSso loginUserInfo) {
+        Student student = studentRepository.findByEmail(loginUserInfo.getLoginId());
+        if (student == null) {
+            UserInfo userInfo = ssafySsoService.getUserInfo(loginUserInfo.getUserId());
+            log.info("{} {} {} {}", userInfo.getName(),userInfo.getEmail(),userInfo.getEntRegn(),userInfo.getClss());
+            student = new Student();
+            student.setName(loginUserInfo.getName());
+            student.setEmail(userInfo.getEmail());
+            student.setEdu(userInfo.getEdu());
+            student.setRegion(userInfo.getEntRegn());
+            student.setClassNum(userInfo.getClss());
+            student.setRetireYn(userInfo.getRetireYn());
+            studentRepository.save(student);
+        }
     }
 }
