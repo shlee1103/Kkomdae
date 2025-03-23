@@ -1,15 +1,18 @@
 package com.pizza.kkomdae.ui
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.widget.TextView
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.databinding.FragmentMainBinding
 import com.pizza.kkomdae.databinding.FragmentOathBinding
 import androidx.core.widget.ImageViewCompat
 import android.content.res.ColorStateList
@@ -60,10 +63,13 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /// 다이얼로그 표시
+        showIntroDialog()
+
         // 제목 설정
         val topBarTitle = view.findViewById<View>(R.id.top_bar).findViewById<TextView>(R.id.tv_title)
         topBarTitle.text = "수령확인서"
-        
+
         val title1 = view.findViewById<View>(R.id.oath_title1).findViewById<TextView>(R.id.tv_model_number)
         title1.text = "01 손실 및 파손 책임"
 
@@ -75,7 +81,8 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
 
         val title4 = view.findViewById<View>(R.id.oath_title4).findViewById<TextView>(R.id.tv_model_number)
         title4.text = "04 인수 확인"
-        
+
+
         // 뒤로가기 버튼 눌렀을 때 메인화면으로 이동
         binding.topBar.btnBack.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -165,7 +172,6 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
             }
 
         }
-        
 
         // 다음 화면 넘어가기
         binding.btnNext.setOnClickListener {
@@ -177,6 +183,29 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
             }
         }
 
+    }
+
+    private fun showIntroDialog() {
+        // 다이얼로그 생성
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_oath_intro)
+
+        // 다이얼로그 배경 투명하게
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // 다이얼로그 너비 : 화면 너비의 90%
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 다이얼로그 확인 버튼 클릭 이벤트
+        val confirmButton = dialog.findViewById<Button>(R.id.btn_confirm)
+        confirmButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+
+        dialog.show()
     }
 
     private fun toggleOathSelection(cardView: View, titleId: Int) {
