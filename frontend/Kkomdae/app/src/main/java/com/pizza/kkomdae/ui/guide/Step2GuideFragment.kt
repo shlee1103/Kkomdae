@@ -1,10 +1,15 @@
 package com.pizza.kkomdae.ui.guide
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
@@ -50,7 +55,28 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
+        showIntroDialog()
     }
+
+    private fun showIntroDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_step2_intro)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        val confirmButton = dialog.findViewById<Button>(R.id.btn_confirm)
+        confirmButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
 
     companion object {
         /**

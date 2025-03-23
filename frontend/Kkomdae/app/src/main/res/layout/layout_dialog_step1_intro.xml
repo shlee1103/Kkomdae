@@ -27,11 +27,9 @@
 
         <TextView
             android:id="@+id/tv_description1"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="32dp"
             android:gravity="center"
             android:text="이제 촬영을 시작해 볼까요?"
             android:textColor="@color/gray300"
@@ -75,7 +73,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:background="@drawable/bg_button_orange"
+            android:background="@drawable/bg_button_intro"
             android:text="확인"
             android:textColor="@color/white"
             style="@style/Title1"
