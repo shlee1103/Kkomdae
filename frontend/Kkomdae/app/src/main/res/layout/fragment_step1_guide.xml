@@ -194,10 +194,11 @@
     android:id="@+id/btn_next"
     android:layout_width="0dp"
     android:layout_height="56dp"
-    android:backgroundTint="@color/blue300"
+    android:backgroundTint="@color/gray500"
     android:textColor="@color/white"
-    android:text="다음"
+    android:text="촬영하기"
     android:layout_margin="24dp"
+    style="@style/Title1"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"/>

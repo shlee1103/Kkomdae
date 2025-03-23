@@ -583,6 +583,7 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/btn_confirm"
         android:layout_width="0dp"
         android:layout_height="51dp"
         app:layout_constraintStart_toStartOf="parent"

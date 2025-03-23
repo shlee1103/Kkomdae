@@ -29,7 +29,7 @@
             android:id="@+id/tv_description1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="STEP2는 노트북과 함께 점검을 진행해요!"
             android:textColor="@color/gray300"

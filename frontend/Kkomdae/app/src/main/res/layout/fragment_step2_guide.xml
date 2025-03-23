@@ -209,6 +209,7 @@
         android:textColor="@color/white"
         android:text="QR코드 스캔하기"
         android:layout_margin="24dp"
+        style="@style/Title1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
