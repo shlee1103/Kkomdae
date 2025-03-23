@@ -1,4 +1,4 @@
-package com.pizza.kkomdae.ui.guide
+package com.pizza.kkomdae.ui.step2
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
-import com.pizza.kkomdae.databinding.FragmentStep2GuideBinding
+import com.pizza.kkomdae.databinding.FragmentMainBinding
+import com.pizza.kkomdae.databinding.FragmentStep2ResultBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,12 +17,12 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [Step2GuideFragment.newInstance] factory method to
+ * Use the [Step2ResultFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
-    FragmentStep2GuideBinding::bind,
-    R.layout.fragment_step2_guide
+class Step2ResultFragment : BaseFragment<FragmentStep2ResultBinding>(
+    FragmentStep2ResultBinding::bind,
+    R.layout.fragment_step2_result
 ) {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -49,12 +49,12 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment Step2GuideFragment.
+         * @return A new instance of fragment Step2ResultFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Step2GuideFragment().apply {
+            Step2ResultFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -46,8 +46,6 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
         }
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = SubmissionAdapter()
