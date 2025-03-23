@@ -95,17 +95,17 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
 
     private fun checkNext() {
         if (binding.etSerial.text.toString() != "" && binding.etBarcode.text.toString() != "") {
-            binding.btnNext.backgroundTintList = ColorStateList.valueOf(
+            binding.btnConfirm.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
                     requireContext(),
                     R.color.blue500
                 )
             )
-            binding.btnNext.isClickable = true
+            binding.btnConfirm.isClickable = true
         } else {
 
-            binding.btnNext.isClickable = false
-            binding.btnNext.backgroundTintList = ColorStateList.valueOf(
+            binding.btnConfirm.isClickable = false
+            binding.btnConfirm.backgroundTintList = ColorStateList.valueOf(
                 ContextCompat.getColor(
                     requireContext(),
                     R.color.blue200
