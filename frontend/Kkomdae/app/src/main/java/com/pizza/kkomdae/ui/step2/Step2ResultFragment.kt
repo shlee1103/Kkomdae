@@ -9,6 +9,8 @@ import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentMainBinding
 import com.pizza.kkomdae.databinding.FragmentStep2ResultBinding
+import com.pizza.kkomdae.ui.LaptopInfoInputFragment
+import com.pizza.kkomdae.ui.guide.Step2GuideFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +42,13 @@ class Step2ResultFragment : BaseFragment<FragmentStep2ResultBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.tvTitle.text = "Step 2"
         binding.topBar.pbStep.progress=200/3
+
+        binding.btnNext.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, LaptopInfoInputFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
     companion object {

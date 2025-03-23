@@ -9,6 +9,8 @@ import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
 import com.pizza.kkomdae.databinding.FragmentStep2GuideBinding
+import com.pizza.kkomdae.ui.QrScanFragment
+import com.pizza.kkomdae.ui.step2.Step2ResultFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +42,14 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.tvTitle.text = "Step 2"
         binding.topBar.pbStep.progress=200/3
+
+        binding.btnNext.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//            transaction.replace(R.id.fl_main, QrScanFragment())
+            transaction.replace(R.id.fl_main, Step2ResultFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
     companion object {

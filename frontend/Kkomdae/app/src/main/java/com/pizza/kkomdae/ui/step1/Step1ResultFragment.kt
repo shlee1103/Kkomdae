@@ -16,6 +16,8 @@ import com.pizza.kkomdae.data.Step1Result
 import com.pizza.kkomdae.databinding.FragmentFontResultBinding
 import com.pizza.kkomdae.databinding.FragmentStep1ResultBinding
 import com.pizza.kkomdae.ui.MyAndroidViewModel
+import com.pizza.kkomdae.ui.guide.Step1GuideFragment
+import com.pizza.kkomdae.ui.guide.Step2GuideFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +72,12 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
         })
         binding.rvPosition.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
+        binding.button.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, Step2GuideFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
     }
 
