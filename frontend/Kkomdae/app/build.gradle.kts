@@ -105,6 +105,8 @@ dependencies {
     // CameraX - 미리보기
     implementation ("androidx.camera:camera-view:1.3.0")
 
+    // Material
+    implementation ("com.google.android.material:material:1.10.0")
 
     // Progress Bar
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
