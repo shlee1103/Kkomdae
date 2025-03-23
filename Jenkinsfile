@@ -22,7 +22,7 @@ pipeline {
     tools {
         jdk 'JDK17'
         gradle 'Gradle 8.12.1'
-        nodejs 'NodeJS18' // Node.js 18 버전 사용
+        nodejs 'NodeJS22' // Node.js 18 버전 사용
     }
 
     /////////////////////////////////////////////////////////////////////////
