@@ -39,3 +39,4 @@ EXPOSE 8000
 # 여기서는 간단하게 gunicorn으로 WSGI 애플리케이션을 실행합니다.
 # "myproject"는 본인의 Django 프로젝트 폴더명으로 변경해주세요.
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "60"]
+
