@@ -11,7 +11,7 @@ import pizza.kkomdae.service.TestResultService;
 
 @RestController
 @RequestMapping("/api")
-public class ApiController {// TODO : JWT 전환 예정
+public class ApiController {
 
     private final StudentService studentService;
     private final TestResultService testResultService;
@@ -23,11 +23,7 @@ public class ApiController {// TODO : JWT 전환 예정
         this.photoService = photoService;
     }
 
-    @PostMapping("/login")
-    @Operation(summary = "임시 로그인", description = "jwt로 변환 예정")
-    public ApiResponse login(@RequestBody LoginInfo loginInfo) {
-        return new ApiResponse(true, "로그인 성공", studentService.login(loginInfo));
-    }
+
 
     @GetMapping("/user-info")
     @Operation(summary = "첫페이지에서 유저의 정보를 조회하는 api", description = "현재 임시적으로 studentId를 받고 있음. 추후 JWT Header로 수정할 예정")

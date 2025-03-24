@@ -13,13 +13,15 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentId;
+    private String ssafyId;
     private String name;
     private String email;
     private String edu;
     private String studentNum;
     private String region;
     private String classNum;
-    private String  retireYn;
+    private String retireYn;
+    private String refreshToken;
     @OneToMany(mappedBy = "student")
     private List<Rent> rent;
     @OneToMany(mappedBy = "student")

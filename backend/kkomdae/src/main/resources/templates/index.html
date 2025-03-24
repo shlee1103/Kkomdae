@@ -56,7 +56,7 @@
             관리자 코드 입력
         </div>
         <div class="card-body">
-            <form th:action="@{/admin/verify}" method="POST">
+            <form th:action="@{/api/admin/verify}" method="POST">
                 <div class="mb-3">
                     <label for="adminCode" class="form-label">관리자 코드</label>
                     <input type="password" class="form-control" id="adminCode" name="adminCode" placeholder="관리자 코드를 입력하세요" required>

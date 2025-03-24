@@ -1,4 +1,4 @@
-package pizza.kkomdae.ssafyapi;
+package pizza.kkomdae.ssafyapi.dto;
 
 import lombok.Data;
 

@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.pizza.kkomdae.databinding.ActivityMainBinding
-import com.pizza.kkomdae.ui.LaptopInfoInputFragment
 import com.pizza.kkomdae.ui.MainFragment
 import com.pizza.kkomdae.ui.OathFragment
 import com.pizza.kkomdae.ui.guide.BackShotGuideFragment

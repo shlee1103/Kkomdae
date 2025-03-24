@@ -2,15 +2,11 @@ package com.pizza.kkomdae.ui.step2
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.databinding.FragmentMainBinding
 import com.pizza.kkomdae.databinding.FragmentStep2ResultBinding
-import com.pizza.kkomdae.ui.LaptopInfoInputFragment
-import com.pizza.kkomdae.ui.guide.Step2GuideFragment
+import com.pizza.kkomdae.ui.step3.LaptopInfoInputFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
