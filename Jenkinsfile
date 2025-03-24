@@ -133,8 +133,8 @@ pipeline {
             steps {
                 echo "[Deploy] Deploying to ${EC2_HOST} as ${EC2_USER}"
                 sshagent(credentials: ['SSH_CREDENTIALS']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} /bin/bash &lt;&lt;'EOS'
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} /bin/bash <<EOS
     cd "${DOCKER_COMPOSE_PATH}"
     docker compose pull
     docker compose up -d --force-recreate
@@ -142,7 +142,7 @@ pipeline {
     sleep 5
     docker ps || echo "Container check failed"
 EOS
-                    """
+                """
                 }
             }
         }
