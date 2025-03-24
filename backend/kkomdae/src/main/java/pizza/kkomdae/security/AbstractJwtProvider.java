@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+
 @Slf4j
 public abstract class AbstractJwtProvider {
     protected long expiration;
@@ -22,6 +23,10 @@ public abstract class AbstractJwtProvider {
 
     public String generateToken(long userId) {
         return Jwts.builder().subject(Long.toString(userId)).expiration(new Date(System.currentTimeMillis() + expiration)).signWith(this.key).compact();
+    }
+
+    public String refreshToken(long userId) {
+        return Jwts.builder().subject(Long.toString(userId)).expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)).signWith(this.key).compact();
     }
 
     public String extractUserId(String token) {

@@ -30,7 +30,6 @@ public class SsafyLoginController {
             log.info(ssoAuthToken.toString());
             UserRequestForSso loginUserInfo = ssafySsoService.getLoginUserInfo(ssoAuthToken);
             log.info("{} {} {}", loginUserInfo.getLoginId(), loginUserInfo.getUserId(), loginUserInfo.getName());
-            long studentId = studentService.checkStudentExist(loginUserInfo);
         }
 
 
@@ -40,10 +39,7 @@ public class SsafyLoginController {
         return "redirect:/admin/students";
     }
 
-    @GetMapping("/login")
-    public String ssafyLogin() {
-        return "index-ss.html";
-    }
+
 
     @GetMapping("/token")
     public String token() {

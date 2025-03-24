@@ -2,23 +2,20 @@ package pizza.kkomdae.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pizza.kkomdae.service.StudentService;
 import pizza.kkomdae.ssafyapi.SsafySsoService;
 import pizza.kkomdae.ssafyapi.SsoAuthToken;
 import pizza.kkomdae.ssafyapi.UserRequestForSso;
 
 @RestController
+@RequestMapping("/api/sso")
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthController {
-    private final StudentService studentService;
-    private final JwtProviderForSpringSecurity jwtProvider;
     private final SsafySsoService ssafySsoService;
 
-    @GetMapping("callback")
+    @GetMapping("/login")
     public AuthenticationResponse callback(@RequestParam(required = false) String code, @RequestParam(required = false) String error) {
 
         log.info(code);
@@ -26,9 +23,15 @@ public class JwtAuthController {
         log.info(ssoAuthToken.toString());
         UserRequestForSso loginUserInfo = ssafySsoService.getLoginUserInfo(ssoAuthToken);
         log.info("{} {} {}", loginUserInfo.getLoginId(), loginUserInfo.getUserId(), loginUserInfo.getName());
-        long studentId = studentService.checkStudentExist(loginUserInfo);
-        AuthenticationResponse response = new AuthenticationResponse(jwtProvider.generateToken(studentId));
+        AuthenticationResponse response = ssafySsoService.checkStudentExist(loginUserInfo);
+
         log.info(response.getJwt());
+        log.info(response.getRefreshToken());
         return response;
+    }
+
+    @PostMapping("/refresh")
+    public AuthenticationResponse refresh(@RequestBody RefreshReq refreshReq) {
+        return ssafySsoService.refresh(refreshReq);
     }
 }

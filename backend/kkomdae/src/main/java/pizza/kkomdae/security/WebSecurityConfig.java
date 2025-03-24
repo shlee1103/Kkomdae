@@ -28,10 +28,9 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
-                                "/login",
                                 "/error",
-                                "/admin/**",
-                                "/callback",
+                                "/api/admin/**",
+                                "/api/sso/**",
 //                                "/api/attachment-files/*/types/*/download",
                                 "/actuator/**",
                                 "/v3/api-docs/**",    // Swagger API 문서 경로

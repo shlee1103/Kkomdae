@@ -2,22 +2,32 @@ package pizza.kkomdae.ssafyapi;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import pizza.kkomdae.entity.Student;
+import pizza.kkomdae.repository.student.StudentRepository;
+import pizza.kkomdae.security.AuthenticationResponse;
+import pizza.kkomdae.security.JwtProviderForSpringSecurity;
+import pizza.kkomdae.security.RefreshReq;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SsafySsoService {
 
+    private final StudentRepository studentRepository;
+    private final JwtProviderForSpringSecurity jwtProvider;
     @Value("${sso.redirect.uri}")
     private String redirectUri;
     @Value("${sso.client.id}")
@@ -27,16 +37,6 @@ public class SsafySsoService {
     @Value("${sso.apikey}")
     private String apiKey;
 
-    /**
-     * SSO 인증 서버로부터 인증 토큰(SsoAuthToken)을 가져오는 메서드
-     * <p>
-     * 전달받은 인증 코드를 사용하여 인증 토큰 요청에 필요한 HttpEntity를 생성합니다.
-     * RestTemplate을 이용해 SSO 인증 서버에 POST 요청을 보냅니다.
-     * 응답이 성공일 경우, 인증 토큰(SsoAuthToken)을 반환합니다.
-     *
-     * @param code 사용자가 전달한 인증 코드
-     * @return SsoAuthToken 인증 토큰 객체
-     */
     public SsoAuthToken getSsoAuthToken(String code) {
         final HttpEntity<MultiValueMap<String, String>> httpEntity = createTokenRequestEntity(code);
 
@@ -56,16 +56,7 @@ public class SsafySsoService {
         }
     }
 
-    /**
-     * SSO 인증 서버로부터 로그인 사용자 정보를 가져오는 메서드
-     * <p>
-     * 전달받은 액세스 토큰을 사용하여 사용자 정보 요청에 필요한 HttpEntity를 생성합니다.
-     * RestTemplate을 이용해 SSO 인증 서버에 GET 요청을 보냅니다.
-     * 응답이 성공힐 경우, 사용자 정보(UserRequestForSso)를 반환합니다.
-     *
-     * @param token SsoAuthToken 객체로부터 얻은 액세스 토큰
-     * @return UserRequestForSso 로그인 사용자 정보를 포함한 객체
-     */
+
     public UserRequestForSso getLoginUserInfo(SsoAuthToken token) {
         final HttpEntity<MultiValueMap<String, String>> httpEntity = createUserInfoRequestEntity(token.getAccess_token());
         RestTemplate restTemplate = new RestTemplate();
@@ -102,6 +93,35 @@ public class SsafySsoService {
 
     }
 
+    @Transactional
+    public AuthenticationResponse checkStudentExist(UserRequestForSso loginUserInfo) {
+        Student student = studentRepository.findByEmail(loginUserInfo.getLoginId());
+        if (student == null) {
+            student = initUser(loginUserInfo);
+
+        }
+
+        AuthenticationResponse response = new AuthenticationResponse(jwtProvider.generateToken(student.getStudentId()), jwtProvider.refreshToken(student.getStudentId()));
+        student.setRefreshToken(response.getRefreshToken());
+        return response;
+    }
+
+    @Transactional
+    public Student initUser(UserRequestForSso loginUserInfo) {
+
+        UserInfo userInfo = getUserInfo(loginUserInfo.getUserId());
+        log.info("{} {} {} {}", userInfo.getName(),userInfo.getEmail(),userInfo.getEntRegn(),userInfo.getClss());
+        Student student = new Student();
+        student.setName(loginUserInfo.getName());
+        student.setEmail(userInfo.getEmail());
+        student.setEdu(userInfo.getEdu());
+        student.setRegion(userInfo.getEntRegn());
+        student.setClassNum(userInfo.getClss());
+        student.setRetireYn(userInfo.getRetireYn());
+        studentRepository.save(student);
+        return student;
+    }
+
     private HttpEntity<MultiValueMap<String, String>> createTokenRequestEntity(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -122,5 +142,18 @@ public class SsafySsoService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         return new HttpEntity<>(headers);
+    }
+
+    @Transactional
+    public AuthenticationResponse refresh(RefreshReq refreshReq) {
+        Student student = studentRepository.findByEmail(refreshReq.getEmail());
+        if(student==null){
+            throw new RuntimeException("없는 이메일");
+        }else if(!student.getRefreshToken().equals(refreshReq.getRefreshToken())){
+            throw new RuntimeException("refreshToken 다름");
+        }
+        AuthenticationResponse response = new AuthenticationResponse(jwtProvider.generateToken(student.getStudentId()), jwtProvider.refreshToken(student.getStudentId()));
+        student.setRefreshToken(response.getRefreshToken());
+        return response;
     }
 }

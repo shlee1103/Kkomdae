@@ -50,7 +50,7 @@ public class AdminController {
         Admin byCode = adminService.getByCode(adminCode);
         //TODO 레디스 세션 추가
         if (byCode != null) {
-            return "redirect:/admin/students";
+            return "redirect:/api/admin/students";
         } else {
             return "redirect:/error";
         }
@@ -112,5 +112,10 @@ public class AdminController {
     @GetMapping("/login-hj")
     public String loginHj() {
         return "login-hj";
+    }
+
+    @GetMapping("/login")
+    public String ssafyLogin() {
+        return "index-ss.html";
     }
 }
