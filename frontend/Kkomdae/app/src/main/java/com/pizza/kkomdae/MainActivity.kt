@@ -17,11 +17,15 @@ import com.pizza.kkomdae.ui.step1.Step1ResultFragment
 import com.pizza.kkomdae.ui.step3.FinalResultFragment
 import android.Manifest
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import com.pizza.kkomdae.data.local.SecureTokenManager
+import com.pizza.kkomdae.data.local.TokenManager
 import com.pizza.kkomdae.ui.QrScanFragment
 
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -40,6 +44,14 @@ class MainActivity : AppCompatActivity() {
 
         transaction.commit()
         checkCameraPermission()
+
+        val secureTokenManager = SecureTokenManager(this)
+        val refreshToken = secureTokenManager.getRefreshToken()
+        Log.d(TAG, "onCreate: $refreshToken")
+
+        val tokenManager = TokenManager(this)
+        val accessToken = tokenManager.getAccessToken()
+        Log.d(TAG, "onCreate: $accessToken")
     }
 
     fun logout(){

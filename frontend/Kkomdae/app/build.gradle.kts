@@ -23,6 +23,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // Server URL 추가
@@ -107,6 +108,12 @@ dependencies {
 
     // Material
     implementation ("com.google.android.material:material:1.10.0")
+
+    // CustomTabsIntent
+    implementation ("androidx.browser:browser:1.5.0")
+
+    // EncryptedSharedPreferences
+    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
 
     // Progress Bar
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
