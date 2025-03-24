@@ -28,6 +28,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # 애플리케이션 전체 소스 코드를 컨테이너에 복사
 COPY ./ /app/
 
+# test 진행
+RUN python manage.py test
+
 # 컨테이너에서 사용할 포트 지정 (보통 gunicorn은 8000 포트를 사용)
 EXPOSE 8000
 

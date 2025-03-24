@@ -115,13 +115,6 @@ pipeline {
                 }
                 // backend/kkomdae_landing_back 디렉토리로 이동하여 빌드 및 Docker 작업 진행
                 dir('backend/kkomdae_landing_back') {
-                    // django 의존성 설치
-                    sh '''
-                        pip install -r requirements.txt
-                        python manage.py makemigrations
-                        python manage.py migrate
-                        python manage.py test
-                    '''
                     script {
                         docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIAL) {
                             def app = docker.build("${DOCKER_IMAGE_DJANGO}:${DOCKER_TAG}", "--no-cache .")
