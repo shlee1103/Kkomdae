@@ -1,4 +1,4 @@
-package pizza.kkomdae.security;
+package pizza.kkomdae.security.etc;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

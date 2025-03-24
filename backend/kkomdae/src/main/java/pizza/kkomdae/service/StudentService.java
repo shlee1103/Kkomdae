@@ -10,7 +10,7 @@ import pizza.kkomdae.entity.Rent;
 import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.rent.RentRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
-import pizza.kkomdae.security.JwtProviderForSpringSecurity;
+import pizza.kkomdae.security.etc.JwtProviderForSpringSecurity;
 import pizza.kkomdae.ssafyapi.SsafySsoService;
 
 import java.util.ArrayList;

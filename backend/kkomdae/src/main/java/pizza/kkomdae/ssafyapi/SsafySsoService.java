@@ -18,8 +18,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.student.StudentRepository;
 import pizza.kkomdae.security.dto.AuthenticationResponse;
-import pizza.kkomdae.security.JwtProviderForSpringSecurity;
+import pizza.kkomdae.security.etc.JwtProviderForSpringSecurity;
 import pizza.kkomdae.security.dto.RefreshReq;
+import pizza.kkomdae.ssafyapi.dto.SsoAuthToken;
+import pizza.kkomdae.ssafyapi.dto.UserInfo;
+import pizza.kkomdae.ssafyapi.dto.UserRequestForSso;
 
 @Service
 @RequiredArgsConstructor

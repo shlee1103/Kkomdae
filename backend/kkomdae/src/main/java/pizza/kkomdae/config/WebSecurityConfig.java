@@ -1,4 +1,4 @@
-package pizza.kkomdae.security;
+package pizza.kkomdae.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pizza.kkomdae.security.etc.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity

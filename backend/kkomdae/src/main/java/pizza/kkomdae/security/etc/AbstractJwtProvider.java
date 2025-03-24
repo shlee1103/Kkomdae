@@ -1,4 +1,4 @@
-package pizza.kkomdae.security;
+package pizza.kkomdae.security.etc;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

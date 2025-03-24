@@ -1,4 +1,4 @@
-package pizza.kkomdae.security;
+package pizza.kkomdae.config;
 
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.Info;

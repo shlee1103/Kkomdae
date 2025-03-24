@@ -1,4 +1,4 @@
-package pizza.kkomdae.security;
+package pizza.kkomdae.security.etc;
 
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;

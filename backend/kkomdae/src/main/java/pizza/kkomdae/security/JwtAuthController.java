@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pizza.kkomdae.security.dto.AuthenticationResponse;
 import pizza.kkomdae.security.dto.RefreshReq;
 import pizza.kkomdae.ssafyapi.SsafySsoService;
-import pizza.kkomdae.ssafyapi.SsoAuthToken;
-import pizza.kkomdae.ssafyapi.UserRequestForSso;
+import pizza.kkomdae.ssafyapi.dto.SsoAuthToken;
+import pizza.kkomdae.ssafyapi.dto.UserRequestForSso;
 
 @RestController
 @RequestMapping("/api/sso")
