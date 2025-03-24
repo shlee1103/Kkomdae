@@ -509,7 +509,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardAgreement4"
                 android:layout_marginTop="24dp"
-                android:text="다음"
+                android:text="위 내용을 모두 동의합니다."
                 android:backgroundTint="@color/blue200"
                 style="@style/Title1"/>
 
