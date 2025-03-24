@@ -17,9 +17,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.student.StudentRepository;
-import pizza.kkomdae.security.AuthenticationResponse;
+import pizza.kkomdae.security.dto.AuthenticationResponse;
 import pizza.kkomdae.security.JwtProviderForSpringSecurity;
-import pizza.kkomdae.security.RefreshReq;
+import pizza.kkomdae.security.dto.RefreshReq;
 
 @Service
 @RequiredArgsConstructor
@@ -95,10 +95,9 @@ public class SsafySsoService {
 
     @Transactional
     public AuthenticationResponse checkStudentExist(UserRequestForSso loginUserInfo) {
-        Student student = studentRepository.findByEmail(loginUserInfo.getLoginId());
+        Student student = studentRepository.findBySsafyId(loginUserInfo.getUserId());
         if (student == null) {
             student = initUser(loginUserInfo);
-
         }
 
         AuthenticationResponse response = new AuthenticationResponse(jwtProvider.generateToken(student.getStudentId()), jwtProvider.refreshToken(student.getStudentId()));
@@ -112,6 +111,7 @@ public class SsafySsoService {
         UserInfo userInfo = getUserInfo(loginUserInfo.getUserId());
         log.info("{} {} {} {}", userInfo.getName(),userInfo.getEmail(),userInfo.getEntRegn(),userInfo.getClss());
         Student student = new Student();
+        student.setSsafyId(loginUserInfo.getUserId());
         student.setName(loginUserInfo.getName());
         student.setEmail(userInfo.getEmail());
         student.setEdu(userInfo.getEdu());

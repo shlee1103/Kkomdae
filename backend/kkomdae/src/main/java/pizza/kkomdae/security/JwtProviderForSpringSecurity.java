@@ -1,6 +1,7 @@
 package pizza.kkomdae.security;
 
 import org.springframework.stereotype.Component;
+import pizza.kkomdae.security.dto.JwtPropertiesForSpringSecurity;
 
 @Component
 public class JwtProviderForSpringSecurity extends AbstractJwtProvider {

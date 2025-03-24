@@ -11,7 +11,7 @@ import pizza.kkomdae.service.TestResultService;
 
 @RestController
 @RequestMapping("/api")
-public class ApiController {// TODO : JWT 전환 예정
+public class ApiController {
 
     private final StudentService studentService;
     private final TestResultService testResultService;

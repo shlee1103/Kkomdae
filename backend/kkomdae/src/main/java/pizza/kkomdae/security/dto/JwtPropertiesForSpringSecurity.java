@@ -1,4 +1,4 @@
-package pizza.kkomdae.security;
+package pizza.kkomdae.security.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

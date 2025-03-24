@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pizza.kkomdae.entity.Student;
 import pizza.kkomdae.repository.student.StudentRepository;
+import pizza.kkomdae.security.dto.CustomUserDetails;
 
 
 @Service

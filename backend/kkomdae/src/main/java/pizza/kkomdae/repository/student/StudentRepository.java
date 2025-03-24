@@ -7,4 +7,6 @@ import pizza.kkomdae.entity.Student;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long>, CustomStudentRepository {
     Student findByEmail(String email);
+
+    Student findBySsafyId(String ssafyId);
 }

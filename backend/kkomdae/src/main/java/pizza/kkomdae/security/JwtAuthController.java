@@ -1,9 +1,11 @@
 package pizza.kkomdae.security;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import pizza.kkomdae.service.StudentService;
+import pizza.kkomdae.security.dto.AuthenticationResponse;
+import pizza.kkomdae.security.dto.RefreshReq;
 import pizza.kkomdae.ssafyapi.SsafySsoService;
 import pizza.kkomdae.ssafyapi.SsoAuthToken;
 import pizza.kkomdae.ssafyapi.UserRequestForSso;
@@ -12,6 +14,7 @@ import pizza.kkomdae.ssafyapi.UserRequestForSso;
 @RequestMapping("/api/sso")
 @Slf4j
 @RequiredArgsConstructor
+@SecurityRequirements
 public class JwtAuthController {
     private final SsafySsoService ssafySsoService;
 
