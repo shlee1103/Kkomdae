@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import pizza.kkomdae.security.AuthenticationResponse;
+import pizza.kkomdae.security.JwtProviderForSpringSecurity;
 import pizza.kkomdae.service.StudentService;
 
 @Slf4j
@@ -11,14 +13,16 @@ import pizza.kkomdae.service.StudentService;
 public class SsafyLoginController {
     private final SsafySsoService ssafySsoService;
     private final StudentService studentService;
+    private final JwtProviderForSpringSecurity jwtProvider;
 
-    public SsafyLoginController(SsafySsoService ssafySsoService, StudentService studentService) {
+    public SsafyLoginController(SsafySsoService ssafySsoService, StudentService studentService, JwtProviderForSpringSecurity jwtProvider) {
         this.ssafySsoService = ssafySsoService;
         this.studentService = studentService;
+        this.jwtProvider = jwtProvider;
     }
 
 
-    @GetMapping("callback")
+    @GetMapping("callback-2")
     public String callback(@RequestParam(required = false) String code, @RequestParam(required = false) String error) {
         if (code != null) {
             log.info(code);
@@ -26,7 +30,7 @@ public class SsafyLoginController {
             log.info(ssoAuthToken.toString());
             UserRequestForSso loginUserInfo = ssafySsoService.getLoginUserInfo(ssoAuthToken);
             log.info("{} {} {}", loginUserInfo.getLoginId(), loginUserInfo.getUserId(), loginUserInfo.getName());
-            studentService.checkStudentExist(loginUserInfo);
+            long studentId = studentService.checkStudentExist(loginUserInfo);
         }
 
 

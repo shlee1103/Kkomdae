@@ -23,7 +23,7 @@ import java.util.List;
 @Controller
 @Hidden
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final TestResultService testResultService;

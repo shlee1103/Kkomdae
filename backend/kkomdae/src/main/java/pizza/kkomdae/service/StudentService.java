@@ -67,7 +67,7 @@ public class StudentService {
 
     }
 
-    public void checkStudentExist(UserRequestForSso loginUserInfo) {
+    public long checkStudentExist(UserRequestForSso loginUserInfo) {
         Student student = studentRepository.findByEmail(loginUserInfo.getLoginId());
         if (student == null) {
             UserInfo userInfo = ssafySsoService.getUserInfo(loginUserInfo.getUserId());
@@ -81,5 +81,6 @@ public class StudentService {
             student.setRetireYn(userInfo.getRetireYn());
             studentRepository.save(student);
         }
+        return student.getStudentId();
     }
 }
