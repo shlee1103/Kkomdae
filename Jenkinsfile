@@ -52,7 +52,7 @@ pipeline {
         }
         // 2) 병렬 빌드 단계
         stage('Build & Push') {
-            paraller {
+            parallel {
 
                 // 2-1) 백엔드 빌드 및 Docker 이미지 빌드/푸시
                 stage('Backend Build & Docker Build/Push') {
