@@ -18,6 +18,7 @@ import pizza.kkomdae.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -31,6 +32,7 @@ public class AdminController {
     private final AdminService adminService;
     private final DeviceService deviceService;
     private final RentService rentService;
+    private final MattermostNotificationService mattermostNotificationService;
 
     // 관리자 로그인 페이지
     @GetMapping("/index")
@@ -117,5 +119,37 @@ public class AdminController {
     @GetMapping("/login")
     public String ssafyLogin() {
         return "index-ss.html";
+    }
+
+
+    /**
+     * 선택한 학생들에게 Mattermost 알림을 전송하는 엔드포인트
+     * (예: 학생 목록 페이지에서 "알림 발송" 버튼 클릭 시 호출)
+     *
+     * @param selectedStudents 선택된 학생들의 ID 리스트 (폼 파라미터)
+     * @param redirectAttributes 리다이렉트 후 메시지 전달
+     * @return 학생 목록 페이지로 리다이렉트
+     */
+    @PostMapping("/notification")
+    public String sendNotification(
+            @RequestParam("selectedStudents") List<Long> selectedStudents,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            // 예시: 학생 ID를 Mattermost 사용자 ID로 변환
+            // 실제 프로젝트에서는 studentService를 통해 학생의 MM 사용자 ID를 조회해야 함
+            List<String> mmUserIds = selectedStudents.stream()
+                    .map(String::valueOf) // 여기서는 단순히 Long 값을 문자열로 변환하는 예시
+                    .collect(Collectors.toList());
+
+            String message = "안녕하세요! 대여 장비 관련 알림입니다.";  // 발송할 메시지 내용
+            mattermostNotificationService.sendNotification(mmUserIds, message);
+
+            redirectAttributes.addFlashAttribute("message", "알림 발송 완료");
+        } catch (Exception e) {
+            log.error("알림 발송 실패", e);
+            redirectAttributes.addFlashAttribute("error", "알림 발송 실패");
+        }
+        return "redirect:/api/admin/students";
     }
 }
