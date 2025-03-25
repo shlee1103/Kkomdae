@@ -7,7 +7,7 @@ from dotenv import load_dotenv              # 환경 변수 로딩
 import boto3                                # AWS S3 연동을 위한 boto3 라이브러리 (최신 버전)
 from io import BytesIO
 from PIL import Image
-
+import tempfile
 load_dotenv()
 
 # AWS 관련 설정 로드
@@ -50,19 +50,20 @@ def analyze():
         return jsonify({"error": "JSON 형식이 올바르지 않습니다.", "detail": str(e)}), 400
 
     # 1) S3에서 파일을 로컬로 다운로드
-    local_download_path = f"/tmp/{s3_key}"  # 예: /tmp 디렉토리 (AWS Lambda나 Linux 서버 등에서 임시폴더)
+    temp_dir = tempfile.gettempdir()
+    local_download_path = os.path.join(temp_dir, s3_key)
     try:
         s3_client.download_file(
             Bucket=bucket_name,
             Key=folder + s3_key,   # 폴더 + 파일명
-            Filename=s3_key
+            Filename=local_download_path
         )
     except Exception as e:
         return jsonify({"error": "S3 파일 다운로드 실패", "detail": str(e)}), 400
 
     # 2) 다운로드된 로컬 파일을 Pillow로 열기
     try:
-        original_image = Image.open(s3_key)
+        original_image = Image.open(local_download_path)
     except Exception as e:
         return jsonify({"error": "이미지를 열 수 없습니다.", "detail": str(e)}), 400
 
@@ -89,6 +90,14 @@ def analyze():
     except Exception as e:
         return jsonify({"error": "S3 업로드 실패", "detail": str(e)}), 500
 
+    # 5) 임시파일 삭제 
+    try:
+        os.remove(local_download_path)
+    except Exception as e:
+        print(f"임시 파일 삭제 실패: {e}")
+        return jsonify({"error": "임시 파일 삭제 실패", "detail": str(e)}), 500
+        
+
     # 5) 업로드된 파일의 presigned URL 생성
     try:
         new_image_url = s3_client.generate_presigned_url(
@@ -99,11 +108,10 @@ def analyze():
     except Exception as e:
         return jsonify({"error": "사전 서명 URL 생성 실패", "detail": str(e)}), 500
 
-    # 최종 반환할 결과
+    # 최종 반환 
     result = {
         "분석결과": {
-            "스크래치": 0,     # 실제 알고리즘 적용 결과
-            "파임": 0,        # 실제 알고리즘 적용 결과
+            "손상" : 0, # 적용 결과과
             "원본 이름" : s3_key,
             "원본이미지URL": image_url,  # 클라이언트가 넘긴 URL or 메타정보
             "업로드 이름" : f"analyzed_{s3_key}",
