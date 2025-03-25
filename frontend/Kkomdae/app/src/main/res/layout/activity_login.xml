@@ -67,8 +67,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="꼼대와 함께하는 스마트한 기기관리"
-                android:textColor="@color/gray200"
-                style="@style/Title3"
+                android:textColor="@color/gray300"
+                style="@style/Body1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_welcome_message_part2"
@@ -80,14 +80,12 @@
             android:id="@+id/iv_kkomi_login"
             android:layout_width="230dp"
             android:layout_height="230dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:src="@drawable/ic_kkomi_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_welcome_message_container" />
 
-
-        <!-- 로그인 버튼 -->
         <Button
             android:id="@+id/btn_login"
             android:layout_width="0dp"

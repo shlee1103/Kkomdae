@@ -45,6 +45,7 @@
             android:paddingHorizontal="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -61,19 +62,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content">
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_sub"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="24dp"
+                android:layout_height="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -84,6 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="보이지 않는 흠집까지,"
+                    android:layout_marginBottom="4dp"
                     style="@style/Headline2"
                     app:layout_constraintBottom_toTopOf="@+id/tv_sub_message_part2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -113,17 +110,19 @@
                     app:layout_constraintTop_toTopOf="@id/tv_sub_message_part2" />
 
                 <ImageView
+                    android:id="@+id/iv_kkomi_main"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="24dp"
                     android:src="@drawable/ic_kkomi_main"
+                    android:scaleType="fitEnd"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@id/tv_sub_message_part3"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:contentDescription="꼼대 캐릭터 이미지" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -136,15 +135,14 @@
                 android:text="대여 기기 등록"
                 app:layout_constraintTop_toBottomOf="@id/cl_sub"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="20dp"/>
 
             <HorizontalScrollView
                 android:id="@+id/sv_register"
                 android:layout_width="match_parent"
                 android:scrollbars="none"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tv_register_title"
-                >
+                app:layout_constraintTop_toBottomOf="@id/tv_register_title">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -154,8 +152,8 @@
                         android:id="@+id/cv_laptop"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_width="300dp"
-                        android:layout_height="180dp"
+                        android:layout_width="320dp"
+                        android:layout_height="200dp"
                         app:cardCornerRadius="16dp"
                         android:layout_marginStart="24dp"
                         app:cardElevation="6dp"
@@ -171,7 +169,7 @@
                             android:layout_height="match_parent">
 
                             <TextView
-                                style="@style/Display1"
+                                style="@style/Display2"
                                 android:textColor="@color/gray700"
                                 android:id="@+id/tv_laptop_title"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -185,28 +183,33 @@
                             <TextView
                                 android:id="@+id/tv_laptop_sub"
                                 android:layout_width="wrap_content"
-                                style="@style/Body1"
+                                style="@style/Body2"
+                                android:textColor="@color/gray600"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
                                 app:layout_constraintStart_toStartOf="@id/tv_laptop_title"
                                 app:layout_constraintTop_toBottomOf="@id/tv_laptop_title"
                                 android:text="AI로 상태를 점검하고,"/>
+
                             <TextView
                                 android:id="@+id/tv_laptop_sub2"
                                 android:layout_width="wrap_content"
-                                style="@style/Body1"
+                                style="@style/Body2"
+                                android:textColor="@color/gray600"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintStart_toStartOf="@id/tv_laptop_sub"
                                 app:layout_constraintTop_toBottomOf="@id/tv_laptop_sub"
                                 android:text="안전하게 사용하세요."/>
 
                             <ImageView
-                                android:layout_width="110dp"
+                                android:layout_width="120dp"
+                                android:layout_height="110dp"
                                 android:src="@drawable/ic_laptap_big"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 android:layout_marginEnd="20dp"
                                 android:layout_marginBottom="16dp"
-                                android:layout_height="110dp"/>
+                                />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -216,7 +219,6 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginBottom="16dp"
                                 style="@style/Label3"
-
                                 android:textColor="@color/white"
                                 android:paddingVertical="5dp"
                                 android:paddingHorizontal="7dp"
@@ -231,9 +233,9 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv_mobile"
-                        android:layout_width="300dp"
-                        android:layout_height="180dp"
-                        android:layout_marginStart="18dp"
+                        android:layout_width="320dp"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="16dp"
                         android:backgroundTint="#C9F7D5"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="16dp"
@@ -250,34 +252,47 @@
                             android:layout_height="match_parent">
 
                             <TextView
+                                style="@style/Display2"
+                                android:textColor="@color/gray700"
                                 android:id="@+id/tv_mobile_title"
                                 app:layout_constraintTop_toTopOf="parent"
                                 android:layout_marginTop="16dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginStart="20dp"
-                                style="@style/Display1"
-                                android:textColor="@color/gray700"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="모바일"/>
 
                             <TextView
                                 android:id="@+id/tv_mobile_sub"
-                                style="@style/Body1"
+                                style="@style/Body2"
+                                android:textColor="@color/gray600"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="6개월 간 어쩌고 저쩌고"
+                                android:layout_marginTop="10dp"
+                                android:text="모바일 기기 상태를 기록하고,"
                                 app:layout_constraintStart_toStartOf="@id/tv_mobile_title"
                                 app:layout_constraintTop_toBottomOf="@id/tv_mobile_title" />
 
+
+                            <TextView
+                                android:id="@+id/tv_mobile_sub2"
+                                android:layout_width="wrap_content"
+                                style="@style/Body2"
+                                android:textColor="@color/gray600"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="@id/tv_mobile_sub"
+                                app:layout_constraintTop_toBottomOf="@id/tv_mobile_sub"
+                                android:text="안전하게 관리하세요."/>
+
                             <ImageView
                                 android:layout_width="110dp"
-                                android:src="@drawable/ic_laptap_big"
+                                android:layout_height="130dp"
+                                android:src="@drawable/ic_mobile_hand"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                android:layout_marginEnd="20dp"
-                                android:layout_marginBottom="16dp"
-                                android:layout_height="110dp"/>
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="10dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -290,7 +305,8 @@
                                 android:textColor="@color/white"
                                 android:paddingVertical="5dp"
                                 android:paddingHorizontal="7dp"
-                                android:background="#C4D3E2"
+                                android:backgroundTint="@color/gray200"
+                                android:background="@drawable/border_gray_rounded"
                                 android:layout_marginStart="20dp"/>
 
 
@@ -301,10 +317,10 @@
                         android:id="@+id/cv_iot"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_width="300dp"
-                        android:layout_height="180dp"
+                        android:layout_width="320dp"
+                        android:layout_height="200dp"
                         app:cardCornerRadius="16dp"
-                        android:layout_marginStart="24dp"
+                        android:layout_marginStart="16dp"
                         app:cardElevation="6dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginEnd="24dp"
@@ -324,30 +340,41 @@
                                 android:layout_marginTop="16dp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 android:layout_marginStart="20dp"
-                                android:textStyle="bold"
-                                android:textSize="26sp"
+                                style="@style/Display2"
+                                android:textColor="@color/gray700"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Iot"/>
+                                android:text="IoT"/>
 
                             <TextView
                                 android:id="@+id/tv_iot_sub"
                                 android:layout_width="wrap_content"
-                                style="@style/Body1"
-                                android:textColor="#8A8A8A"
+                                style="@style/Body2"
+                                android:textColor="@color/gray600"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
                                 app:layout_constraintStart_toStartOf="@id/tv_iot_title"
                                 app:layout_constraintTop_toBottomOf="@id/tv_iot_title"
-                                android:text="6개월 간 어쩌고 저쩌고"/>
+                                android:text="스마트 기기 상태를 점검하고,"/>
+
+                            <TextView
+                                android:id="@+id/tv_iot_sub2"
+                                android:layout_width="wrap_content"
+                                style="@style/Body2"
+                                android:textColor="@color/gray600"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="@id/tv_iot_sub"
+                                app:layout_constraintTop_toBottomOf="@id/tv_iot_sub"
+                                android:text="효율적으로 활용하세요."/>
 
                             <ImageView
                                 android:layout_width="110dp"
-                                android:src="@drawable/ic_laptap_big"
+                                android:layout_height="110dp"
+                                android:src="@drawable/ic_wifi"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                android:layout_marginEnd="20dp"
-                                android:layout_marginBottom="16dp"
-                                android:layout_height="110dp"/>
+                                android:layout_marginEnd="12dp"
+                                android:layout_marginBottom="12dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
