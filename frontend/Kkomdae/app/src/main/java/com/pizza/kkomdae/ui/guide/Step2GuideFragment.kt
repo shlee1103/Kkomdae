@@ -5,16 +5,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
 import com.pizza.kkomdae.databinding.FragmentStep2GuideBinding
-import com.pizza.kkomdae.ui.QrScanFragment
 import com.pizza.kkomdae.ui.step2.Step2ResultFragment
 
 // TODO: Rename parameter arguments, choose names that match

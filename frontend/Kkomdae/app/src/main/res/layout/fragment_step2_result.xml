@@ -84,6 +84,7 @@
                     style="@style/Headline3" />
 
                 <TextView
+                    android:id="@+id/tv_keyboard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_rounded_blue_light"
@@ -123,6 +124,7 @@
                     style="@style/Headline3" />
 
                 <TextView
+                    android:id="@+id/tv_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_rounded_blue_light"
@@ -162,6 +164,7 @@
                     style="@style/Headline3" />
 
                 <TextView
+                    android:id="@+id/tv_usb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_rounded_blue_light"
@@ -201,6 +204,7 @@
                     style="@style/Headline3" />
 
                 <TextView
+                    android:id="@+id/tv_charger"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_rounded_red_light"
@@ -239,6 +243,7 @@
                     style="@style/Headline3" />
 
                 <TextView
+                    android:id="@+id/tv_battery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_rounded_blue_light"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.QrScanFragment">
+    tools:context=".ui.step2.QrScanFragment">
 
     <!-- 📸 카메라 미리보기 뷰 -->
     <androidx.camera.view.PreviewView

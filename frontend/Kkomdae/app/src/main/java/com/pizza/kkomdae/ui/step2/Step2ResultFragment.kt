@@ -1,8 +1,10 @@
 package com.pizza.kkomdae.ui.step2
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep2ResultBinding
@@ -25,6 +27,7 @@ class Step2ResultFragment : BaseFragment<FragmentStep2ResultBinding>(
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val viewModel: Step2ViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,61 @@ class Step2ResultFragment : BaseFragment<FragmentStep2ResultBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.tvTitle.text = "Step 2"
         binding.topBar.pbStep.progress=200/3
+
+        // 키보드
+        if(viewModel.keyboardStatus.value?.status == "pass"){
+            binding.tvKeyboard.text="통과"
+            binding.tvKeyboard.setBackgroundResource(R.drawable.bg_rounded_blue_light)
+            binding.tvKeyboard.setTextColor(Color.parseColor("#485B78"))
+        }else{
+            binding.tvKeyboard.text="실패"
+            binding.tvKeyboard.setBackgroundResource(R.drawable.bg_rounded_red_light)
+            binding.tvKeyboard.setTextColor(Color.parseColor("#E4614F"))
+        }
+
+        // 카메라
+        if(viewModel.cameraStatus.value?.status == "pass"){
+            binding.tvCamera.text="통과"
+            binding.tvCamera.setBackgroundResource(R.drawable.bg_rounded_blue_light)
+            binding.tvCamera.setTextColor(Color.parseColor("#485B78"))
+        }else{
+            binding.tvCamera.text="실패"
+            binding.tvCamera.setBackgroundResource(R.drawable.bg_rounded_red_light)
+            binding.tvCamera.setTextColor(Color.parseColor("#E4614F"))
+        }
+
+        // USB
+        if(viewModel.usbStatus.value?.status == "pass"){
+            binding.tvUsb.text="통과"
+            binding.tvUsb.setBackgroundResource(R.drawable.bg_rounded_blue_light)
+            binding.tvUsb.setTextColor(Color.parseColor("#485B78"))
+        }else{
+            binding.tvUsb.text="실패"
+            binding.tvUsb.setBackgroundResource(R.drawable.bg_rounded_red_light)
+            binding.tvUsb.setTextColor(Color.parseColor("#E4614F"))
+        }
+
+        // 충전기
+        if(viewModel.chargerStatus.value?.status == "pass"){
+            binding.tvCharger.text="통과"
+            binding.tvCharger.setBackgroundResource(R.drawable.bg_rounded_blue_light)
+            binding.tvCharger.setTextColor(Color.parseColor("#485B78"))
+        }else{
+            binding.tvCharger.text="실패"
+            binding.tvCharger.setBackgroundResource(R.drawable.bg_rounded_red_light)
+            binding.tvCharger.setTextColor(Color.parseColor("#E4614F"))
+        }
+
+        // 배터리
+        if(viewModel.batteryStatus.value == "pass"){
+            binding.tvBattery.text="통과"
+            binding.tvBattery.setBackgroundResource(R.drawable.bg_rounded_blue_light)
+            binding.tvBattery.setTextColor(Color.parseColor("#485B78"))
+        }else{
+            binding.tvBattery.text="실패"
+            binding.tvBattery.setBackgroundResource(R.drawable.bg_rounded_red_light)
+            binding.tvBattery.setTextColor(Color.parseColor("#E4614F"))
+        }
 
         binding.btnNext.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()

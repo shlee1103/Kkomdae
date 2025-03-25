@@ -115,6 +115,9 @@ dependencies {
     // EncryptedSharedPreferences
     implementation ("androidx.security:security-crypto:1.1.0-alpha06")
 
+    // QR scanning
+    implementation ("com.google.mlkit:barcode-scanning:17.1.0")
+
     // Progress Bar
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
         exclude(group = "com.android.support")
