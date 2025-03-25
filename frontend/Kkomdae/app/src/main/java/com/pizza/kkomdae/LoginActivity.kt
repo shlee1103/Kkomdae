@@ -13,7 +13,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.pizza.kkomdae.data.local.SecureTokenManager
@@ -40,13 +39,32 @@ class LoginActivity : AppCompatActivity() {
 
 //            openCustomTab("https://project.ssafy.com/oauth/sso-check?client_id=811342aa-58e7-4430-9b48-18ef1108d783&response_type=code&redirect_uri=http://localhost:8080/api/sso/login")
             binding.wvLogin.visibility= View.VISIBLE
+            binding.vLogin.visibility = View.VISIBLE
             binding.wvLogin.loadUrl("https://project.ssafy.com/oauth/sso-check?client_id=811342aa-58e7-4430-9b48-18ef1108d783&response_type=code&redirect_uri=https://j12d101.p.ssafy.io/api/sso/login")
         }
 
 //        handleIntent(intent)
 
-        binding.wvLogin.webViewClient= WebViewClient()
-        binding.wvLogin.settings.javaScriptEnabled = true
+        //binding.wvLogin.webViewClient= WebViewClient()
+        // 웹뷰 로드 시 페이지 너비에 맞추기
+        binding.wvLogin.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                // 페이지 로드 완료 후 화면에 맞추기
+                view?.loadUrl("javascript:document.body.style.margin='0'; document.body.style.padding='0';")
+                view?.loadUrl("javascript:var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);")
+            }
+        }
+      //  binding.wvLogin.settings.javaScriptEnabled = true
+        binding.wvLogin.settings.apply {
+            loadWithOverviewMode = true
+            useWideViewPort = true
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            builtInZoomControls = true
+            displayZoomControls = false
+            useWideViewPort = true
+        }
+        binding.wvLogin.setInitialScale(1)
 
         // SSO 로그인 페이지 로드
         // 커스텀 WebViewClient 설정
@@ -67,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
                         mainIntent.putExtra("auth_code", code)
                         getLogin(code)
                         binding.wvLogin.isVisible=false
+                        binding.vLogin.isVisible=false
 //                        startActivity(mainIntent)
 //                        finish()
                         return true // URL 로딩 중단
