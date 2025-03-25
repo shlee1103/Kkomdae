@@ -1,11 +1,15 @@
 package com.pizza.kkomdae.ui
 
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import androidx.appcompat.widget.AppCompatButton
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
@@ -73,6 +77,39 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
+        // 모바일 카드뷰 클릭 이벤트
+        binding.cvMobile.setOnClickListener {
+            showDevelopingDialog()
+        }
+
+        // IoT 카드뷰 클릭 이벤트
+        binding.cvIot.setOnClickListener {
+            showDevelopingDialog()
+        }
+    }
+
+    // 개발 중 다이얼로그를 표시하는 메서드
+    private fun showDevelopingDialog() {
+        // 다이얼로그 생성
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_mobile_iot)
+
+        // 다이얼로그 배경 투명하게
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // 다이얼로그 너비 : 화면 너비의 90%
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 다이얼로그 확인 버튼 클릭 이벤트
+        val confirmButton = dialog.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.btn_confirm)
+        confirmButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     companion object {
