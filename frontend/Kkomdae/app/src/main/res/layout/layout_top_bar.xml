@@ -23,6 +23,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Headline1"/>
+        android:textSize="18dp"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:lineSpacingMultiplier="1.4"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
