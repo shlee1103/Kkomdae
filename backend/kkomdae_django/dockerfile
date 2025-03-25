@@ -39,3 +39,4 @@ EXPOSE 8000
 # gunicorn으로 WSGI 애플리케이션을 실행.
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "60"]
 
+
