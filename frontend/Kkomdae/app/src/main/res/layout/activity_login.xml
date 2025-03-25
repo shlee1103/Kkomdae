@@ -104,5 +104,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_kkomi_login" />
 
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <WebView
+    android:visibility="gone"
+        android:id="@+id/wv_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

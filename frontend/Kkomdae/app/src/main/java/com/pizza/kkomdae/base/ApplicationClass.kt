@@ -2,8 +2,10 @@ package com.pizza.kkomdae.base
 
 
 import android.app.Application
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pizza.kkomdae.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -16,22 +18,25 @@ class ApplicationClass : Application() {
         // SERVER_URL 참조 오류 발생할 경우, import 패키지 경로 확인해 볼 것.
        // const val SERVER_URL = BuildConfig.SERVER_URL
         const val IMGS_URL = ""
-
+        const val SERVER_URL = BuildConfig.SERVER_URL
         lateinit var retrofit: Retrofit
     }
 
     override fun onCreate() {
         super.onCreate()
-
+        Log.d("ApplicationClass", "SERVER_URL: $SERVER_URL")
         // FCM Channel
         //createNotificationChannel()
 
         // SharedPreferencesUtil
         //SharedPreferencesUtil.init(this)
 
-        val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Log.e("Post", "log: message ${message}")
+            }
+        })
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         // 레트로핏 인스턴스를 생성하고, 레트로핏에 각종 설정값들을 지정해줍니다.
         // 연결 타임아웃시간은 5초로 지정이 되어있고, HttpLoggingInterceptor를 붙여서 어떤 요청이 나가고 들어오는지를 보여줍니다.
@@ -42,11 +47,12 @@ class ApplicationClass : Application() {
             //.addInterceptor(AddAuthInterceptor()) // JWT 토큰 추가
             .build()
 
+
         // 앱이 처음 생성되는 순간, retrofit 인스턴스를 생성
         retrofit = Retrofit.Builder()
-            //.baseUrl(SERVER_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl(SERVER_URL)
             .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
