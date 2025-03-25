@@ -305,6 +305,29 @@
             }
 
             const studentIds = [...selected].map(el => el.value);
+
+            // AJAX 요청을 사용하여 POST 방식으로 학생 ID를 전송
+            fetch('/api/admin/notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'selectedStudents': studentIds
+                })
+            })
+                .then(response => {
+                    if(response.redirected) {
+                        window.location.href = response.url;
+                    } else {
+                        alert('알림 발송 성공');
+                    }
+                })
+                .catch(error => {
+                    console.error('알림 전송 에러:', error);
+                    alert('알림 발송 실패');
+                });
+
             alert(`선택된 학생 ${selected.length}명에게 알림을 발송합니다.`);
             // 실제 발송 로직은 서버에 구현 필요
             console.log('선택된 학생 ID:', studentIds);

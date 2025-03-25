@@ -10,6 +10,7 @@ from PIL import Image
 import tempfile
 load_dotenv()
 
+
 # AWS 관련 설정 로드
 aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
