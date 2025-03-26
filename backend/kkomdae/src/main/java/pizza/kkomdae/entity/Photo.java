@@ -16,10 +16,10 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long photoId;
     private String name;
+    private String aiName;
+    private int testId;
     @Enumerated(EnumType.STRING)
     private PhotoType type;
-    private String url;
-    private String resultUrl;
     @ManyToOne
     private LaptopTestResult laptopTestResult;
     @ManyToOne
@@ -28,7 +28,6 @@ public class Photo {
     public Photo(AiPhotoInfo aiPhotoInfo) {
         this.name = aiPhotoInfo.getName();
         this.type = aiPhotoInfo.getType();
-        this.url = aiPhotoInfo.getS3PicUrl();
     }
 }
 
