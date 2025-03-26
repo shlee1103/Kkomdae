@@ -9,10 +9,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.pizza.kkomdae.databinding.ActivityMainBinding
 import com.pizza.kkomdae.ui.MainFragment
-import com.pizza.kkomdae.ui.OathFragment
-import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
-import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
-import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import com.pizza.kkomdae.ui.step1.Step1ResultFragment
 import com.pizza.kkomdae.ui.step3.FinalResultFragment
 import android.Manifest
@@ -24,7 +20,7 @@ import androidx.core.app.ActivityCompat
 import com.pizza.kkomdae.data.local.SecureTokenManager
 import com.pizza.kkomdae.data.local.TokenManager
 import com.pizza.kkomdae.databinding.LayoutLogoutDialogBinding
-import com.pizza.kkomdae.ui.QrScanFragment
+import android.view.WindowManager
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -53,11 +49,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: $accessToken")
     }
 
-//    fun logout(){
-//        startActivity(Intent(this,LoginActivity::class.java))
-//        finish()
-//    }
-
     fun logout() {
         val dialogBinding = LayoutLogoutDialogBinding.inflate(layoutInflater)
 
@@ -67,6 +58,11 @@ class MainActivity : AppCompatActivity() {
             .create()
 
         customDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        customDialog.setOnShowListener {
+            val width = (resources.displayMetrics.widthPixels * 0.75).toInt()
+            customDialog.window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
+        }
 
         // 취소 버튼 클릭 리스너
         dialogBinding.btnCancel.setOnClickListener {

@@ -43,7 +43,6 @@ class LoginActivity : AppCompatActivity() {
         // 토큰 존재 여부 로그 출력
         Log.d(TAG, "onCreate: refreshToken=$refreshToken, accessToken=$accessToken")
 
-
         val loginButton = findViewById<Button>(R.id.btn_login)
 
         loginButton.setOnClickListener {
@@ -65,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                 view?.loadUrl("javascript:var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'); document.getElementsByTagName('head')[0].appendChild(meta);")
             }
         }
-      //  binding.wvLogin.settings.javaScriptEnabled = true
+        //  binding.wvLogin.settings.javaScriptEnabled = true
         binding.wvLogin.settings.apply {
             loadWithOverviewMode = true
             useWideViewPort = true
@@ -91,14 +90,13 @@ class LoginActivity : AppCompatActivity() {
                     if (code != null) {
                         Log.d("SSO_CODE", "인증 코드: $code")
 
-                        // 코드를 사용하여 메인 액티비티로 이동
-                        val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
-                        mainIntent.putExtra("auth_code", code)
+                        // WebView 숨기고 로딩 화면 표시
+                        binding.wvLogin.isVisible = false
+                        binding.vLogin.isVisible = false
+                        binding.clLoading.isVisible = true
+
+                        // 로그인 처리
                         getLogin(code)
-                        binding.wvLogin.isVisible=false
-                        binding.vLogin.isVisible=false
-//                        startActivity(mainIntent)
-//                        finish()
                         return true // URL 로딩 중단
                     }
                 }
@@ -123,19 +121,26 @@ class LoginActivity : AppCompatActivity() {
                 val response = loginService.getLogin(code)
                 if (response.isSuccessful){
                     Log.d(TAG, "getLogin: ${response.body()}")
-                    val data =response.body()
+                    val data = response.body()
                     data?.let {
-                        saveRefreshToken(it.jwt ,it.refreshToken)
+                        saveRefreshToken(it.jwt, it.refreshToken)
                     }
 
+                    // 로딩 후 메인 액티비티로 이동
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                }else{
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // 로그인 실패 시 로딩 화면 숨기기
+                    binding.clLoading.isVisible = false
                     Log.d(TAG, "getLogin: $response")
+                    Toast.makeText(this@LoginActivity, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
+                // 예외 발생 시 로딩 화면 숨기기
+                binding.clLoading.isVisible = false
                 Log.d(TAG, "getLogin: $e")
+                Toast.makeText(this@LoginActivity, "오류가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

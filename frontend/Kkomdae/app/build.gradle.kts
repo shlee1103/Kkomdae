@@ -122,4 +122,7 @@ dependencies {
     implementation("com.beardedhen:androidbootstrap:2.3.2") {
         exclude(group = "com.android.support")
     }
+
+    // Lottie
+    implementation ("com.airbnb.android:lottie:5.2.0")
 }
