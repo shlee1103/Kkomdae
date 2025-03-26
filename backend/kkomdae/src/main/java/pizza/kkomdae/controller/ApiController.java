@@ -1,6 +1,9 @@
 package pizza.kkomdae.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +37,6 @@ public class ApiController {
     }
 
 
-
     @GetMapping("/user-info")
     @Operation(summary = "첫페이지에서 유저의 정보를 조회하는 api", description = "현재 임시적으로 studentId를 받고 있음. 추후 JWT Header로 수정할 예정")
     public ApiResponse userInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
@@ -50,10 +52,11 @@ public class ApiController {
     }
 
 
-    @PostMapping( value = "photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "사진 업로드", description = "사진 업로드 및 Ai에 분석 요청 및 사진 단계 업데이트")
-    public void uploadPhoto(@RequestPart("photoReq") PhotoReq photoReq, @RequestPart(value = "image")MultipartFile image) {
-        s3Service.upload(photoReq,image);
+    @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void uploadPhoto(
+            @RequestPart("photoReq") PhotoReq photoReq,
+            @RequestPart(value = "image") MultipartFile image) {
+        s3Service.upload(photoReq, image);
         // TODO 로직에서 해야 할 일 : S3에 업로드, 사진 db에 저장, 피이썬에 요청
         // TODO 마지막 사진 업로드 즉 최종 업로드 이후에는 rent 를 init 하거나 update 하는 로직이 필요함
     }
