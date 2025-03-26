@@ -24,7 +24,8 @@ public class S3Service {
     private final AmazonS3 amazonS3;
 
 
-    public void upload(PhotoReq photoReq, MultipartFile image) {
+    public String upload(PhotoReq photoReq, MultipartFile image) {
+        // S3 key 생성: prefix + testId + "/" + photoType + "_" + originalFilename
         String s3Key = generateS3Key(photoReq,image);
         ObjectMetadata metadata = createMetadata(image);
 
@@ -39,13 +40,18 @@ public class S3Service {
             amazonS3.putObject(request);
         }catch (IOException e){
             e.printStackTrace();
+            //오류 발생 시 null 반환
+            return null;
         }
+        return s3Key;
     }
 
+    // S3 Key 생성 메서드
     private String generateS3Key(PhotoReq photoReq, MultipartFile image) {
         return prefix+photoReq.getTestId()+"/"+photoReq.getPhotoType()+"_"+image.getOriginalFilename();
     }
 
+    // 메타데이터 생성 메서드
     private ObjectMetadata createMetadata(MultipartFile file) {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
