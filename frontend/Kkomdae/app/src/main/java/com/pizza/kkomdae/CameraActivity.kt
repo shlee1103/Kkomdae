@@ -15,6 +15,13 @@ import com.pizza.kkomdae.ui.guide.LeftGuideFragment
 import com.pizza.kkomdae.ui.guide.RightGuideFragment
 import com.pizza.kkomdae.ui.guide.ScreenShotGuideFragment
 import com.pizza.kkomdae.ui.step1.ResultFragment
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 
 class CameraActivity : BaseActivity() {
     private lateinit var myAndroidViewModel: MyAndroidViewModel
@@ -37,6 +44,13 @@ class CameraActivity : BaseActivity() {
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         ).get(MyAndroidViewModel::class.java)
+
+        // 상태바 뒤로가기 처리를 위한 콜백 등록 로직
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showStopCameraDialog()
+            }
+        })
 
     }
 
@@ -94,6 +108,35 @@ class CameraActivity : BaseActivity() {
         }
 
         }
+    }
+
+    // 다이얼로그 표시
+    fun showStopCameraDialog() {
+        // 다이얼로그 생성
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_stop_camera_dialog)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.5).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 취소 버튼
+        val btnCancel = dialog.findViewById<TextView>(R.id.btn_cancel)
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 그만하기 버튼
+        val btnConfirm = dialog.findViewById<TextView>(R.id.btn_confirm)
+        btnConfirm.setOnClickListener {
+            // 다이얼로그 닫기
+            dialog.dismiss()
+            moveToBack()
+        }
+
+        dialog.show()
     }
 
 
