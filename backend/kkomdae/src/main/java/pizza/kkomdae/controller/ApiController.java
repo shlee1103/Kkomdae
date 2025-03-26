@@ -10,7 +10,8 @@ import pizza.kkomdae.dto.request.AiPhotoInfo;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.respond.ApiResponse;
 import pizza.kkomdae.dto.respond.PhotoWithUrl;
-import pizza.kkomdae.dto.respond.UserTestResultRes;
+import pizza.kkomdae.dto.respond.UserRentTestInfo;
+import pizza.kkomdae.dto.respond.UserRentTestRes;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.PhotoService;
@@ -39,7 +40,7 @@ public class ApiController {
 
     @GetMapping("/user-info")
     @Operation(summary = "첫페이지에서 유저의 정보를 조회하는 api", description = "")
-    public List<UserTestResultRes> userInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public UserRentTestInfo userInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
         log.info("jwt 토큰 유저 아이디 : {}", userDetails.getUserId());
         return studentService.getUserRentInfo(userDetails.getUserId());
     }
