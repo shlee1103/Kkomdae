@@ -23,8 +23,6 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final RentRepository rentRepository;
-    private final SsafySsoService ssafySsoService;;
-    private final JwtProviderForSpringSecurity jwtProvider;
 
     // 노트북 현황은 반납하지 않은 rent 값이 true인 것이 있으면
     public List<StudentWithRent> findByKeyword(String searchType, String searchKeyword) {
