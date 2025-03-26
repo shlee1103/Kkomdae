@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
 
+    <ImageButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="@color/gray300"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_image"
         android:layout_width="0dp"
@@ -55,7 +69,7 @@
         android:id="@+id/iv_icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/ic_camera"
         app:layout_constraintBottom_toTopOf="@+id/tv_text1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,9 +82,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
+        android:lineSpacingMultiplier="1.1"
         android:textColor="@color/gray600"
         android:text="사진 확인 후 진행하세요.\n마음에 들지 않으면 다시 찍을 수 있습니다."
         app:layout_constraintBottom_toTopOf="@+id/button_container"
