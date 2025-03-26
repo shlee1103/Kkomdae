@@ -1,14 +1,25 @@
 package pizza.kkomdae.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pizza.kkomdae.dto.request.AiPhotoInfo;
 import pizza.kkomdae.dto.request.LoginInfo;
+import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.respond.ApiResponse;
+import pizza.kkomdae.s3.S3Service;
+import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.PhotoService;
 import pizza.kkomdae.service.StudentService;
 import pizza.kkomdae.service.TestResultService;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -16,19 +27,21 @@ public class ApiController {
     private final StudentService studentService;
     private final TestResultService testResultService;
     private final PhotoService photoService;
+    private final S3Service s3Service;
 
-    public ApiController(StudentService studentService, TestResultService testResultService, PhotoService photoService) {
+    public ApiController(StudentService studentService, TestResultService testResultService, PhotoService photoService, S3Service s3Service) {
         this.studentService = studentService;
         this.testResultService = testResultService;
         this.photoService = photoService;
+        this.s3Service = s3Service;
     }
-
 
 
     @GetMapping("/user-info")
     @Operation(summary = "첫페이지에서 유저의 정보를 조회하는 api", description = "현재 임시적으로 studentId를 받고 있음. 추후 JWT Header로 수정할 예정")
-    public ApiResponse userInfo(@RequestParam long studentId) {
-        return new ApiResponse(true, "조회 성공", studentService.getUserRentInfo(studentId));
+    public ApiResponse userInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        log.info("jwt 토큰 유저 아이디 : {}", userDetails.getUserId());
+        return new ApiResponse(true, "조회 성공", studentService.getUserRentInfo(userDetails.getUserId()));
     }
 
     @PostMapping("/test")
@@ -39,9 +52,11 @@ public class ApiController {
     }
 
 
-    @PostMapping("photo")
-    @Operation(summary = "사진 업로드", description = "사진 업로드 및 Ai에 분석 요청 및 사진 단계 업데이트")
-    public void uploadPhoto() {
+    @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void uploadPhoto(
+            @RequestPart("photoReq") PhotoReq photoReq,
+            @RequestPart(value = "image") MultipartFile image) {
+        s3Service.upload(photoReq, image);
         // TODO 로직에서 해야 할 일 : S3에 업로드, 사진 db에 저장, 피이썬에 요청
         // TODO 마지막 사진 업로드 즉 최종 업로드 이후에는 rent 를 init 하거나 update 하는 로직이 필요함
     }
