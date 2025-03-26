@@ -9,4 +9,5 @@ object  AppData {
     var rightUri: Uri? = null
     var screenUri: Uri? = null
     var keypadUri: Uri? = null
+    var step:Int =0
 }

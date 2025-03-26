@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import androidx.core.content.ContextCompat
+import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
@@ -54,6 +56,49 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.tvTitle.text = "외관 촬영 가이드"
         binding.topBar.pbStep.progress=100/3
+        val color = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
+
+        val step =AppData.step
+        when(step){
+            1-> {
+                binding.layoutStep.flStep1.backgroundTintList=color
+            }
+            2->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+            }
+            3->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+            }
+            4->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+                binding.layoutStep.flStep4.backgroundTintList=color
+            }
+            5->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+                binding.layoutStep.flStep4.backgroundTintList=color
+                binding.layoutStep.flStep5.backgroundTintList=color
+            }
+            6->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+                binding.layoutStep.flStep4.backgroundTintList=color
+                binding.layoutStep.flStep5.backgroundTintList=color
+                binding.layoutStep.flStep6.backgroundTintList=color
+            }
+            else->{
+
+            }
+        }
+        binding.layoutStep.flStep1
+
         binding.btnNext.setOnClickListener {
             mainActivity.next()
         }

@@ -179,6 +179,7 @@ class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
                     viewModel.setRight(savedUri)
                     viewModel.setStep(4)
                     AppData.rightUri = savedUri
+                    AppData.step=4
 
 
 
