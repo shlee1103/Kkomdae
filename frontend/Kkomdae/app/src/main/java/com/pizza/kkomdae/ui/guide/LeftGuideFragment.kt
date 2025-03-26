@@ -179,6 +179,7 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
                     viewModel.setLeft(savedUri)
                     viewModel.setStep(3)
                     AppData.leftUri = savedUri
+                    AppData.step=3
 
 
 

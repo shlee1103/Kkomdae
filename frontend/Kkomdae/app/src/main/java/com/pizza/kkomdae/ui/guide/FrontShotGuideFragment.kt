@@ -181,6 +181,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
                     viewModel.setFront(savedUri)
                     viewModel.setStep(1)
                     AppData.frontUri = savedUri
+                    AppData.step=1
 
 
 

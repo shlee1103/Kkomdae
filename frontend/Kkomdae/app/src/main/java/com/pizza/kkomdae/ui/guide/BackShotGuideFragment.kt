@@ -204,7 +204,7 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
                     viewModel.setBack(savedUri)
                     viewModel.setStep(2)
                     AppData.backUri = savedUri
-
+                    AppData.step=2
 
 
                     cameraActivity.changeFragment(0)

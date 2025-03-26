@@ -177,6 +177,7 @@ class KeypadGuideFragment : BaseFragment<FragmentKeypadGuideBinding>(
                     viewModel.setKeypad(savedUri)
                     viewModel.setStep(6)
                     AppData.keypadUri = savedUri
+                    AppData.step=6
 
 
 

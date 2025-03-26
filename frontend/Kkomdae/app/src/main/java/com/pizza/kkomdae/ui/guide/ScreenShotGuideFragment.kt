@@ -200,7 +200,7 @@ class ScreenShotGuideFragment :  BaseFragment<FragmentScreenShotGuideBinding>(
                     viewModel.setScreen(savedUri)
                     viewModel.setStep(5)
                     AppData.screenUri = savedUri
-
+                    AppData.step=5
 
 
                     cameraActivity.changeFragment(0)

@@ -38,7 +38,9 @@ class CameraActivity : BaseActivity() {
                 )
 
         setContentView(binding.root)
-        changeFragment(1)
+        var step = AppData.step+1
+
+        changeFragment(step)
 
         myAndroidViewModel = ViewModelProvider(
             this,

@@ -23,6 +23,7 @@
         app:layout_constraintTop_toBottomOf="@id/top_bar"
         android:layout_height="wrap_content">
     <include
+        android:id="@+id/layout_step"
         layout="@layout/layout_step_guide"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
