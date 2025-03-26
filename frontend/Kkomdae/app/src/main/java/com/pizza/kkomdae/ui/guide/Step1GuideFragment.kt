@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import androidx.core.content.ContextCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
@@ -19,6 +20,7 @@ import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentLaptopInfoInputBinding
 import com.pizza.kkomdae.databinding.FragmentMainBinding
 import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
+
 private lateinit var mainActivity: MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -99,6 +101,11 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         }
         binding.layoutStep.flStep1
 
+        // X 클릭 이벤트 설정
+        binding.topBar.btnCancel.setOnClickListener {
+            showQuitBottomSheet()
+        }
+
         binding.btnNext.setOnClickListener {
             mainActivity.next()
         }
@@ -123,6 +130,34 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         }
 
         dialog.show()
+    }
+
+    /**
+     * X 버튼 클릭 시 나타나는 등록 취소 확인 바텀시트를 표시
+     */
+    private fun showQuitBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet, null)
+
+        // 계속하기 버튼 클릭 시 바텀시트 닫기
+        val btnContinue = bottomSheetView.findViewById<View>(R.id.btn_continue)
+        btnContinue.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // 그만두기 버튼 클릭 시 메인 화면으로 이동
+        val btnQuit = bottomSheetView.findViewById<View>(R.id.btn_quit)
+        btnQuit.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            // 메인 화면으로 이동
+            val transaction = mainActivity.supportFragmentManager.beginTransaction()
+            mainActivity.supportFragmentManager.popBackStack()
+            transaction.replace(R.id.fl_main, com.pizza.kkomdae.ui.MainFragment())
+            transaction.commit()
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
     }
 
     companion object {

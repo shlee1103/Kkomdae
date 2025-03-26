@@ -91,7 +91,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
             binding?.btnGuide?.isVisible = false
         }
 
-        // 뒤로 가기 버튼 눌렀을 때
+        // X 버튼 눌렀을 때
         binding.btnBack?.setOnClickListener {
             showStopCameraDialog()
         }
