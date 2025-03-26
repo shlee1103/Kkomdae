@@ -153,8 +153,10 @@ public class SsafySsoService {
     public AuthenticationResponse refresh(RefreshReq refreshReq) {
         Student student = studentRepository.findByEmail(refreshReq.getEmail());
         if(student==null){
+            log.error("없는 이메일");
             throw new RuntimeException("없는 이메일");
         }else if(!student.getRefreshToken().equals(refreshReq.getRefreshToken())){
+            log.error("refreshToken 다름");
             throw new RuntimeException("refreshToken 다름");
         }
         AuthenticationResponse response = new AuthenticationResponse(jwtProvider.generateToken(student.getStudentId()), jwtProvider.refreshToken(student.getStudentId()));
