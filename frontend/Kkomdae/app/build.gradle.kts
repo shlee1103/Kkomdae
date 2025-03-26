@@ -123,6 +123,9 @@ dependencies {
         exclude(group = "com.android.support")
     }
 
+    //포토뷰
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
     // Lottie
     implementation ("com.airbnb.android:lottie:5.2.0")
 }
