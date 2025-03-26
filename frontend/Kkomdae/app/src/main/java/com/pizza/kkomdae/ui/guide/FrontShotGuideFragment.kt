@@ -125,16 +125,9 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
             // 다이얼로그 닫기
             dialog.dismiss()
             cameraActivity.moveToBack()
-//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.fl_camera, Step1GuideFragment())
-//            transaction.addToBackStack(null) // 뒤로가기 지원
-//            transaction.commit()
         }
 
         dialog.show()
-
-        // 액티비티의 다이얼로그 함수 호출
-        cameraActivity.showStopCameraDialog()
     }
 
     private fun startCamera() {
@@ -191,7 +184,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
 
 
 
-                   cameraActivity.changeFragment(0)
+                    cameraActivity.changeFragment(0)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
