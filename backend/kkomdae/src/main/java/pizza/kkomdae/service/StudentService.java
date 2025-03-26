@@ -45,7 +45,6 @@ public class StudentService {
 
     public List<UserTestResultRes> getUserRentInfo(long studentId) {
         Student student = studentRepository.findById(studentId).orElseThrow();
-//        Student student = studentRepository.findByEmail("sskim629@gmail.com"); TODO jwt에서 추출한 이메일로 변경
         StudentWithRentCond cond = new StudentWithRentCond();
         cond.setStudent(student);
         List<Rent> laptopTestResults = rentRepository.getRentsByStudentInfo(cond);

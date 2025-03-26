@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class UserTestResultRes {
     private final String modelCode;
     private final LocalDateTime dateTime;
-    private final boolean release;
+    private Boolean release;
     private final String rentPdfUrl;
     private String releasePdfUrl;
 
@@ -17,12 +17,12 @@ public class UserTestResultRes {
         this.modelCode = rent.getDevice().getModelCode();
         this.rentPdfUrl = rent.getDevice().getLaptopTestResults().get(0).getPdfUrl();
         if (rent.getReleaseDateTime() != null) { // 반납했다면
-            this.dateTime= rent.getReleaseDateTime();
+            this.dateTime = rent.getReleaseDateTime();
             this.release = true;
-            this.releasePdfUrl=rent.getDevice().getLaptopTestResults().get(1).getPdfUrl();
-        }else{
-            this.dateTime= rent.getRentDateTime();
-            this.release=false;
+            this.releasePdfUrl = rent.getDevice().getLaptopTestResults().get(1).getPdfUrl();
+        } else {
+            this.dateTime = rent.getRentDateTime();
+            this.release = false;
         }
     }
 }

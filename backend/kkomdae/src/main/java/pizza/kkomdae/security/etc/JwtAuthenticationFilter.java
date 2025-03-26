@@ -1,5 +1,6 @@
 package pizza.kkomdae.security.etc;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,13 +26,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.getJwtFromRequest(request);
-        if (this.jwtProvider.validateToken(token)) {
-            String userId = this.jwtProvider.extractUserId(token);
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId); // loadByUsername인데 내가 커스텀
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        }
+        try {
+            if (this.jwtProvider.validateToken(token)) {
+                String userId = this.jwtProvider.extractUserId(token);
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId); // loadByUsername인데 내가 커스텀
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+        }catch (ExpiredJwtException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"JWT_TOKEN_EXPIRED\",\"message\":\"JWT 토큰이 만료되었습니다.\"}");
+            return;
+
+    }
+
         filterChain.doFilter(request, response);
     }
 

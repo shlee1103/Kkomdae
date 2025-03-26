@@ -1,23 +1,23 @@
 package pizza.kkomdae.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pizza.kkomdae.dto.request.AiPhotoInfo;
-import pizza.kkomdae.dto.request.LoginInfo;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.respond.ApiResponse;
+import pizza.kkomdae.dto.respond.PhotoWithUrl;
+import pizza.kkomdae.dto.respond.UserTestResultRes;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.PhotoService;
 import pizza.kkomdae.service.StudentService;
 import pizza.kkomdae.service.TestResultService;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -38,17 +38,17 @@ public class ApiController {
 
 
     @GetMapping("/user-info")
-    @Operation(summary = "첫페이지에서 유저의 정보를 조회하는 api", description = "현재 임시적으로 studentId를 받고 있음. 추후 JWT Header로 수정할 예정")
-    public ApiResponse userInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    @Operation(summary = "첫페이지에서 유저의 정보를 조회하는 api", description = "")
+    public List<UserTestResultRes> userInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
         log.info("jwt 토큰 유저 아이디 : {}", userDetails.getUserId());
-        return new ApiResponse(true, "조회 성공", studentService.getUserRentInfo(userDetails.getUserId()));
+        return studentService.getUserRentInfo(userDetails.getUserId());
     }
 
     @PostMapping("/test")
     @Operation(summary = "테스트 저장을 위한 테스트 생성", description = "테스트가 시작될 때 호출, 테스트 아이디를 반환합니다.<br>" +
             "테스트 아이디를 sharedPreference에 저장하고 사진 업로드할 때 사용 바랍니다.")
-    public ApiResponse initTest(@RequestParam String email) {
-        return new ApiResponse(true, "테스트 생성 성공", testResultService.initTest(email));
+    public long initTest(@RequestParam String email) {
+        return testResultService.initTest(email);
     }
 
 
@@ -63,14 +63,14 @@ public class ApiController {
 
     @GetMapping("photo")
     @Operation(summary = "테스트 id로 테스트의 사진을 얻는 api", description = "List<String>으로 반환")
-    public ApiResponse getPhotos(@RequestParam long testId) {
-        return new ApiResponse(true, "결과 사진 조회 성공", testResultService.getPhotos(testId));
+    public List<PhotoWithUrl> getPhotos(@RequestParam long testId) {
+        return testResultService.getPhotos(testId);
     }
 
     @Operation(summary = "PDF URL 반환", description = "testId로 pdf url을 돌려받기")
     @GetMapping("/test-pdf/{testId}")
-    public ApiResponse getPdfUrl(@PathVariable long testId) {
-        return new ApiResponse(true, "PDF URL 조회 성공", testResultService.getPdfUrl(testId));
+    public String getPdfUrl(@PathVariable long testId) {
+        return testResultService.getPdfUrl(testId);
     }
 
     @Operation(summary = "ai 사진 url update(파이썬 서버용)", description = "python용 s3 ai 이미지 업로드하고 url을 넣는 api")
