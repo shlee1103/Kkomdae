@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -51,11 +52,11 @@ public class SsafySsoService {
             if (response.getStatusCode().is2xxSuccessful()) {
                 return response.getBody();
             } else {
-                throw new RuntimeException("인증 서버로부터 AuthToken 정보를 가져오는데 실패하였습니다.",
+                throw new AuthenticationServiceException("인증 서버로부터 AuthToken 정보를 가져오는데 실패하였습니다.",
                         new RuntimeException("Authentication Failed with code " + response.getStatusCode()));
             }
         } catch (HttpClientErrorException ex) {
-            throw new RuntimeException("인증 서버로부터 AuthToken 정보를 가져오는데 실패하였습니다.\n관리자에게 문의하세요.", ex);
+            throw new AuthenticationServiceException("인증 서버로부터 AuthToken 정보를 가져오는데 실패하였습니다.\n관리자에게 문의하세요.", ex);
         }
     }
 
@@ -104,6 +105,7 @@ public class SsafySsoService {
         }
 
         AuthenticationResponse response = new AuthenticationResponse(jwtProvider.generateToken(student.getStudentId()), jwtProvider.refreshToken(student.getStudentId()));
+        log.info("jwt 토큰 생성 userId : {}", student.getStudentId());
         student.setRefreshToken(response.getRefreshToken());
         return response;
     }

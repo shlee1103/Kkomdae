@@ -15,6 +15,9 @@ public class CustomUserDetails implements UserDetails, CredentialsContainer {
         this.userId = userId;
     }
 
+    public long getUserId() {
+        return userId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
