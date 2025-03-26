@@ -34,7 +34,6 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
     R.layout.fragment_step1_guide
 ){
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity

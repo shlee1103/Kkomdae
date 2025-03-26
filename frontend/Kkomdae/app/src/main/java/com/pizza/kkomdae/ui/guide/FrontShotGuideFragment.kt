@@ -1,11 +1,17 @@
 package com.pizza.kkomdae.ui.guide
 
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -62,13 +68,9 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
         }
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startCamera()
-
-
 
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
         // 가이드 닫기 버튼 눌렀을 때
@@ -91,13 +93,48 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
 
         // 뒤로 가기 버튼 눌렀을 때
         binding.btnBack?.setOnClickListener {
-            cameraActivity.moveToBack()
+            showStopCameraDialog()
         }
 
         binding.btnShot?.setOnClickListener {
             takePhoto()
         }
 
+    }
+
+    private fun showStopCameraDialog() {
+        // 다이얼로그 생성
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_stop_camera_dialog)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.5).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 취소 버튼
+        val btnCancel = dialog.findViewById<TextView>(R.id.btn_cancel)
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 그만하기 버튼
+        val btnConfirm = dialog.findViewById<TextView>(R.id.btn_confirm)
+        btnConfirm.setOnClickListener {
+            // 다이얼로그 닫기
+            dialog.dismiss()
+            cameraActivity.moveToBack()
+//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//            transaction.replace(R.id.fl_camera, Step1GuideFragment())
+//            transaction.addToBackStack(null) // 뒤로가기 지원
+//            transaction.commit()
+        }
+
+        dialog.show()
+
+        // 액티비티의 다이얼로그 함수 호출
+        cameraActivity.showStopCameraDialog()
     }
 
     private fun startCamera() {
