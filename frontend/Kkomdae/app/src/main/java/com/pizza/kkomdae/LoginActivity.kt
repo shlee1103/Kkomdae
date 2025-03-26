@@ -33,6 +33,17 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+
+        // 토큰 확인 로직 추가
+        val secureTokenManager = SecureTokenManager(this)
+        val refreshToken = secureTokenManager.getRefreshToken()
+        val tokenManager = TokenManager(this)
+        val accessToken = tokenManager.getAccessToken()
+
+        // 토큰 존재 여부 로그 출력
+        Log.d(TAG, "onCreate: refreshToken=$refreshToken, accessToken=$accessToken")
+
+
         val loginButton = findViewById<Button>(R.id.btn_login)
 
         loginButton.setOnClickListener {
@@ -102,9 +113,6 @@ class LoginActivity : AppCompatActivity() {
         binding.wvLogin.settings.userAgentString = "Mozilla/5.0 (Android)" // 유저 에이전트 설정
 
         // SSO 로그인 페이지 로드
-
-
-
 
     }
 

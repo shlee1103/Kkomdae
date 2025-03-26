@@ -23,14 +23,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.pizza.kkomdae.data.local.SecureTokenManager
 import com.pizza.kkomdae.data.local.TokenManager
+import com.pizza.kkomdae.databinding.LayoutLogoutDialogBinding
 import com.pizza.kkomdae.ui.QrScanFragment
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-
-
 
 
     private val REQUEST_CAMERA_PERMISSION = 1001
@@ -54,9 +53,61 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: $accessToken")
     }
 
-    fun logout(){
-        startActivity(Intent(this,LoginActivity::class.java))
+//    fun logout(){
+//        startActivity(Intent(this,LoginActivity::class.java))
+//        finish()
+//    }
+
+    fun logout() {
+        val dialogBinding = LayoutLogoutDialogBinding.inflate(layoutInflater)
+
+        // 커스텀 다이얼로그 생성
+        val customDialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setView(dialogBinding.root)
+            .create()
+
+        customDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // 취소 버튼 클릭 리스너
+        dialogBinding.btnCancel.setOnClickListener {
+            customDialog.dismiss()
+        }
+
+        // 확인 버튼 클릭 리스너
+        dialogBinding.btnConfirm.setOnClickListener {
+            customDialog.dismiss()
+            performLogout()
+        }
+
+        customDialog.show()
+    }
+
+    private fun performLogout() {
+        // 저장된 토큰 삭제
+        val secureTokenManager = SecureTokenManager(this)
+        secureTokenManager.deleteRefreshToken()
+
+        val tokenManager = TokenManager(this)
+        tokenManager.clearAccessToken()
+
+        // 토큰이 삭제되었는지 확인
+        val refreshTokenAfterLogout = secureTokenManager.getRefreshToken()
+        val accessTokenAfterLogout = tokenManager.getAccessToken()
+        Log.d("MainActivity", "로그아웃 후 리프레시 토큰: $refreshTokenAfterLogout")
+        Log.d("MainActivity", "로그아웃 후 액세스 토큰: $accessTokenAfterLogout")
+
+        // WebView 캐시 및 쿠키 삭제
+        android.webkit.WebStorage.getInstance().deleteAllData()
+        android.webkit.CookieManager.getInstance().removeAllCookies(null)
+        android.webkit.CookieManager.getInstance().flush()
+
+        // 로그인 화면으로 이동
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
         finish()
+
+        showToast("로그아웃 되었습니다")
     }
 
     fun next(){
@@ -104,8 +155,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

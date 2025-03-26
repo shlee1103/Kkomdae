@@ -89,21 +89,18 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
         }
     }
 
-    // 개발 중 다이얼로그를 표시하는 메서드
+    // 개발 중 다이얼로그
     private fun showDevelopingDialog() {
-        // 다이얼로그 생성
+
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.layout_dialog_mobile_iot)
 
-        // 다이얼로그 배경 투명하게
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        // 다이얼로그 너비 : 화면 너비의 90%
         val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
         dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-        // 다이얼로그 확인 버튼 클릭 이벤트
         val confirmButton = dialog.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.btn_confirm)
         confirmButton.setOnClickListener {
             dialog.dismiss()

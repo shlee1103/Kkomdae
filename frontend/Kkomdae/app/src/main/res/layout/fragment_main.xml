@@ -8,8 +8,6 @@
     android:background="#FCFCFC"
     tools:context=".MainActivity">
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_top_bar"
         android:layout_width="0dp"
