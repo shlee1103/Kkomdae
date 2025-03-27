@@ -32,9 +32,11 @@ public class PhotoService {
         //Photo entity 생성 및 필드 설정
         Photo photo = new Photo();
         // 파일명
-        photo.setName(image.getOriginalFilename());
+        photo.setName(s3FileName);
         // 타입 설정
         photo.setType(photoreq.getPhotoType());
+        // 테스트 아이디
+        photo.setTestId(photo.getTestId());
 
         photoRepository.save(photo);
     }
