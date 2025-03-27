@@ -16,6 +16,7 @@
         android:padding="4dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_cancel"
+        app:tint="@color/gray500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,7 +79,7 @@
 
     <TextView
         android:id="@+id/tv_text1"
-        style="@style/Title3"
+        style="@style/Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
