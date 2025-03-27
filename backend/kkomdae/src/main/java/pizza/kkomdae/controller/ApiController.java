@@ -6,16 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pizza.kkomdae.dto.request.AiPhotoInfo;
-import pizza.kkomdae.dto.request.FlaskRequest;
-import pizza.kkomdae.dto.request.LoginInfo;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.request.SecondStageReq;
-import pizza.kkomdae.dto.respond.ApiResponse;
-import pizza.kkomdae.dto.respond.PhotoWithUrl;
-import pizza.kkomdae.dto.respond.UserRentTestInfo;
-import pizza.kkomdae.dto.respond.UserRentTestRes;
-import pizza.kkomdae.dto.respond.FlaskResponse;
+import pizza.kkomdae.dto.respond.*;
 import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
@@ -75,31 +68,20 @@ public class ApiController {
         // TODO 마지막 사진 업로드 즉 최종 업로드 이후에는 rent 를 init 하거나 update 하는 로직이 필요함
     }
 
-    @PostMapping("/analyze-photo")
-    @Operation(summary = "Flask 서버로 사진 분석 요청", description = "Flask 서버에 JSON 데이터를 전송하고 분석 결과를 반환받습니다.")
-    public ApiResponse analyzePhoto(@RequestBody FlaskRequest flaskRequest) {
-        FlaskResponse flaskResponse = flaskService.analyzeImage(flaskRequest);
-        return new ApiResponse(true, "사진 분석 성공", flaskResponse);
-    }
-
     @GetMapping("photo")
     @Operation(summary = "테스트 id로 테스트의 사진을 얻는 api", description = "List<String>으로 반환")
     public List<PhotoWithUrl> getPhotos(@RequestParam long testId) {
         return testResultService.getPhotos(testId);
     }
 
-    @Operation(summary = "PDF URL 반환", description = "testId로 pdf url을 돌려받기")
-    @GetMapping("/test-pdf/{testId}")
-    public String getPdfUrl(@PathVariable long testId) {
-        return testResultService.getPdfUrl(testId);
+    @Operation(summary = "파일 이름으로 URL 반환", description = "파일 이름으로 url을 돌려받기")
+    @GetMapping("/test-file/{file-name}")
+    public UrlResponse getFileName(@PathVariable("file-name") String fileName) {
+        // S3에서 URL 생성
+        String url = s3Service.generatePresignedUrl(fileName);
+        // UrlResponse 객체에 담아 반환
+        return new UrlResponse(url);
     }
-
-//    @Operation(summary = "ai 사진 url update(파이썬 서버용)", description = "python용 s3 ai 이미지 업로드하고 url을 넣는 api")
-//    @PostMapping("ai-photo")
-//    public ApiResponse uploadAiPhoto(@RequestBody AiPhotoInfo aiPhotoInfo) {
-//        photoService.uploadAiPhoto(aiPhotoInfo);
-//        return new ApiResponse(true, "db에 s3 link 저장 성공");
-//    }
 
     @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
     public void secondStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody SecondStageReq secondStageReq) {
