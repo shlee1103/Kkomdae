@@ -99,6 +99,24 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
 
             }
         }
+
+        // 버튼 텍스트 업데이트
+        updateButtonText()
+    }
+
+    private fun updateButtonText() {
+        when {
+            step == 6 -> {
+                binding.btnNext.text = "완료"
+                binding.btnNext.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
+            }
+            step > 0 -> {
+                binding.btnNext.text = "이어서 촬영하기"
+            }
+            else -> {
+                binding.btnNext.text = "촬영하기"
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
