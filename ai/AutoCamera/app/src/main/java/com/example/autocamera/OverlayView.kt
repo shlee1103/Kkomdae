@@ -23,10 +23,31 @@ class OverlayView(context: Context, attrs: AttributeSet?) : View(context, attrs)
 
     private val boxes = mutableListOf<BBox>()
 
-    fun setBoxes(newBoxes: List<BBox>) {
+    fun setBoxes(newBoxes: List<BBox>, bitmapWidth: Int, bitmapHeight: Int) {
         boxes.clear()
-        boxes.addAll(newBoxes)
-        invalidate()  // 뷰 다시 그리기
+
+        // previewView의 크기를 가져옴
+        val viewWidth = width.toFloat()
+        val viewHeight = height.toFloat()
+
+        // bitmap 크기 → previewView 크기로 변환하는 scale 비율
+        val scaleX = viewWidth / bitmapWidth
+        val scaleY = viewHeight / bitmapHeight
+
+        // 각 박스를 previewView 좌표계로 변환
+        val scaledBoxes = newBoxes.map { box ->
+            val rect = box.rect
+            val scaledRect = RectF(
+                rect.left * scaleX,
+                rect.top * scaleY,
+                rect.right * scaleX,
+                rect.bottom * scaleY
+            )
+            BBox(scaledRect, box.label, box.confidence)
+        }
+
+        boxes.addAll(scaledBoxes)
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {

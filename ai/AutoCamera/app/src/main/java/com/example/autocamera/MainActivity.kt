@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.media.MediaScannerConnection
 import android.os.Handler
+import android.util.Size
 import com.example.autocamera.BBox
 import com.example.autocamera.databinding.ActivityMainBinding
 import java.io.FileOutputStream
@@ -111,13 +112,19 @@ class MainActivity : AppCompatActivity() {
                 it.setSurfaceProvider(binding.previewView.surfaceProvider)
             }
 
+            val resolution = Size(3840, 2160)
+
             // ✅ 2. ImageCapture (📸 이 줄이 바로 여기!)
             // 사진을 캡처(저장)할 수 있도록 ImageCapture 객체 생성
-            imageCapture = ImageCapture.Builder().build()
+            imageCapture = ImageCapture.Builder()
+                .setTargetResolution(resolution)
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY) // 고화질 우선
+                .build()
 
             // ✅ 3. ImageAnalysis
             // 카메라에서 들어오는 실시간 프레임(영상)을 분석
             val imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetResolution(resolution)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) // 분석이 끝날 때까지 기다리지 말고, 가장 최근 프레임만 분석
                 .build()
                 .also {
@@ -187,29 +194,30 @@ class MainActivity : AppCompatActivity() {
             // confidence score가 기준을 넘으면 유효한 객체로 간주
             if (score > threshold) {
 
-                // ✅ modelInputSize 기준으로 위치 계산 (중심좌표 + 너비/높이를 복원)
-                // YOLO가 예측한 **중심 좌표(cx, cy)**를
-                // 패딩 보정 + 비율 역변환해서 원본 이미지 기준의 좌표로 복원
-                val cx = predictions[0][i] * modelInputSize / scale
-                val cy = predictions[1][i] * modelInputSize / scale
-                val w = predictions[2][i] * modelInputSize / scale * 1.0f
-                val h = predictions[3][i] * modelInputSize / scale * 1.0f
+                // YOLO 640 기준 bbox
+                val cx = predictions[0][i] * modelInputSize
+                val cy = predictions[1][i] * modelInputSize
+                val w = predictions[2][i] * modelInputSize
+                val h = predictions[3][i] * modelInputSize
 
-                // YOLO는 중심 기준 박스를 출력하니까
-                // → 좌측 상단/우측 하단 좌표로 변환해서 Android의 RectF 형식으로 맞춤
-                val left = cx - w / 2
-                val top = cy - h / 2
-                val right = cx + w / 2
-                val bottom = cy + h / 2
+                // padding 고려해서 원본 비트맵 좌표로 역변환
+                val x = (cx - dx) / scale
+                val y = (cy - dy) / scale
+                val width = w / scale
+                val height = h / scale
+
+                val left = x - width / 2
+                val top = y - height / 2
+                val right = x + width / 2
+                val bottom = y + height / 2
 
                 // 최종적으로 계산한 박스를 BBox 객체로 만들어 리스트에 추가
                 // 나중에 오버레이에 그리거나 베스트 박스를 고르기 위해 사용
                 detectedBoxes.add(BBox(RectF(left, top, right, bottom), "laptop", score))
+                Log.d("BBoxFinal", "BBox: RectF($left, $top, $right, $bottom)")
 
                 if (detectedBoxes.isNotEmpty()) {
-                    // 전처리된 크기에 맞춰 bitmap도 640x640으로 축소해서 전달
-                    val debugBitmap = Bitmap.createScaledBitmap(bitmap, 640, 640, true)
-                    saveDebugBitmapWithBoxes(debugBitmap, detectedBoxes)
+                    // saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
                 }
             }
         }
@@ -226,21 +234,29 @@ class MainActivity : AppCompatActivity() {
                 //  → 나중에 노트북이 충분히 클 때만 촬영하기 위해
                 val viewWidth = binding.previewView.width.toFloat()
                 val viewHeight = binding.previewView.height.toFloat()
-                val areaRatio = bestBox.rect.width() * bestBox.rect.height() / (viewWidth * viewHeight)
+                val bitmapWidth = bitmap.width.toFloat()
+                val bitmapHeight = bitmap.height.toFloat()
+                Log.d("화면", "viewWidth: $viewWidth viewHeight:$viewHeight")
+                Log.d("화면", "bitmapWidth: $bitmapWidth bitmapHeight:$bitmapHeight")
+                Log.d("화면", "bestBox.rect.width(): ${bestBox.rect.width()} bestBox.rect.height():${bestBox.rect.height()}")
+                val areaRatio = (bestBox.rect.width() * bestBox.rect.height()) / (bitmapWidth * bitmapHeight)
+                Log.d("AreaRatio", "비율: $areaRatio")
 
-                // 노트북이 화면의 50% 이상 차지할 때만 유효하다고 간주
+                // 노트북이 화면의 20% 이상 차지할 때만 유효하다고 간주
                 //→ 너무 멀리 있거나 작게 보이는 건 촬영하지 않음
-                val minAreaRatio = 0.5f  // 화면의 50% 이상일 때만 인정
+                val minAreaRatio = 0.2f  // 화면의 20% 이상일 때만 인정
                 val isBigEnough = areaRatio > minAreaRatio
 
                 // 이전 프레임의 bestBox와 비교해서
-                // 중심좌표의 이동이 20px 이하이면 → "카메라 흔들림 없음"으로 간주
+                // 중심좌표의 이동이 100px 이하이면 → "카메라 흔들림 없음"으로 간주
                 // 이전 박스가 없으면 → 그냥 true (처음 프레임)
                 val isPositionStable = lastBox?.let {
                     val dx = Math.abs(it.rect.centerX() - bestBox.rect.centerX())
                     val dy = Math.abs(it.rect.centerY() - bestBox.rect.centerY())
-                    dx < 50 && dy < 50  // 20px 이내 움직임이면 "안정"
+                    dx < 100 && dy < 100  // 100px 이내 움직임이면 "안정"
                 } ?: true
+                Log.d("StableFrames", "count = $stableFrameCount, 크기 통과: $isBigEnough, 위치 통과: $isPositionStable")
+
 
                 // 충분히 크고, 안정적인 위치에 있을 경우만
                 if (isBigEnough && isPositionStable) {
@@ -264,7 +280,8 @@ class MainActivity : AppCompatActivity() {
                 if (stableFrameCount >= requiredStableFrames) {
                     // 지금까지 모은 비트맵 중에서 가장 좋은 걸 선택해서 저장!
                     // 저장 후 초기화
-                    selectBestAndSave(candidateBitmaps)
+                    captureHighResImage()
+                    // selectBestAndSave(candidateBitmaps)
                     stableFrameCount = 0
                     candidateBitmaps.clear()
 
@@ -275,7 +292,7 @@ class MainActivity : AppCompatActivity() {
 
                 // 오버레이에 감지된 박스 하나만 그리기
                 // → 화면에 사각형이 표시됨
-                binding.overlay.setBoxes(listOf(bestBox))
+                binding.overlay.setBoxes(listOf(bestBox), bitmap.width, bitmap.height)
             }
         }
 
@@ -345,8 +362,8 @@ class MainActivity : AppCompatActivity() {
         val resizedWidth = (originalWidth * scale).toInt()
         val resizedHeight = (originalHeight * scale).toInt()
 
-        val dx = 0f
-        val dy = 0f
+        val dx = (modelSize - resizedWidth) / 2f
+        val dy = (modelSize - resizedHeight) / 2f
 
         // 비율 유지한 채 축소된 이미지 만들기
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, true)
@@ -360,7 +377,7 @@ class MainActivity : AppCompatActivity() {
 
         // (0, 0)에 축소된 이미지 그리기
         // → YOLO가 선호하는 letterbox 스타일
-        canvas.drawBitmap(resizedBitmap, 0f, 0f, null)
+        canvas.drawBitmap(resizedBitmap, dx, dy, null)
 
         // paddedBitmap에서 픽셀 값을 하나씩 읽어서
         // RGB 각각을 0~1로 정규화해서 input 배열에 저장
@@ -453,6 +470,7 @@ class MainActivity : AppCompatActivity() {
         return sumDiff.toDouble() / (gray.width * gray.height)
     }
 
+    // yolo가 진짜로 잘 탐지했는지를 보기위해 laptop을 탐지하면 bbox를 그리고 갤러리에 저장.
     private fun saveDebugBitmapWithBoxes(bitmap: Bitmap, boxes: List<BBox>) {
         val debugBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val canvas = Canvas(debugBitmap)
@@ -464,6 +482,7 @@ class MainActivity : AppCompatActivity() {
 
         // 감지된 박스들을 이미지 위에 그림
         for (box in boxes) {
+            Log.d("BBoxDebug", "📦 rect = ${box.rect}")
             canvas.drawRect(box.rect, paint)
         }
 
@@ -486,7 +505,60 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "✅ YOLO 디버그 이미지 저장됨: ${debugFile.absolutePath}")
     }
 
+    // yolo가 진짜로 잘 탐지했는지를 보기위해 laptop을 탐지하면 bbox를 그리고 갤러리에 저장.
+    private fun saveDebugBitmapWithBoxes(bitmap: Bitmap) {
+        val debugBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
+        // 저장
+        val debugFile = File(
+            externalMediaDirs.first(),
+            "yolo_debug_${System.currentTimeMillis()}.jpg"
+        )
+        FileOutputStream(debugFile).use { out ->
+            debugBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        }
+
+        MediaScannerConnection.scanFile(
+            applicationContext,
+            arrayOf(debugFile.absolutePath),
+            arrayOf("image/jpeg"),
+            null
+        )
+
+        Log.d("MainActivity", "✅ YOLO 디버그 이미지 저장됨: ${debugFile.absolutePath}")
+    }
+
+    private fun captureHighResImage() {
+        val photoFile = File(
+            externalMediaDirs.first(),
+            "best_laptop_capture_${System.currentTimeMillis()}.jpg"
+        )
+
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    MediaScannerConnection.scanFile(
+                        applicationContext,
+                        arrayOf(photoFile.absolutePath),
+                        arrayOf("image/jpeg"),
+                        null
+                    )
+                    Log.d("ImageCapture", "📸 고해상도 이미지 저장됨: ${photoFile.absolutePath}")
+                    runOnUiThread {
+                        binding.text1.text = "📸 고해상도 촬영 완료!"
+                    }
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("ImageCapture", "촬영 실패", exception)
+                }
+            }
+        )
+    }
 
 
     companion object {
