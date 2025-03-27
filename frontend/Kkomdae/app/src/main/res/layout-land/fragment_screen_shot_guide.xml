@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.guide.FrontShotGuideFragment">
 
@@ -17,8 +18,11 @@
 
     <!-- 📌 오버레이: 네모 틀과 반투명 검은색 배경 -->
     <com.pizza.kkomdae.ui.CameraOverlayView
+        app:layout_constraintDimensionRatio="4:3"
         android:id="@+id/overlayView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
 

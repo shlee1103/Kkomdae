@@ -13,12 +13,12 @@ import com.pizza.kkomdae.data.Step1Result
 import com.pizza.kkomdae.databinding.ItemStep1ResultBinding
 
 class Step1ResultAdapter(val list: List<Step1Result>, val listen:(Int)->Unit): RecyclerView.Adapter<Step1ResultAdapter.Step1ResultViewHolder>() {
-    private var selectedPosition: Int = RecyclerView.NO_POSITION
+    private var selectedPosition: Int = 0
 
     inner class Step1ResultViewHolder(val binding: ItemStep1ResultBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             Glide.with(binding.ivPosition)
-                .load(list[position+1].image)
+                .load(list[position].image)
                 .into(binding.ivPosition)
 
             if (position == selectedPosition) {
