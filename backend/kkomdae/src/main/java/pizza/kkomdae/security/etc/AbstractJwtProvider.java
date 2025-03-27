@@ -44,6 +44,7 @@ public abstract class AbstractJwtProvider {
             log.error("Invalid JWT token : {}", token, ex);
         } catch (ExpiredJwtException ex) {
             log.error("Expired JWT token : {}", token, ex);
+            throw ex;
         } catch (UnsupportedJwtException ex) {
             log.error("Unsupported JWT token : {}", token, ex);
         } catch (IllegalArgumentException ex) {

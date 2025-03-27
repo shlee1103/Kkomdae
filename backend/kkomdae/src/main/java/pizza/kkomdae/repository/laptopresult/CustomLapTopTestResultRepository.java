@@ -1,7 +1,6 @@
 package pizza.kkomdae.repository.laptopresult;
 
 
-import pizza.kkomdae.dto.respond.UserTestResultRes;
 import pizza.kkomdae.entity.Device;
 import pizza.kkomdae.entity.LaptopTestResult;
 import pizza.kkomdae.entity.Student;
