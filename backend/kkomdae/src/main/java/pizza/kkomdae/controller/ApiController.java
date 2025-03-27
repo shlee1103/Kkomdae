@@ -6,16 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pizza.kkomdae.dto.request.AiPhotoInfo;
-import pizza.kkomdae.dto.request.FlaskRequest;
-import pizza.kkomdae.dto.request.LoginInfo;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.request.SecondStageReq;
-import pizza.kkomdae.dto.respond.ApiResponse;
-import pizza.kkomdae.dto.respond.PhotoWithUrl;
-import pizza.kkomdae.dto.respond.UserRentTestInfo;
-import pizza.kkomdae.dto.respond.UserRentTestRes;
-import pizza.kkomdae.dto.respond.FlaskResponse;
+import pizza.kkomdae.dto.respond.*;
 import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
@@ -83,8 +76,11 @@ public class ApiController {
 
     @Operation(summary = "파일 이름으로 URL 반환", description = "파일 이름으로 url을 돌려받기")
     @GetMapping("/test-file/{file-name}")
-    public String getFileName(@PathVariable("file-name") String fileName) {
-        return s3Service.generatePresignedUrl(fileName);
+    public UrlResponse getFileName(@PathVariable("file-name") String fileName) {
+        // S3에서 URL 생성
+        String url = s3Service.generatePresignedUrl(fileName);
+        // UrlResponse 객체에 담아 반환
+        return new UrlResponse(url);
     }
 
     @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
