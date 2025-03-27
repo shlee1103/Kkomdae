@@ -47,6 +47,7 @@
         android:layout_margin="24dp"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_cancel"
+        app:tint="#CCFFFFFF"
         android:id="@+id/btn_back"/>
 
     <ImageButton

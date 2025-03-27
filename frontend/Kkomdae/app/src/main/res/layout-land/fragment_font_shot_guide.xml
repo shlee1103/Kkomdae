@@ -62,7 +62,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_margin="24dp"/>
+        android:layout_margin="24dp"
+        app:tint="#CCFFFFFF" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_guide"
