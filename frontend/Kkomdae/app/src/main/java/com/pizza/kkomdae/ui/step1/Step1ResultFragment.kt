@@ -38,6 +38,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var step = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,19 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 
         binding.topBar.tvTitle.text=""
         binding.topBar.pbStep.progress=100/3
+
+        binding.ivImage.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("param1", step)  // 이미지 URL을 전달
+
+            // ImageDetailFragment 생성
+            val imageDetailFragment = ImageDetailFragment()
+            imageDetailFragment.arguments = bundle
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, imageDetailFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
         Glide.with(binding.ivImage)
             .load(AppData.frontUri)
@@ -83,11 +97,12 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 
     fun changeImage(it: Int){
         var a = AppData.frontUri
-
+        step=it
         if(it ==1){
             a=AppData.frontUri
         }else if(it == 2){
             a=AppData.backUri
+
         }else if (it ==3){
             a=AppData.leftUri
         }else if (it ==4){

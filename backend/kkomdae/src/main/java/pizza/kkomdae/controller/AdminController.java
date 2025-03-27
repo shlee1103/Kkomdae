@@ -121,7 +121,10 @@ public class AdminController {
         return "index-ss.html";
     }
 
-
+    @GetMapping("/login-local")
+    public String ssafyLoginLocal() {
+        return "index-redirect-local.html";
+    }
     /**
      * 선택한 학생들에게 Mattermost 알림을 전송하는 엔드포인트
      * (예: 학생 목록 페이지에서 "알림 발송" 버튼 클릭 시 호출)

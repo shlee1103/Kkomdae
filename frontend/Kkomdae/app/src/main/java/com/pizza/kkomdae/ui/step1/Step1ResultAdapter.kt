@@ -18,7 +18,7 @@ class Step1ResultAdapter(val list: List<Step1Result>, val listen:(Int)->Unit): R
     inner class Step1ResultViewHolder(val binding: ItemStep1ResultBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             Glide.with(binding.ivPosition)
-                .load(list[position].image)
+                .load(list[position+1].image)
                 .into(binding.ivPosition)
 
             if (position == selectedPosition) {
