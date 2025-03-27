@@ -3,12 +3,12 @@ package pizza.kkomdae.dto.respond;
 import lombok.Getter;
 import pizza.kkomdae.entity.Rent;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 public class UserRentTestRes {
     private final String modelCode;
-    private final LocalDateTime dateTime;
+    private final LocalDate dateTime;
     private boolean release;
     private final String rentPdfUrl;
     private String releasePdfUrl;

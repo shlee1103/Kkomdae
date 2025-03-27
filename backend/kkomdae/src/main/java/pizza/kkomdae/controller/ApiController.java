@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pizza.kkomdae.dto.request.AiPhotoInfo;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.request.SecondStageReq;
+import pizza.kkomdae.dto.request.ThirdStageReq;
 import pizza.kkomdae.dto.respond.ApiResponse;
 import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.dto.respond.UserRentTestInfo;
@@ -82,8 +83,14 @@ public class ApiController {
     }
 
     @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
+    @PostMapping("/secondStage")
     public void secondStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody SecondStageReq secondStageReq) {
         testResultService.secondStage(userDetails, secondStageReq);
     }
 
+    @Operation(summary = "기기 정보 입력", description = "기기 모델명, 시리얼 넘버 등의 정보를 받는 api")
+    @PostMapping("/thirdStage")
+    public void thirdStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody ThirdStageReq thirdStageReq) {
+        testResultService.thirdStage(userDetails, thirdStageReq);
+    }
 }
