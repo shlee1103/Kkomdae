@@ -38,6 +38,7 @@ import java.util.*
 import android.media.MediaScannerConnection
 import android.os.Handler
 import android.util.Size
+import androidx.camera.core.AspectRatio
 import com.example.autocamera.BBox
 import com.example.autocamera.databinding.ActivityMainBinding
 import java.io.FileOutputStream
@@ -51,17 +52,16 @@ data class PreprocessedResult(
 )
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var tflite: Interpreter
     private lateinit var imageCapture: ImageCapture
+    private var count = 0
 
     // 이전 프레임과 비교를 위한 상태
     private var lastBox: BBox? = null
     private var stableFrameCount = 0
     private val requiredStableFrames = 10
     private val candidateBitmaps = mutableListOf<Bitmap>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,19 +117,23 @@ class MainActivity : AppCompatActivity() {
             // ✅ 2. ImageCapture (📸 이 줄이 바로 여기!)
             // 사진을 캡처(저장)할 수 있도록 ImageCapture 객체 생성
             imageCapture = ImageCapture.Builder()
-                .setTargetResolution(resolution)
+                .setTargetAspectRatio(AspectRatio.RATIO_DEFAULT) // 📌 비율 설정
+                // .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY) // 빠른 캡처 모드
+                //.setTargetResolution(resolution)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY) // 고화질 우선
                 .build()
 
             // ✅ 3. ImageAnalysis
             // 카메라에서 들어오는 실시간 프레임(영상)을 분석
             val imageAnalyzer = ImageAnalysis.Builder()
-                .setTargetResolution(resolution)
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) // 분석이 끝날 때까지 기다리지 말고, 가장 최근 프레임만 분석
+                .setTargetAspectRatio(AspectRatio.RATIO_16_9) // 📌 비율 설정
+                // .setTargetResolution(resolution)
+                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) // 분석이 끝날 때까지 기다리지 말고, 가장 최근 프레임만 분석
                 .build()
                 .also {
                     // 프레임이 들어올 때마다 이미지 분석 함수 실행
                     it.setAnalyzer(ContextCompat.getMainExecutor(this), { imageProxy ->
+                        // Log.d("startCamera", "imageProxy 해상도: ${imageProxy.width}X${imageProxy.height}")
                         // YOLO 모델로 감지하고 bbox도 그려주는 기능이 작동
                         analyzeImage(imageProxy)
                     })
@@ -154,9 +158,8 @@ class MainActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-
     private fun loadModelFile(): MappedByteBuffer {
-        val fileDescriptor = assets.openFd("yolo_laptop_detection_float32.tflite")
+        val fileDescriptor = assets.openFd("yolo_laptop.tflite")
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, fileDescriptor.startOffset, fileDescriptor.declaredLength)
@@ -165,6 +168,8 @@ class MainActivity : AppCompatActivity() {
     private fun analyzeImage(imageProxy: ImageProxy) {
         // ImageProxy에서 가져온 카메라 프레임을 Bitmap으로 변환 (YOLO 입력용)
         val bitmap = imageProxyToBitmap(imageProxy)
+        val width = bitmap.width
+        val height = bitmap.height
         // YOLOv8 TFLite 모델에 넣기 위한 전처리 작업 (640x640 크기, float 정규화 등)
         val preprocessed = preprocessBitmap(bitmap)
         val input = preprocessed.input
@@ -217,7 +222,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("BBoxFinal", "BBox: RectF($left, $top, $right, $bottom)")
 
                 if (detectedBoxes.isNotEmpty()) {
-                    // saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
+                    saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
                 }
             }
         }
@@ -236,15 +241,12 @@ class MainActivity : AppCompatActivity() {
                 val viewHeight = binding.previewView.height.toFloat()
                 val bitmapWidth = bitmap.width.toFloat()
                 val bitmapHeight = bitmap.height.toFloat()
-                Log.d("화면", "viewWidth: $viewWidth viewHeight:$viewHeight")
-                Log.d("화면", "bitmapWidth: $bitmapWidth bitmapHeight:$bitmapHeight")
                 Log.d("화면", "bestBox.rect.width(): ${bestBox.rect.width()} bestBox.rect.height():${bestBox.rect.height()}")
                 val areaRatio = (bestBox.rect.width() * bestBox.rect.height()) / (bitmapWidth * bitmapHeight)
-                Log.d("AreaRatio", "비율: $areaRatio")
 
                 // 노트북이 화면의 20% 이상 차지할 때만 유효하다고 간주
                 //→ 너무 멀리 있거나 작게 보이는 건 촬영하지 않음
-                val minAreaRatio = 0.2f  // 화면의 20% 이상일 때만 인정
+                val minAreaRatio = 0.5f  // 화면의 20% 이상일 때만 인정
                 val isBigEnough = areaRatio > minAreaRatio
 
                 // 이전 프레임의 bestBox와 비교해서
@@ -253,7 +255,7 @@ class MainActivity : AppCompatActivity() {
                 val isPositionStable = lastBox?.let {
                     val dx = Math.abs(it.rect.centerX() - bestBox.rect.centerX())
                     val dy = Math.abs(it.rect.centerY() - bestBox.rect.centerY())
-                    dx < 100 && dy < 100  // 100px 이내 움직임이면 "안정"
+                    dx < 10 && dy < 10  // 100px 이내 움직임이면 "안정"
                 } ?: true
                 Log.d("StableFrames", "count = $stableFrameCount, 크기 통과: $isBigEnough, 위치 통과: $isPositionStable")
 
@@ -281,13 +283,8 @@ class MainActivity : AppCompatActivity() {
                     // 지금까지 모은 비트맵 중에서 가장 좋은 걸 선택해서 저장!
                     // 저장 후 초기화
                     captureHighResImage()
-                    // selectBestAndSave(candidateBitmaps)
                     stableFrameCount = 0
                     candidateBitmaps.clear()
-
-                    // (삭제) 화면에 촬영 완료 메시지 출력
-                    val now = SimpleDateFormat("yyyy.MM.dd-HH:mm:ss", Locale.KOREA).format(System.currentTimeMillis())
-                    binding.text1.setText("📸 베스트 컷 촬영 완료! $now")
                 }
 
                 // 오버레이에 감지된 박스 하나만 그리기
@@ -505,29 +502,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "✅ YOLO 디버그 이미지 저장됨: ${debugFile.absolutePath}")
     }
 
-    // yolo가 진짜로 잘 탐지했는지를 보기위해 laptop을 탐지하면 bbox를 그리고 갤러리에 저장.
-    private fun saveDebugBitmapWithBoxes(bitmap: Bitmap) {
-        val debugBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-
-        // 저장
-        val debugFile = File(
-            externalMediaDirs.first(),
-            "yolo_debug_${System.currentTimeMillis()}.jpg"
-        )
-        FileOutputStream(debugFile).use { out ->
-            debugBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        }
-
-        MediaScannerConnection.scanFile(
-            applicationContext,
-            arrayOf(debugFile.absolutePath),
-            arrayOf("image/jpeg"),
-            null
-        )
-
-        Log.d("MainActivity", "✅ YOLO 디버그 이미지 저장됨: ${debugFile.absolutePath}")
-    }
-
     private fun captureHighResImage() {
         val photoFile = File(
             externalMediaDirs.first(),
@@ -549,7 +523,7 @@ class MainActivity : AppCompatActivity() {
                     )
                     Log.d("ImageCapture", "📸 고해상도 이미지 저장됨: ${photoFile.absolutePath}")
                     runOnUiThread {
-                        binding.text1.text = "📸 고해상도 촬영 완료!"
+                        binding.text1.text = "📸 고해상도 촬영 완료! ${++count}"
                     }
                 }
 
