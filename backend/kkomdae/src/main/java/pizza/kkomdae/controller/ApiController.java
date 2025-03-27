@@ -88,11 +88,4 @@ public class ApiController {
         testResultService.secondStage(userDetails, secondStageReq);
     }
 
-//    @Operation(summary = "ai 사진 url update(파이썬 서버용)", description = "python용 s3 ai 이미지 업로드하고 url을 넣는 api")
-//    @PostMapping("ai-photo")
-//    public ApiResponse uploadAiPhoto(@RequestBody AiPhotoInfo aiPhotoInfo) {
-//        photoService.uploadAiPhoto(aiPhotoInfo);
-//        return new ApiResponse(true, "db에 s3 link 저장 성공");
-//    }
-
 }
