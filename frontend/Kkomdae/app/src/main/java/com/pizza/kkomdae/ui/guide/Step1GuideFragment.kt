@@ -109,7 +109,7 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         binding.layoutStep.flStep1
 
         // X 클릭 이벤트 설정
-        binding.topBar.btnCancel.setOnClickListener {
+        binding.topBar.backButtonContainer.setOnClickListener {
             showQuitBottomSheet()
         }
 
