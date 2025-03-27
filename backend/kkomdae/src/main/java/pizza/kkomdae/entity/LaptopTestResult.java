@@ -3,6 +3,7 @@ package pizza.kkomdae.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pizza.kkomdae.dto.request.SecondStageReq;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class LaptopTestResult {
     @Id
@@ -28,7 +30,8 @@ public class LaptopTestResult {
     private String batteryReportUrl;
     private LocalDate date;
     private String pdfUrl;
-    private int step = 0;
+    private int stage = 0;
+    private int picStage = 0;
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
     @ManyToOne(fetch = FetchType.LAZY)

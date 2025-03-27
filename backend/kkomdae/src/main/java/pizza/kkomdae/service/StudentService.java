@@ -57,9 +57,9 @@ public class StudentService {
         }
         UserRentTestInfo info = new UserRentTestInfo();
         info.setUserRentTestRes(results);
-        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndStepIsLessThan(student, 4);
+        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndStageIsLessThan(student, 4);
         if (testResult != null) {
-            info.setStage(testResult.getStep());
+            info.setStage(testResult.getStage());
             List<Photo> photos = testResult.getPhotos();
             info.setPicStage(photos.size());
         }

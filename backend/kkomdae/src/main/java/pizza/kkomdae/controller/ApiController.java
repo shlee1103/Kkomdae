@@ -1,6 +1,7 @@
 package pizza.kkomdae.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +19,10 @@ import pizza.kkomdae.service.PhotoService;
 import pizza.kkomdae.service.StudentService;
 import pizza.kkomdae.service.TestResultService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -58,20 +62,32 @@ public class ApiController {
     @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse uploadPhoto(
             @RequestPart("photoReq") PhotoReq photoReq,
-            @RequestPart(value = "image") MultipartFile image) {
-        // s3에 원본 사진 업로드 및 db에 저장
-        Photo photo = photoService.uploadPhotoSync(photoReq, image);
-        // 비동기로 flask 서버에 요청
-        photoService.analyzePhoto(photo.getPhotoId());
-        return new ApiResponse(true, "사진 업로드 및 저장 성공");
-        // TODO 로직에서 해야 할 일 : S3에 업로드, 사진 db에 저장, 피이썬에 요청
-        // TODO 마지막 사진 업로드 즉 최종 업로드 이후에는 rent 를 init 하거나 update 하는 로직이 필요함
+            @Parameter(required = false, description = "업로드할 이미지 파일 (선택)")
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        // 이미지 파일이 없고, photoType이 음수(-1 등)인 경우
+        if (photoReq.getPhotoType() < 0) {
+            // 테스트 결과의 stage를 2로 업데이트
+            photoService.updateStageTo2(photoReq.getTestId());
+            return new ApiResponse(true, "파일 없이 stage 2 업데이트 완료");
+        } else {
+            // 파일이 있을 경우 S3 업로드 및 DB 저장, 분석 요청 진행
+            Photo photo = photoService.uploadPhotoSync(photoReq, image);
+            photoService.analyzePhoto(photo.getPhotoId());
+            return new ApiResponse(true, "사진 업로드 및 저장 성공");
+        }
     }
+
 
     @GetMapping("photo")
     @Operation(summary = "테스트 id로 테스트의 사진을 얻는 api", description = "List<String>으로 반환")
-    public List<PhotoWithUrl> getPhotos(@RequestParam long testId) {
-        return testResultService.getPhotos(testId);
+    public ApiResponse getPhoto(@RequestParam long testId) {
+        List<PhotoWithUrl> photoList = testResultService.getPhotos(testId);
+
+        Map<String, String> photoMap = photoList.stream()
+                .collect(Collectors.toMap(PhotoWithUrl::getName, PhotoWithUrl::getUrl));
+
+        return new ApiResponse(true, "사진 url 반환 완료", photoMap);
     }
 
     @Operation(summary = "파일 이름으로 URL 반환", description = "파일 이름으로 url을 돌려받기")

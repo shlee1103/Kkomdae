@@ -12,10 +12,12 @@ import pizza.kkomdae.repository.PhotoRepository;
 import pizza.kkomdae.repository.device.DeviceRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
+import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,6 +27,7 @@ public class TestResultService {
     private final StudentRepository studentRepository;
     private final DeviceRepository deviceRepository;
     private final PhotoRepository photoRepository;
+    private final S3Service s3Service;
 
     public List<LaptopTestResultWithStudent> getByStudentOrDevice(Long studentId, Long deviceId, String deviceType) {
         Student referenceStudentById = null;
@@ -54,15 +57,25 @@ public class TestResultService {
     }
 
     public List<PhotoWithUrl> getPhotos(long testId) {
+        // 테스트에 해당하는 laptopTestResult 조회
         LaptopTestResult laptopResult = lapTopTestResultRepository.getReferenceById(testId);
+        // 해당하는 테스트에 연관된 Photo 목록 조회
         List<Photo> photos = photoRepository.getPhotosByLaptopTestResult(laptopResult);
-        List<PhotoWithUrl> results = new ArrayList<>();
-        for (Photo photo : photos) {
-            results.add(new PhotoWithUrl(photo));
-        }
-        return results;
+
+        // 각 Photo마다 presigned URL 생성 후 PhotoWithUrl DTO로 변환
+        return photos.stream()
+                .map(photo -> {
+                    String presignedUrl = s3Service.generatePresignedUrl(photo.getName());
+                    return new PhotoWithUrl(photo, presignedUrl);
+                })
+                .collect(Collectors.toList());
     }
 
+
+    public String getPdfUrl(long testId) {
+        LaptopTestResult testResult = lapTopTestResultRepository.findById(testId).orElseThrow();
+        return testResult.getPdfUrl();
+    }
 
     @Transactional
     public void secondStage(CustomUserDetails userDetails, SecondStageReq secondStageReq) {

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface LapTopTestResultRepository extends JpaRepository<LaptopTestResult,Long>, CustomLapTopTestResultRepository {
 
-    LaptopTestResult findByStudentAndStepIsLessThan(Student student, int stepIsLessThan);
+    LaptopTestResult findByStudentAndStageIsLessThan(Student student, int stageIsLessThan);
 
     LaptopTestResult findByStudentAndLaptopTestResultId(Student student, long laptopTestResultId);
 }
