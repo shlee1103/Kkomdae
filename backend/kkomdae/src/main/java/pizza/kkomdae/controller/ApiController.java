@@ -88,18 +88,11 @@ public class ApiController {
         return testResultService.getPhotos(testId);
     }
 
-    @Operation(summary = "PDF URL 반환", description = "testId로 pdf url을 돌려받기")
-    @GetMapping("/test-pdf/{testId}")
-    public String getPdfUrl(@PathVariable long testId) {
-        return testResultService.getPdfUrl(testId);
+    @Operation(summary = "파일 이름으로 URL 반환", description = "파일 이름으로 url을 돌려받기")
+    @GetMapping("/test-file/{file-name}")
+    public String getFileName(@PathVariable("file-name") String fileName) {
+        return s3Service.generatePresignedUrl(fileName);
     }
-
-//    @Operation(summary = "ai 사진 url update(파이썬 서버용)", description = "python용 s3 ai 이미지 업로드하고 url을 넣는 api")
-//    @PostMapping("ai-photo")
-//    public ApiResponse uploadAiPhoto(@RequestBody AiPhotoInfo aiPhotoInfo) {
-//        photoService.uploadAiPhoto(aiPhotoInfo);
-//        return new ApiResponse(true, "db에 s3 link 저장 성공");
-//    }
 
     @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
     public void secondStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody SecondStageReq secondStageReq) {
