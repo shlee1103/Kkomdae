@@ -75,14 +75,13 @@ public class ApiController {
     }
 
     @Operation(summary = "ai 사진 url update(파이썬 서버용)", description = "python용 s3 ai 이미지 업로드하고 url을 넣는 api")
-    @PostMapping(value = "ai-photo", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("ai-photo")
     public ApiResponse uploadAiPhoto(@RequestBody AiPhotoInfo aiPhotoInfo) {
         photoService.uploadAiPhoto(aiPhotoInfo);
         return new ApiResponse(true, "db에 s3 link 저장 성공");
     }
 
     @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
-    @PostMapping(value = "/stage-2",consumes = MediaType.APPLICATION_JSON_VALUE)
     public void secondStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody SecondStageReq secondStageReq) {
         testResultService.secondStage(userDetails, secondStageReq);
     }
