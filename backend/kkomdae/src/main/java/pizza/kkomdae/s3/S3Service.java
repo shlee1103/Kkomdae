@@ -42,6 +42,11 @@ public class S3Service {
         }
     }
 
+
+    public void uploadPdf(){
+
+    }
+
     private String generateS3Key(PhotoReq photoReq, MultipartFile image) {
         return prefix+photoReq.getTestId()+"/"+photoReq.getPhotoType()+"_"+image.getOriginalFilename();
     }

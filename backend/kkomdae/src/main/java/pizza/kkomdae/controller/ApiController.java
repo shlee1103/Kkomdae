@@ -15,6 +15,7 @@ import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.dto.respond.UserRentTestInfo;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
+import pizza.kkomdae.service.PdfService;
 import pizza.kkomdae.service.PhotoService;
 import pizza.kkomdae.service.StudentService;
 import pizza.kkomdae.service.TestResultService;
@@ -30,12 +31,14 @@ public class ApiController {
     private final TestResultService testResultService;
     private final PhotoService photoService;
     private final S3Service s3Service;
+    private final PdfService pdfService;
 
-    public ApiController(StudentService studentService, TestResultService testResultService, PhotoService photoService, S3Service s3Service) {
+    public ApiController(StudentService studentService, TestResultService testResultService, PhotoService photoService, S3Service s3Service, PdfService pdfService) {
         this.studentService = studentService;
         this.testResultService = testResultService;
         this.photoService = photoService;
         this.s3Service = s3Service;
+        this.pdfService = pdfService;
     }
 
 
@@ -48,9 +51,10 @@ public class ApiController {
 
     @PostMapping("/test")
     @Operation(summary = "테스트 저장을 위한 테스트 생성", description = "테스트가 시작될 때 호출, 테스트 아이디를 반환합니다.<br>" +
-            "테스트 아이디를 sharedPreference에 저장하고 사진 업로드할 때 사용 바랍니다.")
-    public long initTest(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return testResultService.initTest(userDetails.getUserId());
+            "테스트 아이디를 sharedPreference에 저장하고 사진 업로드할 때 사용 바랍니다.<br>" +
+            "반납일 경우 serialNum을 넣어주면 됩니다. 그냥 대여일 시 아무 것도 없이 그냥 전송")
+    public long initTest(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(required = false) String serialNum) {
+        return testResultService.initTest(userDetails.getUserId(), serialNum);
     }
 
 
@@ -92,5 +96,11 @@ public class ApiController {
     @PostMapping("/thirdStage")
     public void thirdStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody ThirdStageReq thirdStageReq) {
         testResultService.thirdStage(userDetails, thirdStageReq);
+    }
+
+    @Operation(summary = "pdf 생성", description = "")
+    @PostMapping("/pdf/{testId}")
+    public void makePdf(@PathVariable long testId) {
+        pdfService.makePdf();
     }
 }

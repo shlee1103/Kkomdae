@@ -48,11 +48,16 @@ public class TestResultService {
     }
 
     @Transactional
-    public long initTest(long userId) {
+    public long initTest(long userId, String serialNum) {
         Student student = studentRepository.getReferenceById(userId);
         LaptopTestResult laptopTestResult = lapTopTestResultRepository.findByStudentAndStepIsLessThan(student, 5);
         if (laptopTestResult == null) {
             laptopTestResult = new LaptopTestResult(student);
+            if (serialNum != null) {
+                Device device = deviceRepository.findDeviceBySerialNum(serialNum);
+                laptopTestResult.setDevice(device);
+                laptopTestResult.setRelease(true);
+            }
             lapTopTestResultRepository.save(laptopTestResult);
         }
         return laptopTestResult.getLaptopTestResultId();
@@ -97,6 +102,9 @@ public class TestResultService {
         rent.setStudent(student);
         rent.setRentDateTime(thirdStageReq.getLocalDate());
         Device device = deviceRepository.findDeviceBySerialNum(thirdStageReq.getSerialNum());
+        if (device == null) {
+            throw new RuntimeException("deivce 시리얼 에러");
+        }
         testResult.setDevice(device);
         rent.setDevice(device);
         rentRepository.save(rent);
