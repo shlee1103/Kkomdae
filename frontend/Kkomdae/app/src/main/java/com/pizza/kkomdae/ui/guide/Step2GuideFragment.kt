@@ -12,6 +12,7 @@ import android.widget.Button
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep2GuideBinding
+import com.pizza.kkomdae.ui.step2.QrScanFragment
 import com.pizza.kkomdae.ui.step2.Step2ResultFragment
 
 // TODO: Rename parameter arguments, choose names that match
@@ -48,7 +49,7 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
         binding.btnNext.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
 //            transaction.replace(R.id.fl_main, QrScanFragment())
-            transaction.replace(R.id.fl_main, Step2ResultFragment())
+            transaction.replace(R.id.fl_main, QrScanFragment())
             transaction.addToBackStack(null)
             transaction.commit()
         }
