@@ -27,6 +27,7 @@ private lateinit var mainActivity: MainActivity
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private var step =0
 
 /**
  * A simple [Fragment] subclass.
@@ -54,13 +55,12 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.topBar.tvTitle.text = "STEP 1"
-        binding.topBar.pbStep.progress=100/3
+    override fun onResume() {
+        super.onResume()
+        step =AppData.step
         val color = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
 
-        val step =AppData.step
+
         when(step){
             1-> {
                 binding.layoutStep.flStep1.backgroundTintList=color
@@ -99,6 +99,13 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
 
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.topBar.tvTitle.text = "STEP 1"
+        binding.topBar.pbStep.progress=100/3
+
         binding.layoutStep.flStep1
 
         // X 클릭 이벤트 설정
