@@ -56,7 +56,7 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.topBar.tvTitle.text = "외관 촬영 가이드"
+        binding.topBar.tvTitle.text = "STEP 1"
         binding.topBar.pbStep.progress=100/3
         val color = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
 
