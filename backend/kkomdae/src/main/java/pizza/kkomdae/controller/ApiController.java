@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pizza.kkomdae.dto.request.AiPhotoInfo;
 import pizza.kkomdae.dto.request.PhotoReq;
+import pizza.kkomdae.dto.request.SecondStageReq;
 import pizza.kkomdae.dto.respond.ApiResponse;
 import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.dto.respond.UserRentTestInfo;
-import pizza.kkomdae.dto.respond.UserRentTestRes;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.PhotoService;
@@ -48,8 +48,8 @@ public class ApiController {
     @PostMapping("/test")
     @Operation(summary = "테스트 저장을 위한 테스트 생성", description = "테스트가 시작될 때 호출, 테스트 아이디를 반환합니다.<br>" +
             "테스트 아이디를 sharedPreference에 저장하고 사진 업로드할 때 사용 바랍니다.")
-    public long initTest(@RequestParam String email) {
-        return testResultService.initTest(email);
+    public long initTest(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return testResultService.initTest(userDetails.getUserId());
     }
 
 
@@ -80,4 +80,10 @@ public class ApiController {
         photoService.uploadAiPhoto(aiPhotoInfo);
         return new ApiResponse(true, "db에 s3 link 저장 성공");
     }
+
+    @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
+    public void secondStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody SecondStageReq secondStageReq) {
+        testResultService.secondStage(userDetails, secondStageReq);
+    }
+
 }
