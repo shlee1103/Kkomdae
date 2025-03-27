@@ -8,6 +8,7 @@ import boto3                                # AWS S3 연동을 위한 boto3 라�
 from io import BytesIO
 from PIL import Image
 import tempfile
+from loguru import logger
 load_dotenv()
 
 
@@ -48,12 +49,11 @@ def analyze():
     try:
         # Spring에서 보내는 형식에 맞춰 처리
         s3_key = data.get('s3Key')
-        image_url = data.get('imageUrl')
         
-        if not s3_key or not image_url:
+        if not s3_key:
             return jsonify({"error": "필수 필드가 누락되었습니다."}), 400
             
-        logger.debug(f"s3_key: {s3_key}, image_url: {image_url}")
+        logger.debug(f"s3_key: {s3_key}")
  
     except Exception as e:
         logger.error(f"Invalid JSON format: {e}")

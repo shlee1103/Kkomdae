@@ -15,6 +15,7 @@ import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.dto.respond.UserRentTestInfo;
 import pizza.kkomdae.dto.respond.UserRentTestRes;
 import pizza.kkomdae.dto.respond.FlaskResponse;
+import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.FlaskService;
@@ -64,7 +65,10 @@ public class ApiController {
     public ApiResponse uploadPhoto(
             @RequestPart("photoReq") PhotoReq photoReq,
             @RequestPart(value = "image") MultipartFile image) {
-        photoService.uploadPhoto(photoReq, image);
+        // s3에 원본 사진 업로드 및 db에 저장
+        Photo photo = photoService.uploadPhotoSync(photoReq, image);
+        // 비동기로 flask 서버에 요청
+        photoService.analyzePhoto(photo.getPhotoId());
         return new ApiResponse(true, "사진 업로드 및 저장 성공");
         // TODO 로직에서 해야 할 일 : S3에 업로드, 사진 db에 저장, 피이썬에 요청
         // TODO 마지막 사진 업로드 즉 최종 업로드 이후에는 rent 를 init 하거나 update 하는 로직이 필요함

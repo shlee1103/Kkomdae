@@ -52,6 +52,7 @@ public class SsafySsoService {
             if (response.getStatusCode().is2xxSuccessful()) {
                 return response.getBody();
             } else {
+                log.error("인증 서버로부터 AuthToken 정보를 가져오는데 실패하였습니다.");
                 throw new AuthenticationServiceException("인증 서버로부터 AuthToken 정보를 가져오는데 실패하였습니다.",
                         new RuntimeException("Authentication Failed with code " + response.getStatusCode()));
             }
@@ -70,6 +71,7 @@ public class SsafySsoService {
             if (response.getStatusCode().is2xxSuccessful()) {
                 return response.getBody();
             } else {
+                log.error("인증 서버로부터 사용자 정보를 가져오는데 실패하였습니다.");
                 throw new RuntimeException("인증 서버로부터 사용자 정보를 가져오는데 실패하였습니다.",
                         new RuntimeException("Authentication Failed with code " + response.getStatusCode()));
             }

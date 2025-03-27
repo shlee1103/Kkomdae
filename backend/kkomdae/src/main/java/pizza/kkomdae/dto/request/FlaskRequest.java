@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FlaskRequest {
     private String s3Key;
-    private String imageUrl;
 }

@@ -17,7 +17,7 @@ public class Photo {
     private long photoId;
     private String name;
     private String aiName;
-    private int testId;
+    private int damage;
     @Enumerated(EnumType.STRING)
     private PhotoType type;
     @ManyToOne

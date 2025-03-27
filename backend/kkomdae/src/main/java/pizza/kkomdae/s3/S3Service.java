@@ -48,7 +48,7 @@ public class S3Service {
 
     // S3 Key 생성 메서드
     private String generateS3Key(PhotoReq photoReq, MultipartFile image) {
-        return prefix+photoReq.getTestId()+"/"+photoReq.getPhotoType()+"_"+image.getOriginalFilename();
+        return prefix+photoReq.getTestId()+"_"+photoReq.getPhotoType()+"_"+image.getOriginalFilename();
     }
 
     // 메타데이터 생성 메서드
