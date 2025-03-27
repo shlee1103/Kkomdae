@@ -64,11 +64,6 @@ public class TestResultService {
     }
 
 
-    public String getPdfUrl(long testId) {
-        LaptopTestResult testResult = lapTopTestResultRepository.findById(testId).orElseThrow();
-        return testResult.getPdfUrl();
-    }
-
     @Transactional
     public void secondStage(CustomUserDetails userDetails, SecondStageReq secondStageReq) {
         Student student = studentRepository.getReferenceById(userDetails.getUserId());
