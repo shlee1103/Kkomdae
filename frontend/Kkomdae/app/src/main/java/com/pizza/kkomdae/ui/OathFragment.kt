@@ -113,6 +113,7 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
             isOath3Checked = !isOath3Checked
             binding.cardAgreement3.isClickable=false
             updateCompleteButtonState()
+            binding.cardAgreement3.isClickable=false
             binding.oathContent3.isVisible=false
             binding.oathTitle3.tvView.isVisible=true
         }

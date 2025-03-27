@@ -123,6 +123,12 @@ dependencies {
         exclude(group = "com.android.support")
     }
 
+    //포토뷰
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+
     // Lottie
     implementation ("com.airbnb.android:lottie:5.2.0")
+
+    // 바텀 시트
+    implementation("com.google.android.material:material:1.2.1")
 }

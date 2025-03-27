@@ -16,18 +16,18 @@ public class LaptopTestResult {
     private long laptopTestResultId;
     @ManyToOne(fetch = FetchType.LAZY)
     Device device;
-    private boolean release;
-    private boolean keyboardStatus;
+    private Boolean release;
+    private Boolean keyboardStatus;
     private String failedKeys; // TODO 입력 값에 따라 수정해야함
-    private boolean usbStatus;
+    private Boolean usbStatus;
     private String failedPorts; // TODO 입력 값에 따라 수정해야함
-    private boolean cameraStatus;
-    private boolean chargerStatus;
-    private boolean batteryReport;
+    private Boolean cameraStatus;
+    private Boolean chargerStatus;
+    private Boolean batteryReport;
     private String batteryReportUrl;
     private LocalDate date;
     private String pdfUrl;
-    private int step;
+    private int step = 0;
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
     @ManyToOne(fetch = FetchType.LAZY)

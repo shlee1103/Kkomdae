@@ -1,11 +1,17 @@
 package com.pizza.kkomdae.ui.step1
 
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.pizza.kkomdae.CameraActivity
@@ -84,6 +90,39 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
         binding.btnCheck?.setOnClickListener {
             cameraActivity.changeFragment((viewModel.step.value?:-1)+1)
         }
+        // X 버튼 눌렀을 때
+        binding.btnCancel?.setOnClickListener {
+            showStopCameraDialog()
+        }
+
+    }
+
+    private fun showStopCameraDialog() {
+        // 다이얼로그 생성
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_stop_camera_dialog)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.5).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 취소 버튼
+        val btnCancel = dialog.findViewById<TextView>(R.id.btn_cancel)
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 그만하기 버튼
+        val btnConfirm = dialog.findViewById<TextView>(R.id.btn_confirm)
+        btnConfirm.setOnClickListener {
+            // 다이얼로그 닫기
+            dialog.dismiss()
+            cameraActivity.moveToBack()
+        }
+
+        dialog.show()
     }
 
     companion object {

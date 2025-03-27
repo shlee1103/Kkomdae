@@ -11,12 +11,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import androidx.core.content.ContextCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentLaptopInfoInputBinding
 import com.pizza.kkomdae.databinding.FragmentMainBinding
 import com.pizza.kkomdae.databinding.FragmentStep1GuideBinding
+
 private lateinit var mainActivity: MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -33,7 +37,6 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
     FragmentStep1GuideBinding::bind,
     R.layout.fragment_step1_guide
 ){
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,6 +58,54 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.tvTitle.text = "외관 촬영 가이드"
         binding.topBar.pbStep.progress=100/3
+        val color = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
+
+        val step =AppData.step
+        when(step){
+            1-> {
+                binding.layoutStep.flStep1.backgroundTintList=color
+            }
+            2->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+            }
+            3->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+            }
+            4->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+                binding.layoutStep.flStep4.backgroundTintList=color
+            }
+            5->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+                binding.layoutStep.flStep4.backgroundTintList=color
+                binding.layoutStep.flStep5.backgroundTintList=color
+            }
+            6->{
+                binding.layoutStep.flStep1.backgroundTintList=color
+                binding.layoutStep.flStep2.backgroundTintList=color
+                binding.layoutStep.flStep3.backgroundTintList=color
+                binding.layoutStep.flStep4.backgroundTintList=color
+                binding.layoutStep.flStep5.backgroundTintList=color
+                binding.layoutStep.flStep6.backgroundTintList=color
+            }
+            else->{
+
+            }
+        }
+        binding.layoutStep.flStep1
+
+        // X 클릭 이벤트 설정
+        binding.topBar.btnCancel.setOnClickListener {
+            showQuitBottomSheet()
+        }
+
         binding.btnNext.setOnClickListener {
             mainActivity.next()
         }
@@ -79,6 +130,34 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         }
 
         dialog.show()
+    }
+
+    /**
+     * X 버튼 클릭 시 나타나는 등록 취소 확인 바텀시트를 표시
+     */
+    private fun showQuitBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet, null)
+
+        // 계속하기 버튼 클릭 시 바텀시트 닫기
+        val btnContinue = bottomSheetView.findViewById<View>(R.id.btn_continue)
+        btnContinue.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // 그만두기 버튼 클릭 시 메인 화면으로 이동
+        val btnQuit = bottomSheetView.findViewById<View>(R.id.btn_quit)
+        btnQuit.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            // 메인 화면으로 이동
+            val transaction = mainActivity.supportFragmentManager.beginTransaction()
+            mainActivity.supportFragmentManager.popBackStack()
+            transaction.replace(R.id.fl_main, com.pizza.kkomdae.ui.MainFragment())
+            transaction.commit()
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
     }
 
     companion object {

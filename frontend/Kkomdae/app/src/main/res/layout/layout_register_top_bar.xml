@@ -14,7 +14,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_cancel"
         android:layout_marginStart="24dp"
-        style="@style/Headline1"/>
+        android:textSize="18dp"
+        android:textColor="@color/gray800"
+        android:fontFamily="@font/pretendard_semi_bold"
+        android:lineSpacingMultiplier="1.4"/>
 
     <ImageView
         android:id="@+id/btn_cancel"

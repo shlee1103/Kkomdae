@@ -5,13 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pizza.kkomdae.dto.request.StudentWithRentCond;
 import pizza.kkomdae.dto.respond.StudentWithRent;
-import pizza.kkomdae.dto.respond.UserTestResultRes;
+import pizza.kkomdae.dto.respond.UserRentTestInfo;
+import pizza.kkomdae.dto.respond.UserRentTestRes;
+import pizza.kkomdae.entity.LaptopTestResult;
+import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.entity.Rent;
 import pizza.kkomdae.entity.Student;
+import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 import pizza.kkomdae.repository.rent.RentRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
-import pizza.kkomdae.security.etc.JwtProviderForSpringSecurity;
-import pizza.kkomdae.ssafyapi.SsafySsoService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final RentRepository rentRepository;
+    private final LapTopTestResultRepository lapTopTestResultRepository;
 
     // 노트북 현황은 반납하지 않은 rent 값이 true인 것이 있으면
     public List<StudentWithRent> findByKeyword(String searchType, String searchKeyword) {
@@ -43,17 +46,24 @@ public class StudentService {
         return results;
     }
 
-    public List<UserTestResultRes> getUserRentInfo(long studentId) {
-        Student student = studentRepository.findById(studentId).orElseThrow();
-//        Student student = studentRepository.findByEmail("sskim629@gmail.com"); TODO jwt에서 추출한 이메일로 변경
+    public UserRentTestInfo getUserRentInfo(long studentId) {
+        Student student = studentRepository.getReferenceById(studentId);
         StudentWithRentCond cond = new StudentWithRentCond();
         cond.setStudent(student);
         List<Rent> laptopTestResults = rentRepository.getRentsByStudentInfo(cond);
-        List<UserTestResultRes> results = new ArrayList<>();
+        List<UserRentTestRes> results = new ArrayList<>();
         for (Rent rent : laptopTestResults) {
-            results.add(new UserTestResultRes(rent));
+            results.add(new UserRentTestRes(rent));
         }
-        return results;
+        UserRentTestInfo info = new UserRentTestInfo();
+        info.setUserRentTestRes(results);
+        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndStepIsLessThan(student, 4);
+        if (testResult != null) {
+            info.setStage(testResult.getStep());
+            List<Photo> photos = testResult.getPhotos();
+            info.setPicStage(photos.size());
+        }
+        return info;
 
     }
 

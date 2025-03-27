@@ -23,10 +23,10 @@ public class LaptopTestResultWithStudent {
         this.studentRegion = laptopTestResult.getStudent().getRegion();
         this.studentName = laptopTestResult.getStudent().getName();
         this.studentNum = laptopTestResult.getStudent().getStudentNum();
-        this.release = laptopTestResult.isRelease();
+        this.release = laptopTestResult.getRelease();
         this.failedKeys = laptopTestResult.getFailedKeys();
         this.failedPorts = laptopTestResult.getFailedPorts();
-        this.cameraStatus = laptopTestResult.isCameraStatus();
+        this.cameraStatus = laptopTestResult.getCameraStatus();
         this.batteryPdfUrl = laptopTestResult.getBatteryReportUrl();
         this.resultPdfUrl = laptopTestResult.getPdfUrl();
         this.date = laptopTestResult.getDate();
