@@ -153,7 +153,9 @@ public class SsafySsoService {
 
     @Transactional
     public AuthenticationResponse refresh(RefreshReq refreshReq) {
-        Student student = studentRepository.findByEmail(refreshReq.getEmail());
+        long userId = Long.parseLong(jwtProvider.extractUserId(refreshReq.getRefreshToken()));
+        log.info("refresh token 속 userID : {}",userId);
+        Student student = studentRepository.findById(userId).orElseThrow(()->new RuntimeException("없는 userId"));
         if(student==null){
             log.error("없는 이메일");
             throw new RuntimeException("없는 이메일");

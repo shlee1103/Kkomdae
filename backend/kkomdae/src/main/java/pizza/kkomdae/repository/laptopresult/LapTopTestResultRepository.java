@@ -14,4 +14,6 @@ public interface LapTopTestResultRepository extends JpaRepository<LaptopTestResu
     LaptopTestResult findByStudentAndStepIsLessThan(Student student, int stepIsLessThan);
 
     LaptopTestResult findByStudentAndLaptopTestResultId(Student student, long laptopTestResultId);
+
+    LaptopTestResult findByStudentAndStepIsLessThanAndDeviceIsNull(Student student, int stepIsLessThan);
 }
