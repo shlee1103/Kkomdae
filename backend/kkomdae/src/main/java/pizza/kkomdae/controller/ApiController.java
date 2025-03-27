@@ -75,13 +75,6 @@ public class ApiController {
         // TODO 마지막 사진 업로드 즉 최종 업로드 이후에는 rent 를 init 하거나 update 하는 로직이 필요함
     }
 
-    @PostMapping("/analyze-photo")
-    @Operation(summary = "Flask 서버로 사진 분석 요청", description = "Flask 서버에 JSON 데이터를 전송하고 분석 결과를 반환받습니다.")
-    public ApiResponse analyzePhoto(@RequestBody FlaskRequest flaskRequest) {
-        FlaskResponse flaskResponse = flaskService.analyzeImage(flaskRequest);
-        return new ApiResponse(true, "사진 분석 성공", flaskResponse);
-    }
-
     @GetMapping("photo")
     @Operation(summary = "테스트 id로 테스트의 사진을 얻는 api", description = "List<String>으로 반환")
     public List<PhotoWithUrl> getPhotos(@RequestParam long testId) {
