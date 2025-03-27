@@ -96,20 +96,20 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
     }
 
     fun changeImage(it: Int){
+        Log.d(TAG, "changeImage: $it")
         var a = AppData.frontUri
-        step=it
-        if(it ==1){
+        step=it+1
+        if(step ==1){
             a=AppData.frontUri
-        }else if(it == 2){
+        }else if(step == 2){
             a=AppData.backUri
-
-        }else if (it ==3){
+        }else if (step ==3){
             a=AppData.leftUri
-        }else if (it ==4){
+        }else if (step ==4){
             a=AppData.rightUri
-        }else if (it ==5){
+        }else if (step ==5){
             a=AppData.screenUri
-        }else if (it ==6){
+        }else if (step ==6){
             a=AppData.keypadUri
         }
         Glide.with(binding.ivImage)

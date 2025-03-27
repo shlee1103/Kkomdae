@@ -1,10 +1,10 @@
 package pizza.kkomdae.service;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pizza.kkomdae.dto.request.SecondStageReq;
 import pizza.kkomdae.dto.respond.LaptopTestResultWithStudent;
 import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.entity.*;
@@ -12,10 +12,10 @@ import pizza.kkomdae.repository.PhotoRepository;
 import pizza.kkomdae.repository.device.DeviceRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
+import pizza.kkomdae.security.dto.CustomUserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -45,8 +45,8 @@ public class TestResultService {
     }
 
     @Transactional
-    public long initTest(String email) {
-        Student student = studentRepository.findByEmail(email);
+    public long initTest(long userId) {
+        Student student = studentRepository.getReferenceById(userId);
         LaptopTestResult laptopTestResult = new LaptopTestResult(student);
         LaptopTestResult testResult = lapTopTestResultRepository.save(laptopTestResult);
 
@@ -67,5 +67,16 @@ public class TestResultService {
     public String getPdfUrl(long testId) {
         LaptopTestResult testResult = lapTopTestResultRepository.findById(testId).orElseThrow();
         return testResult.getPdfUrl();
+    }
+
+    @Transactional
+    public void secondStage(CustomUserDetails userDetails, SecondStageReq secondStageReq) {
+        Student student = studentRepository.getReferenceById(userDetails.getUserId());
+        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndLaptopTestResultId(student, secondStageReq.getTestId());
+        if (testResult == null) {
+            throw new RuntimeException("저장된 테스트 없음");
+        }
+        testResult.saveSecondStage(secondStageReq);
+
     }
 }
