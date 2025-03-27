@@ -3,6 +3,7 @@ package pizza.kkomdae.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pizza.kkomdae.dto.request.SecondStageReq;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,4 +39,12 @@ public class LaptopTestResult {
         this.student = student;
     }
 
+    public void saveSecondStage(SecondStageReq secondStageReq) {
+        this.keyboardStatus = secondStageReq.isKeyboardStatus();
+        this.failedKeys = secondStageReq.getFailedKeys();
+        this.usbStatus = secondStageReq.isUsbStatus();
+        this.failedPorts = secondStageReq.getFailedPorts();
+        this.cameraStatus = secondStageReq.isCameraStatus();
+        this.chargerStatus = secondStageReq.isChargerStatus();
+    }
 }
