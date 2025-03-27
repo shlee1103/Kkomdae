@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.camera.core.Camera
@@ -17,6 +18,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
+import com.google.gson.JsonParser
+import com.google.gson.JsonSyntaxException
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -70,19 +73,24 @@ class QrScanFragment : BaseFragment<FragmentQrScanBinding>(
                         for (barcode in barcodes) {
                             // 바코드 스캔 성공 시 처리 로직
                             val rawValue = barcode.rawValue
-                            Log.d(TAG, "Scanned QR Code: $rawValue")
-                            val report = Gson().fromJson(rawValue,DeviceReport::class.java)
-                            viewModel.apply {
-                                setUsbStatus(report.usb)
-                                setCameraStatus(report.camera)
-                                setBatteryStatus(report.battery_report)
-                                setChargerStatus(report.charger)
-                                setKeyboardStatus(report.keyboard)
+                            if(isValidJson("$rawValue")){
+                                Log.d(TAG, "Scanned QR Code: $rawValue")
+                                val report = Gson().fromJson(rawValue,DeviceReport::class.java)
+                                viewModel.apply {
+                                    setUsbStatus(report.usb)
+                                    setCameraStatus(report.camera)
+                                    setBatteryStatus(report.battery_report)
+                                    setChargerStatus(report.charger)
+                                    setKeyboardStatus(report.keyboard)
+                                }
+                                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                                transaction.replace(R.id.fl_main, Step2ResultFragment())
+                                transaction.addToBackStack(null)
+                                transaction.commit()
+                            }else{
+                                Toast.makeText(requireContext(),"잘못된 QR코드 정보입니다.",Toast.LENGTH_SHORT).show()
                             }
-                            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                            transaction.replace(R.id.fl_main, Step2ResultFragment())
-                            transaction.addToBackStack(null)
-                            transaction.commit()
+
 
                             // 여기에 스캔된 바코드 처리 로직 추가
                             // 예: 특정 액티비티로 이동, 데이터 처리 등
@@ -97,6 +105,14 @@ class QrScanFragment : BaseFragment<FragmentQrScanBinding>(
                         image.close()
                     }
             }
+        }
+    }
+    fun isValidJson(jsonString: String): Boolean {
+        return try {
+            JsonParser.parseString(jsonString)
+            true
+        } catch (e: JsonSyntaxException) {
+            false
         }
     }
 
