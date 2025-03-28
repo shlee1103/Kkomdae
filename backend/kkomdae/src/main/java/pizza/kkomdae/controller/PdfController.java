@@ -14,6 +14,7 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+@Hidden
 @RequiredArgsConstructor
 public class PdfController {
 
@@ -393,7 +395,7 @@ public class PdfController {
 
         // 이미지 추가
 
-        String imagePath = PdfController.class.getClassLoader().getResource("static/test.jpg").getPath();
+        String imagePath = PdfController.class.getClassLoader().getResource("static/image/test.jpg").getPath();
         Image image = new Image(ImageDataFactory.create(new URL(url)));
 
         // 이미지 크기와 정렬 설정
