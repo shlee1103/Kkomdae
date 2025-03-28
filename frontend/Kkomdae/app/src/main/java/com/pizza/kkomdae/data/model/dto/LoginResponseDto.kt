@@ -1,6 +1,6 @@
 package com.pizza.kkomdae.data.model.dto
 
-data class LoginResponse(
+data class LoginResponseDto(
     val jwt : String,
     val refreshToken : String
 )
