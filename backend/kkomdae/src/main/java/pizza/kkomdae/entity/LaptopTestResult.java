@@ -38,7 +38,9 @@ public class LaptopTestResult {
     private Integer bag;
     private Integer mousePad;
 
-    private int step = 0;
+    private int stage = 0;
+    private int picStage = 0;
+
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,7 +52,7 @@ public class LaptopTestResult {
     }
 
     public void saveSecondStage(SecondStageReq secondStageReq) {
-        this.step = 3;
+        this.stage = 3;
         this.keyboardStatus = secondStageReq.isKeyboardStatus();
         this.failedKeys = secondStageReq.getFailedKeys();
         this.usbStatus = secondStageReq.isUsbStatus();
@@ -62,7 +64,7 @@ public class LaptopTestResult {
     }
 
     public void saveThirdStage(ThirdStageReq thirdStageReq) {
-        this.step = 4;
+        this.stage = 4;
         this.release = thirdStageReq.isRelease();
         this.date = thirdStageReq.getLocalDate();
         this.laptop = thirdStageReq.getLaptop();

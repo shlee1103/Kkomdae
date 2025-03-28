@@ -9,6 +9,6 @@ public class AiPhotoInfo {
     private String s3PicUrl;
     private long testId;
     private long photoId;
-    private PhotoType type;
+    private int type;
     private String name;
 }
