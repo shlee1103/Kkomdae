@@ -1,9 +1,8 @@
-package com.pizza.kkomdae.data.local
+package com.pizza.kkomdae.data.source.local
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import android.util.Log
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator

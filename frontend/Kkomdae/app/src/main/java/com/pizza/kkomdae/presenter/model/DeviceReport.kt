@@ -1,4 +1,4 @@
-package com.pizza.kkomdae.data.dto
+package com.pizza.kkomdae.presenter.model
 
 data class DeviceReport(
     val keyboard: KeyboardStatus,

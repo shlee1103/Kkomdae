@@ -3,9 +3,7 @@ package com.pizza.kkomdae.ui.step1
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -13,11 +11,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.data.Step1Result
-import com.pizza.kkomdae.databinding.FragmentFontResultBinding
+import com.pizza.kkomdae.presenter.model.Step1Result
 import com.pizza.kkomdae.databinding.FragmentStep1ResultBinding
 import com.pizza.kkomdae.ui.MyAndroidViewModel
-import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import com.pizza.kkomdae.ui.guide.Step2GuideFragment
 import android.content.Context
 import androidx.fragment.app.FragmentManager

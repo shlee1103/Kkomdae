@@ -8,13 +8,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.data.Submission
+import com.pizza.kkomdae.presenter.model.Submission
 import com.pizza.kkomdae.databinding.FragmentMainBinding
 
 // TODO: Rename parameter arguments, choose names that match

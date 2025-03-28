@@ -1,4 +1,4 @@
-package com.pizza.kkomdae.data.dto
+package com.pizza.kkomdae.data.model.dto
 
 data class RefreshTokenResponse(
     val jwt: String,

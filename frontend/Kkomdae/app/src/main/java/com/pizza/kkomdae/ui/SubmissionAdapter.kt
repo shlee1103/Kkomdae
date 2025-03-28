@@ -6,8 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.pizza.kkomdae.R
-import com.pizza.kkomdae.data.Submission
+import com.pizza.kkomdae.presenter.model.Submission
 import com.pizza.kkomdae.databinding.ItemSubmissionBinding
 
 

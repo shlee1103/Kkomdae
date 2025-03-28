@@ -15,13 +15,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.pizza.kkomdae.data.local.SecureTokenManager
-import com.pizza.kkomdae.data.local.TokenManager
+import com.pizza.kkomdae.data.source.local.SecureTokenManager
+import com.pizza.kkomdae.data.source.local.TokenManager
 import com.pizza.kkomdae.databinding.ActivityLoginBinding
-import com.pizza.kkomdae.databinding.ActivityMainBinding
-import com.pizza.kkomdae.remote.RetrofitUtil.Companion.loginService
+import com.pizza.kkomdae.util.RetrofitUtil.Companion.loginService
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 private const val TAG = "LoginActivity"
 class LoginActivity : AppCompatActivity() {
