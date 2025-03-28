@@ -37,25 +37,27 @@
 
         <ImageView
             android:id="@+id/iv_smartphone"
-            android:layout_width="100dp"
-            android:layout_height="120dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/ic_mobile"
-            android:layout_marginEnd="8dp" />
+            android:scaleType="fitCenter"
+            android:layout_marginEnd="4dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=">>>"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="16dp" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_arrow"
+            android:layout_width="100dp"
+            android:layout_height="80dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_fileName="step2_right_arrow.json" />
 
         <ImageView
             android:id="@+id/iv_laptop"
-            android:layout_width="120dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/ic_laptop"
-            android:layout_marginStart="8dp" />
+            android:scaleType="fitCenter"
+            android:layout_marginStart="4dp" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

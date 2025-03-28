@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import com.airbnb.lottie.LottieDrawable
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep2GuideBinding
@@ -45,6 +46,17 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.tvTitle.text = "Step 2"
         binding.topBar.pbStep.progress=200/3
+
+        // Lottie 애니메이션 설정
+        binding.animationArrow.setAnimation(R.raw.step2_right_arrow)
+        binding.animationArrow.playAnimation()
+        binding.animationArrow.loop(true)
+        binding.animationArrow.apply {
+            setAnimation(R.raw.step2_right_arrow)
+            speed = 0.8f  // 속도 조정 (1.0이 기본)
+            repeatCount = LottieDrawable.INFINITE  // 무한 반복
+            playAnimation()
+        }
 
         binding.btnNext.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
