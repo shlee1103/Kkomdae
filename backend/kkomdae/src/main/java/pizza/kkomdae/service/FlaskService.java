@@ -16,7 +16,7 @@ public class FlaskService {
     }
 
     public FlaskResponse analyzeImage(FlaskRequest flaskRequest) {
-        String flaskUrl = "http://127.0.0.1:5000/analyze"; // Flask 서버 URL
+        String flaskUrl = "http://flask:5000/analyze"; // Flask 서버 URL
 
         // HTTP 요청 생성
         HttpHeaders headers = new HttpHeaders();
