@@ -14,9 +14,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btn_confirm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_bar">
@@ -28,11 +29,11 @@
 
             <TextView
                 android:id="@+id/tv_title"
-                style="@style/Display1"
+                style="@style/Display2"
+                android:textColor="@color/gray700"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="노트북 정보 입력"
-                android:textColor="@color/gray700"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -579,6 +580,7 @@
         android:backgroundTint="@color/blue200"
         android:clickable="false"
         android:text="완료"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
