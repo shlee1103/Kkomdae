@@ -144,7 +144,7 @@ def analyze():
 
 # Flask 앱 실행
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)  # 모든 IP에서 접근 가능하도록 설정
 
 
 # 요청 예시 (Request Examples)
