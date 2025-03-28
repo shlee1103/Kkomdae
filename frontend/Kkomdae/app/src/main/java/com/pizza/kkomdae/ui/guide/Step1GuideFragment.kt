@@ -43,6 +43,7 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
