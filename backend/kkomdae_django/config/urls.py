@@ -19,6 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('s3app/', include('s3app.urls')),
+    path('django/s3app/', include('s3app.urls')),
 ]
 
