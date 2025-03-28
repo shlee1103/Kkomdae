@@ -22,7 +22,7 @@ public class UserRentTestRes {
     public UserRentTestRes(Rent rent) {
         this.modelCode = rent.getDevice().getModelCode();
         this.rentPdfName = rent.getDevice().getLaptopTestResults().get(0).getPdfFileName();
-        log.info("테스트 번호 {}",rent.getDevice().getLaptopTestResults().get(0).getLaptopTestResultId());
+//        log.info("테스트 번호 {}",rent.getDevice().getLaptopTestResults().get(0).getLaptopTestResultId());
         if (rent.getReleaseDateTime() != null) { // 반납했다면
             this.dateTime = rent.getReleaseDateTime();
             this.release = true;
