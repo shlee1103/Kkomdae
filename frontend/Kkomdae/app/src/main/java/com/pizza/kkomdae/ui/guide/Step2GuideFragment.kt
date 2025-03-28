@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import androidx.fragment.app.FragmentManager
 import com.airbnb.lottie.LottieDrawable
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep2GuideBinding
@@ -58,9 +61,13 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
             playAnimation()
         }
 
+        // X 클릭 이벤트 설정
+        binding.topBar.backButtonContainer.setOnClickListener {
+            showQuitBottomSheet()
+        }
+
         binding.btnNext.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.fl_main, QrScanFragment())
             transaction.replace(R.id.fl_main, QrScanFragment())
             transaction.addToBackStack(null)
             transaction.commit()
@@ -85,6 +92,29 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
         }
 
         dialog.show()
+    }
+
+    private fun showQuitBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet, null)
+
+        // 계속하기 버튼 클릭 시 바텀시트 닫기
+        val btnContinue = bottomSheetView.findViewById<View>(R.id.btn_continue)
+        btnContinue.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // 그만두기 버튼 클릭 시 메인 화면으로 이동
+        val btnQuit = bottomSheetView.findViewById<View>(R.id.btn_quit)
+        btnQuit.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            // 메인 화면으로 이동
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
     }
 
 
