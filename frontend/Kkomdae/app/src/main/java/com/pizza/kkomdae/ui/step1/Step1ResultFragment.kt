@@ -64,7 +64,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
         Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
 
-        binding.topBar.tvTitle.text=""
+        binding.topBar.tvTitle.text = "STEP 1"
         binding.topBar.pbStep.progress=100/3
 
         binding.ivImage.setOnClickListener {

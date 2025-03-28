@@ -133,7 +133,7 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/blue500"
-        android:text="분석 시작하기"
+        android:text="저장 후 다음단계"
         style="@style/Title1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
