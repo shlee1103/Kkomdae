@@ -10,7 +10,9 @@ import time
 import ctypes
 from ctypes import wintypes
 import json
-
+import xml.etree.ElementTree as ET
+from datetime import datetime
+import requests
 # 외부 라이브러리
 from tkinter import messagebox
 import ttkbootstrap as ttkb
@@ -20,7 +22,10 @@ import cv2
 import win32com.client
 import psutil
 import qrcode
+import boto3
+import dotenv
 
+dotenv.load_dotenv()
 
 # ===============================
 # Windows API 상수 및 구조체 정의
@@ -1223,13 +1228,30 @@ class TestApp(ttkb.Window):
             if not os.path.exists(downloads_path):
                 os.makedirs(downloads_path)
 
-            self.report_path = os.path.join(downloads_path, "battery_report.html")
-            subprocess.run(["powercfg", "/batteryreport", "/output", self.report_path],
+            # 컴퓨터 이름 가져오기
+            computer_name = os.getenv("COMPUTERNAME")
+            if computer_name is None:
+                computer_name = "Unknown"
+            # 현재 시간 가져오기
+            now = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            # 배터리 리포트 파일명 생성
+            new_report_name = f"battery_report_{computer_name}_{now}.html"
+            new_report_path = os.path.join(downloads_path, new_report_name)
+            
+            # 리포트 생성
+            temp_report_path = os.path.join(downloads_path, "battery_report.html")
+            subprocess.run(["powercfg", "/batteryreport", "/output", temp_report_path],
                            check=True, capture_output=True, text=True)
+            # 리포트 파일 이름 변경
+            os.rename(temp_report_path, new_report_path)
+
+            self.report_path = new_report_path
             messagebox.showinfo("배터리 리포트", f"배터리 리포트가 생성되었습니다.\n파일 경로:\n{self.report_path}")
             self.battery_report_button.config(bootstyle="info")
             self.update_status("배터리", "생성 완료")
             self.mark_test_complete("배터리")
+            self.upload_battery_report(self.report_path)
         except subprocess.CalledProcessError as e:
             messagebox.showerror("배터리 리포트 오류", f"명령 실행 중 오류 발생:\n{e.stderr}")
             self.update_status("배터리", "오류 발생")
@@ -1237,7 +1259,19 @@ class TestApp(ttkb.Window):
             messagebox.showerror("배터리 리포트 오류", f"오류 발생:\n{e}")
             self.update_status("배터리", "오류 발생")
             
-
+    def get_computer_name(self):
+        """
+        컴퓨터 이름을 가져옵니다.
+        """
+        try:
+            computer_name = os.getenv("COMPUTERNAME")
+            if computer_name is None:
+                computer_name = "Unknown"
+            return computer_name
+        except Exception as e:
+            messagebox.showerror("컴퓨터 이름 오류", f"컴퓨터 이름을 가져오는 중 오류 발생:\n{e}")
+            return "Unknown"
+            
     def view_battery_report(self) -> None:
         """
         생성된 배터리 리포트 파일을 엽니다.
@@ -1253,6 +1287,28 @@ class TestApp(ttkb.Window):
             messagebox.showwarning("리포트 없음", "아직 배터리 리포트가 생성되지 않았습니다.\n먼저 '배터리 리포트 생성' 버튼을 눌러주세요.")
             self.update_status("배터리", "생성 전")
 
+    def upload_battery_report(self, report_path):
+        """
+        (기존) S3 직접 업로드 -> (변경) Django 서버로 업로드
+        """
+        # Django 서버 endpoint
+        # 실제 주소/포트를 맞춰서 기입: 예) https://j12d101.p.ssafy.io/s3app/upload_battery/
+        django_url = "https://j12d101.p.ssafy.io/django/s3app/upload_battery/"
+        # django_url = "http://localhost:8000/s3app/upload_battery/"
+
+        try:
+            with open(report_path, 'rb') as f:
+                # 파일 전송
+                files = {'file': (os.path.basename(report_path), f, 'text/html')}
+                resp = requests.post(django_url, files=files)
+                
+                if resp.status_code == 200:
+                    data = resp.json()
+                    messagebox.showinfo("업로드 완료", f"Django에 업로드 성공: {data}")
+                else:
+                    messagebox.showerror("업로드 오류", f"status={resp.status_code}, body={resp.text}")
+        except Exception as e:
+            messagebox.showerror("업로드 예외", f"Django 서버 업로드 중 오류 발생: {e}")
 
     # -------------------------------
     # QR 코드 생성 관련 메서드
@@ -1277,7 +1333,10 @@ class TestApp(ttkb.Window):
                 "charger": {
                     "status": "pass" if self.test_done.get("충전") else "fail"
                 },
-                "battery_report": "pass" if self.report_path and os.path.exists(self.report_path) else "fail"
+                "battery_report": {
+                    "status": "pass" if self.report_path and os.path.exists(self.report_path) else "fail",
+                    "report_name": os.path.basename(self.report_path) if self.report_path else None,
+                }
             }
             qr_data = json.dumps(results, ensure_ascii=False, indent=2)
             try:
