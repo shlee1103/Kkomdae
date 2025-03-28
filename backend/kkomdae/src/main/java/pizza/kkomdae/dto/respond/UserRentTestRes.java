@@ -19,11 +19,11 @@ public class UserRentTestRes {
 
     public UserRentTestRes(Rent rent) {
         this.modelCode = rent.getDevice().getModelCode();
-        this.rentPdfUrl = rent.getDevice().getLaptopTestResults().get(0).getPdfUrl();
+        this.rentPdfUrl = rent.getDevice().getLaptopTestResults().get(0).getPdfFileName();
         if (rent.getReleaseDateTime() != null) { // 반납했다면
             this.dateTime = rent.getReleaseDateTime();
             this.release = true;
-            this.releasePdfUrl = rent.getDevice().getLaptopTestResults().get(1).getPdfUrl();
+            this.releasePdfUrl = rent.getDevice().getLaptopTestResults().get(1).getPdfFileName();
         } else {
             this.dateTime = rent.getRentDateTime();
             this.release = false;

@@ -30,7 +30,7 @@ public class LaptopTestResult {
     private Boolean batteryReport;
     private String batteryReportUrl;
     private LocalDate date;
-    private String pdfUrl;
+    private String pdfFileName;
     private Integer laptop;
     private Integer powerCable;
     private Integer adapter;
@@ -39,7 +39,7 @@ public class LaptopTestResult {
     private Integer mousePad;
     private Integer stage = 1;
     private Integer picStage = 0;
-    private LocalDate birthDay;
+
 
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
@@ -73,6 +73,5 @@ public class LaptopTestResult {
         this.mouse = thirdStageReq.getMouse();
         this.bag = thirdStageReq.getBag();
         this.mousePad = thirdStageReq.getMousePad();
-        this.birthDay = thirdStageReq.getBirthday();
     }
 }

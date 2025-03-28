@@ -39,18 +39,19 @@ public class PdfService {
         this.lapTopTestResultRepository = lapTopTestResultRepository;
     }
 
-    public String makePdf(long testId) {
-        LaptopTestResult laptopTestResult = lapTopTestResultRepository.getReferenceById(testId);
-        LaptopTestResult result = lapTopTestResultRepository.findByIdWithStudentAndDevice(laptopTestResult);
-
+    public String makeAndUploadPdf(long testId) {
+        LaptopTestResult result = lapTopTestResultRepository.findByIdWithStudentAndDeviceAndPhotos(testId);
+        String fileName;
         try{
             PdfInfo pdfInfo = new PdfInfo(result);
             ByteArrayOutputStream baso = initPdf(pdfInfo);
-            s3Service.uploadPdf(baso);
+            fileName = s3Service.uploadPdf(baso,result);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        result.setPdfFileName(fileName);
+        lapTopTestResultRepository.save(result);
+        return fileName;
     }
 
     private ByteArrayOutputStream initPdf(PdfInfo info) throws IOException {

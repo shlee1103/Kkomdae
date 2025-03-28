@@ -28,7 +28,7 @@ public class LaptopTestResultWithStudent {
         this.failedPorts = laptopTestResult.getFailedPorts();
         this.cameraStatus = laptopTestResult.getCameraStatus();
         this.batteryPdfUrl = laptopTestResult.getBatteryReportUrl();
-        this.resultPdfUrl = laptopTestResult.getPdfUrl();
+        this.resultPdfUrl = laptopTestResult.getPdfFileName();
         this.date = laptopTestResult.getDate();
     }
 

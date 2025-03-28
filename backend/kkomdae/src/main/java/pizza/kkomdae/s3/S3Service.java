@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pizza.kkomdae.dto.request.PhotoReq;
+import pizza.kkomdae.entity.LaptopTestResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -109,8 +110,8 @@ public class S3Service {
 
 
 
-    public String uploadPdf(ByteArrayOutputStream baso){
-        String pdfFileName="random_pdf.pdf";
+    public String uploadPdf(ByteArrayOutputStream baso, LaptopTestResult result){
+        String pdfFileName= generatePdfS3Key(result) +".pdf";
         try {
             ObjectMetadata metadata = createMetadata(baso);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(baso.toByteArray());
@@ -129,5 +130,19 @@ public class S3Service {
             return null;
         }
         return pdfFileName;
+    }
+
+    private String generatePdfS3Key(LaptopTestResult result) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(result.getLaptopTestResultId());
+        sb.append('_');
+        sb.append(result.getStudent().getStudentId());
+        sb.append('_');
+        if (result.getRelease()) {
+            sb.append("return");
+        } else {
+            sb.append("rent");
+        }
+        return sb.toString();
     }
 }

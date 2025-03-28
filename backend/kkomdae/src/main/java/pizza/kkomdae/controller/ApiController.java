@@ -18,7 +18,6 @@ import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.*;
 
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -104,9 +103,9 @@ public class ApiController {
         testResultService.thirdStage(userDetails, thirdStageReq);
     }
 
-    @Operation(summary = "pdf 생성", description = "")
+    @Operation(summary = "pdf 생성", description = "testId로 절차를 종료하고 pdf를 생성합니다.")
     @PostMapping("/pdf/{testId}")
     public String makePdf(@PathVariable long testId) {
-        return pdfService.makePdf(testId);
+        return pdfService.makeAndUploadPdf(testId);
     }
 }

@@ -28,14 +28,17 @@ public class CustomLapTopTestResultRepositoryImpl implements CustomLapTopTestRes
     }
 
     @Override
-    public LaptopTestResult findByIdWithStudentAndDevice(LaptopTestResult laptopTestResult) {
+    public LaptopTestResult findByIdWithStudentAndDeviceAndPhotos(long testId) {
         QLaptopTestResult result = QLaptopTestResult.laptopTestResult;
         QStudent student = QStudent.student;
         QDevice device = QDevice.device;
+        QPhoto photo = QPhoto.photo;
         return query.selectFrom(result)
                 .leftJoin(result.student, student).fetchJoin()
                 .leftJoin(result.device, device).fetchJoin()
-                .where(result.eq(laptopTestResult))
+                .leftJoin(result.photos,photo).fetchJoin()
+                .where(result.laptopTestResultId.eq(testId))
+                .orderBy(photo.type.asc())
                 .fetchOne();
     }
 
