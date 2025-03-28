@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                                 "/api/v3/api-docs/**",    // Swagger API 문서 경로
                                 "/api/swagger-ui/**",     // Swagger UI 경로
                                 "/api/swagger-ui.html"    // Swagger HTML
+                                ,"/css/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
