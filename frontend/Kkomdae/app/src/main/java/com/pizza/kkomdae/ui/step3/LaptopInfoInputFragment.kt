@@ -71,9 +71,6 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
             checkNext()
         }
 
-
-
-
         // 날짜 설정
         settingDate()
 
@@ -105,6 +102,10 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
             transaction.commit()
         }
 
+        // 완료 버튼
+        binding.btnConfirm.setOnClickListener {
+            showConfirmDialog()
+        }
     }
 
     private fun checkNext() {
@@ -384,6 +385,61 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
 
         dialog.show()
     }
+
+    // 완료 다이얼로그
+    private fun showConfirmDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_step3_confirm)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 닫기 버튼 클릭 리스너
+        val cancelButton = dialog.findViewById<View>(R.id.btn_cancel)
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 입력 완료하기 버튼 클릭 리스너
+        val confirmButton = dialog.findViewById<View>(R.id.btn_confirm)
+        confirmButton.setOnClickListener {
+            dialog.dismiss()
+            showEndDialog()
+        }
+
+        dialog.show()
+    }
+
+    // 종료 다이얼로그 추가
+    private fun showEndDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_step_end)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // "분석하러 가기" 버튼에 클릭 리스너 추가
+        val confirmButton = dialog.findViewById<Button>(R.id.btn_confirm)
+        confirmButton.setOnClickListener {
+            dialog.dismiss() // 다이얼로그 닫기
+
+            // AiResultFragment로 전환
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, AiResultFragment())
+            transaction.addToBackStack(null) // 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 설정
+            transaction.commit()
+        }
+
+        dialog.show()
+    }
+
+
 
     companion object {
         /**
