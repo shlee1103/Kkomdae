@@ -26,12 +26,12 @@ public class CustomRentRepositoryImpl implements CustomRentRepository {
                 .distinct()
                 .join(rent.student, student).fetchJoin()
                 .join(rent.device, device).fetchJoin()
-                .join(rent.device.laptopTestResults,QLaptopTestResult.laptopTestResult).fetchJoin()
+                .join(rent.device.laptopTestResults, QLaptopTestResult.laptopTestResult).fetchJoin()
                 .orderBy(student.studentNum.asc())
                 .where(isKeyword(studentWithRentCond.getKeyword(), studentWithRentCond.getSearchType()),
                         isRegion(studentWithRentCond.getRegion(), studentWithRentCond.getClassName())
-                        ,isStudent(studentWithRentCond.getStudent())
-                ).orderBy(student.studentNum.asc(),QLaptopTestResult.laptopTestResult.laptopTestResultId.asc())
+                        , isStudent(studentWithRentCond.getStudent())
+                ).orderBy(student.studentNum.asc(), QLaptopTestResult.laptopTestResult.laptopTestResultId.asc())
                 .fetch()
                 ;
     }
