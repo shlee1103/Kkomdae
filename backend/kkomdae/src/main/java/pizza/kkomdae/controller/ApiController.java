@@ -106,7 +106,7 @@ public class ApiController {
 
     @Operation(summary = "pdf 생성", description = "")
     @PostMapping("/pdf/{testId}")
-    public void makePdf(@PathVariable long testId) {
-        pdfService.makePdf(testId);
+    public String makePdf(@PathVariable long testId) {
+        return pdfService.makePdf(testId);
     }
 }

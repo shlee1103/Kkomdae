@@ -12,6 +12,7 @@ public class ThirdStageReq {
     private String serialNum; //
     private String barcodeNum; //
     private LocalDate localDate;
+    private LocalDate birthday;
     private int laptop;
     private int powerCable;
     private int adapter;
