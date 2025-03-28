@@ -12,4 +12,10 @@ public class PdfInfo {
     private String serial;
     private String barcode;
     private String birthday;
+    private int laptopCount;
+    private int powerCableCount;
+    private int adapterCount;
+    private int mouseCount;
+    private int bagCount;
+    private int mousePadCount;
 }

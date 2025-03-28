@@ -63,7 +63,7 @@ public class StudentService {
             log.info("진행 중인 대여 절차 쿼리 정보 {} {}", testResult.getStage(), testResult.getLaptopTestResultId());
             info.setOnGoingTestId(testResult.getLaptopTestResultId());
             info.setStage(testResult.getStage());//TODO 여기서 N+1 포토 리스트 한번에 fetchJoin하기
-            info.setPicStage(testResult.getPicStage()); //todo 나중에 laptopTestResult picStage 생기면 연결
+            info.setPicStage(testResult.getPicStage());
         }
         return info;
 

@@ -33,7 +33,7 @@ public class PdfService {
         this.s3Service = s3Service;
     }
 
-    public void makePdf() {
+    public void makePdf(long testId) {
         try{
             PdfInfo pdfInfo = new PdfInfo();
             ByteArrayOutputStream baso = initPdf(pdfInfo);

@@ -96,6 +96,7 @@ public class AdminController {
     @GetMapping("/photos")
     public String photos(@RequestParam long testResultId, Model model) {
         List<String> photoUrls = new ArrayList<>();
+//        TODO 실제 사진 링크로 변경
         photoUrls.add("/test.jpg");
         photoUrls.add("/test.jpg");
         photoUrls.add("/test.jpg");

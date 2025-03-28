@@ -37,9 +37,8 @@ public class LaptopTestResult {
     private Integer mouse;
     private Integer bag;
     private Integer mousePad;
-
-    private int stage = 0;
-    private int picStage = 0;
+    private Integer stage = 1;
+    private Integer picStage = 0;
 
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
