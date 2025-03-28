@@ -20,6 +20,7 @@ import com.pizza.kkomdae.ui.MyAndroidViewModel
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import com.pizza.kkomdae.ui.guide.Step2GuideFragment
 import android.content.Context
+import androidx.fragment.app.FragmentManager
 import com.pizza.kkomdae.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -125,8 +126,8 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
         btnQuit.setOnClickListener {
             bottomSheetDialog.dismiss()
             // 메인 화면으로 이동
+            mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
             val transaction = mainActivity.supportFragmentManager.beginTransaction()
-            mainActivity.supportFragmentManager.popBackStack()
             transaction.replace(R.id.fl_main, com.pizza.kkomdae.ui.MainFragment())
             transaction.commit()
         }
