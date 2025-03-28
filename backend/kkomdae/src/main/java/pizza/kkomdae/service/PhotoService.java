@@ -9,11 +9,14 @@ import pizza.kkomdae.dto.request.AiPhotoInfo;
 import pizza.kkomdae.dto.request.FlaskRequest;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.respond.FlaskResponse;
+import pizza.kkomdae.dto.respond.UserRentTestInfo;
 import pizza.kkomdae.entity.LaptopTestResult;
 import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.repository.PhotoRepository;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 import pizza.kkomdae.s3.S3Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,6 @@ public class PhotoService {
     private final S3Service s3Service;
     private final FlaskService flaskService;
 
-    // 사진 업로드와 DB 저장을 위한 메서드
     @Transactional
     public Photo uploadPhotoSync(PhotoReq photoreq, MultipartFile image) {
         // S3 업로드 후 파일 이름 반환
@@ -33,11 +35,11 @@ public class PhotoService {
             throw new RuntimeException("Failed to upload photo");
         }
 
-        //Photo entity 생성 및 필드 설정
+        // Photo 엔티티 생성 및 필드 설정
         Photo photo = new Photo();
-        // 파일명
-        String fileNameWithoutPrefix = s3FileName.replace("lkm7ln/", "");
 
+        // S3 key에서 prefix를 제거한 파일명 설정
+        String fileNameWithoutPrefix = s3FileName.replace("lkm7ln/", "");
         photo.setName(fileNameWithoutPrefix);
 
         // 타입 설정
@@ -45,9 +47,28 @@ public class PhotoService {
         LaptopTestResult test = lapTopTestResultRepository.getReferenceById(photoreq.getTestId());
         photo.setLaptopTestResult(test);
 
+        // 사진 단계 저장
+        // 업로드된 사진 단계 확인
+        int updateStage = photoreq.getPhotoType();
+        // 저장된 사진 단계 확인
+        int savedStage = test.getPicStage();
+        // 업로드된 사진의 단계가 높드면 단계를 업데이트
+        if (savedStage < updateStage) {
+            test.setPicStage(photoreq.getPhotoType());
+        }
+
         photoRepository.save(photo);
+        lapTopTestResultRepository.save(test);
 
         return photo;
+    }
+
+    @Transactional
+    public void updateStageTo2(long testId) {
+        // testId로 LaptopTestResult 조회 후 stage 업데이트
+        LaptopTestResult result = lapTopTestResultRepository.findById(testId)
+                .orElseThrow(() -> new RuntimeException("Failed to find test result"));
+        result.setStage(2);
     }
 
     @Async
@@ -55,16 +76,14 @@ public class PhotoService {
         Photo photo = photoRepository.findById(photoId)
                 .orElseThrow(() -> new RuntimeException("no photo found"));
 
-        // 2) Flask 서버 분석 요청
-        // FlaskRequest 객체 생성
-        // s3Key, Url 등은 상황에 맞게 photo가 가진 정보로 세팅
+        // FlaskRequest 객체 생성 (예: S3 key를 사용)
         FlaskRequest flaskRequest = new FlaskRequest();
         flaskRequest.setS3Key(photo.getName());
 
         // Flask 서버로 분석 요청
         FlaskResponse response = flaskService.analyzeImage(flaskRequest);
 
-        // 3) AI 분석 결과 DB 업데이트
+        // AI 분석 결과를 DB 업데이트
         photo.setAiName(response.getUploadName());
         photo.setDamage(response.getDamage());
 

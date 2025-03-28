@@ -4,6 +4,6 @@ import lombok.Getter;
 import pizza.kkomdae.enums.PhotoType;
 @Getter
 public class PhotoReq {
-    private PhotoType photoType;
+    private int photoType;
     private long testId;
 }
