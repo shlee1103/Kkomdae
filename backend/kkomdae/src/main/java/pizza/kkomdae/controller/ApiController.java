@@ -1,6 +1,7 @@
 package pizza.kkomdae.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -14,12 +15,8 @@ import pizza.kkomdae.dto.respond.*;
 import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
-import pizza.kkomdae.service.FlaskService;
-//import pizza.kkomdae.service.PhotoService;
-import pizza.kkomdae.service.PdfService;
-import pizza.kkomdae.service.PhotoService;
-import pizza.kkomdae.service.StudentService;
-import pizza.kkomdae.service.TestResultService;
+import pizza.kkomdae.service.*;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +35,6 @@ public class ApiController {
     private final S3Service s3Service;
     private final FlaskService flaskService;
     private final PdfService pdfService;
-
-
 
 
     @GetMapping("/user-info")

@@ -30,6 +30,7 @@ public class TestResultService {
     private final DeviceRepository deviceRepository;
     private final PhotoRepository photoRepository;
     private final RentRepository rentRepository;
+    private final S3Service s3Service;
 
     public List<LaptopTestResultWithStudent> getByStudentOrDevice(Long studentId, Long deviceId, String deviceType) {
         Student referenceStudentById = null;
@@ -52,7 +53,7 @@ public class TestResultService {
     @Transactional
     public long initTest(long userId, String serialNum) {
         Student student = studentRepository.getReferenceById(userId);
-        LaptopTestResult laptopTestResult = lapTopTestResultRepository.findByStudentAndStepIsLessThan(student, 5);
+        LaptopTestResult laptopTestResult = lapTopTestResultRepository.findByStudentAndStageIsLessThan(student, 5);
         if (laptopTestResult == null) {
             laptopTestResult = new LaptopTestResult(student);
             if (serialNum != null) {
@@ -61,6 +62,7 @@ public class TestResultService {
                 laptopTestResult.setRelease(true);
             }
             lapTopTestResultRepository.save(laptopTestResult);
+            laptopTestResult.setStage(1);
         }
         return laptopTestResult.getLaptopTestResultId();
     }

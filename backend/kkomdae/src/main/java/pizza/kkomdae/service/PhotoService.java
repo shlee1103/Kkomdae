@@ -47,12 +47,18 @@ public class PhotoService {
         LaptopTestResult test = lapTopTestResultRepository.getReferenceById(photoreq.getTestId());
         photo.setLaptopTestResult(test);
 
-        photoRepository.save(photo);
-
-        // 예시: photoType이 음수가 아니라면 PicStage를 업데이트
-        if (photoreq.getPhotoType() >= 0) {
+        // 사진 단계 저장
+        // 업로드된 사진 단계 확인
+        int updateStage = photoreq.getPhotoType();
+        // 저장된 사진 단계 확인
+        int savedStage = test.getPicStage();
+        // 업로드된 사진의 단계가 높드면 단계를 업데이트
+        if (savedStage < updateStage) {
             test.setPicStage(photoreq.getPhotoType());
         }
+
+        photoRepository.save(photo);
+        lapTopTestResultRepository.save(test);
 
         return photo;
     }
