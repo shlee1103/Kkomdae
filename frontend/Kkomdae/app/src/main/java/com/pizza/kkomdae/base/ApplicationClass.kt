@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.pizza.kkomdae.BuildConfig
+import com.pizza.kkomdae.remote.TokenAuthenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -45,6 +46,7 @@ class ApplicationClass : Application() {
             .connectTimeout(5000, TimeUnit.MILLISECONDS)
             .addInterceptor(logging) // 로그 확인
             //.addInterceptor(AddAuthInterceptor()) // JWT 토큰 추가
+            .authenticator(TokenAuthenticator(this))
             .build()
 
 

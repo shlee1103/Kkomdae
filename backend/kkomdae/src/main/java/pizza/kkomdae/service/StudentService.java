@@ -35,8 +35,8 @@ public class StudentService {
         for (Student student : byKeywordWithStatus) {
             StudentWithRent tmp = new StudentWithRent(student);
             tmp.setStatus(true);
-            for(Rent rent : student.getRent()){
-                if(rent.getReleaseDateTime()==null){
+            for (Rent rent : student.getRent()) {
+                if (rent.getReleaseDateTime() == null) {
                     tmp.setStatus(false);
                     break;
                 }
@@ -57,14 +57,18 @@ public class StudentService {
         }
         UserRentTestInfo info = new UserRentTestInfo();
         info.setUserRentTestRes(results);
-        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndStageIsLessThan(student, 4);
+        log.info("진행 중인 대여 절차 확인 쿼리");
+        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndStepIsLessThanAndDeviceIsNull(student, 5);
         if (testResult != null) {
-            info.setStage(testResult.getStage());
+            log.info("진행 중인 대여 절차 쿼리 정보 {} {}", testResult.getStep(), testResult.getLaptopTestResultId());
+            info.setOnGoingTestId(testResult.getLaptopTestResultId());
+            info.setStage(testResult.getStep());//TODO 여기서 N+1 포토 리스트 한번에 fetchJoin하기
             List<Photo> photos = testResult.getPhotos();
-            info.setPicStage(photos.size());
+            info.setPicStage(photos.size()); //todo 나중에 laptopTestResult picStage 생기면 연결
         }
         return info;
 
     }
 
 }
+

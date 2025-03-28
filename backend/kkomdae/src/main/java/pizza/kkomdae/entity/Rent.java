@@ -2,17 +2,19 @@ package pizza.kkomdae.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
+@Setter
 public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rentId;
-    private LocalDateTime releaseDateTime;
-    private LocalDateTime rentDateTime;
+    private LocalDate releaseDateTime;
+    private LocalDate rentDateTime;
     @ManyToOne(fetch = FetchType.LAZY)
     private Student student;
     @ManyToOne(fetch = FetchType.LAZY)

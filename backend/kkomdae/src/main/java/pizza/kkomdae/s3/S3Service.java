@@ -50,6 +50,12 @@ public class S3Service {
         return s3Key;
     }
     // S3 Key 생성 메서드
+
+
+    public void uploadPdf(){
+
+    }
+
     private String generateS3Key(PhotoReq photoReq, MultipartFile image) {
         return prefix+photoReq.getTestId()+"_"+photoReq.getPhotoType()+"_"+image.getOriginalFilename();
     }

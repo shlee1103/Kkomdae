@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pizza.kkomdae.dto.request.SecondStageReq;
+import pizza.kkomdae.dto.request.ThirdStageReq;
 import pizza.kkomdae.dto.respond.LaptopTestResultWithStudent;
 import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.entity.*;
 import pizza.kkomdae.repository.PhotoRepository;
 import pizza.kkomdae.repository.device.DeviceRepository;
+import pizza.kkomdae.repository.rent.RentRepository;
 import pizza.kkomdae.repository.student.StudentRepository;
 import pizza.kkomdae.repository.laptopresult.LapTopTestResultRepository;
 import pizza.kkomdae.s3.S3Service;
@@ -27,7 +29,7 @@ public class TestResultService {
     private final StudentRepository studentRepository;
     private final DeviceRepository deviceRepository;
     private final PhotoRepository photoRepository;
-    private final S3Service s3Service;
+    private final RentRepository rentRepository;
 
     public List<LaptopTestResultWithStudent> getByStudentOrDevice(Long studentId, Long deviceId, String deviceType) {
         Student referenceStudentById = null;
@@ -48,12 +50,19 @@ public class TestResultService {
     }
 
     @Transactional
-    public long initTest(long userId) {
+    public long initTest(long userId, String serialNum) {
         Student student = studentRepository.getReferenceById(userId);
-        LaptopTestResult laptopTestResult = new LaptopTestResult(student);
-        LaptopTestResult testResult = lapTopTestResultRepository.save(laptopTestResult);
-
-        return testResult.getLaptopTestResultId();
+        LaptopTestResult laptopTestResult = lapTopTestResultRepository.findByStudentAndStepIsLessThan(student, 5);
+        if (laptopTestResult == null) {
+            laptopTestResult = new LaptopTestResult(student);
+            if (serialNum != null) {
+                Device device = deviceRepository.findDeviceBySerialNum(serialNum);
+                laptopTestResult.setDevice(device);
+                laptopTestResult.setRelease(true);
+            }
+            lapTopTestResultRepository.save(laptopTestResult);
+        }
+        return laptopTestResult.getLaptopTestResultId();
     }
 
     public List<PhotoWithUrl> getPhotos(long testId) {
@@ -72,11 +81,6 @@ public class TestResultService {
     }
 
 
-    public String getPdfUrl(long testId) {
-        LaptopTestResult testResult = lapTopTestResultRepository.findById(testId).orElseThrow();
-        return testResult.getPdfUrl();
-    }
-
     @Transactional
     public void secondStage(CustomUserDetails userDetails, SecondStageReq secondStageReq) {
         Student student = studentRepository.getReferenceById(userDetails.getUserId());
@@ -86,5 +90,25 @@ public class TestResultService {
         }
         testResult.saveSecondStage(secondStageReq);
 
+    }
+
+    @Transactional
+    public void thirdStage(CustomUserDetails userDetails, ThirdStageReq thirdStageReq) {
+        Student student = studentRepository.getReferenceById(userDetails.getUserId());
+        LaptopTestResult testResult = lapTopTestResultRepository.findByStudentAndLaptopTestResultId(student, thirdStageReq.getTestId());
+        if (testResult == null) {
+            throw new RuntimeException("저장된 테스트 없음");
+        }
+        testResult.saveThirdStage(thirdStageReq);
+        Rent rent = new Rent();
+        rent.setStudent(student);
+        rent.setRentDateTime(thirdStageReq.getLocalDate());
+        Device device = deviceRepository.findDeviceBySerialNum(thirdStageReq.getSerialNum());
+        if (device == null) {
+            throw new RuntimeException("deivce 시리얼 에러");
+        }
+        testResult.setDevice(device);
+        rent.setDevice(device);
+        rentRepository.save(rent);
     }
 }
