@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 public class UserRentTestInfo {
     private List<UserRentTestRes> userRentTestRes;
+    private long onGoingTestId = 0;
     private int stage = 0;
     private int picStage = 0;
 }

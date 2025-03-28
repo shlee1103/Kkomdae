@@ -11,4 +11,6 @@ public class SecondStageReq {
     private String failedPorts;
     private boolean cameraStatus;
     private boolean chargerStatus;
+    private boolean batteryReport;
+    private String batteryReportUrl;
 }

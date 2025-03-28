@@ -83,12 +83,9 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
         val title4 = view.findViewById<View>(R.id.oath_title4).findViewById<TextView>(R.id.tv_model_number)
         title4.text = "04 인수 확인"
 
-
-        // 뒤로가기 버튼 눌렀을 때 메인화면으로 이동
-        binding.topBar.btnBack.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, MainFragment())
-            transaction.commit()
+        // 뒤로가기 버튼
+        binding.topBar.backButtonContainer.setOnClickListener {
+            requireActivity().onBackPressed()
         }
 
         // 서약서 항목 클릭 이벤트

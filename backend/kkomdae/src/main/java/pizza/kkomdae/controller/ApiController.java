@@ -1,6 +1,7 @@
 package pizza.kkomdae.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -8,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pizza.kkomdae.dto.request.PhotoReq;
 import pizza.kkomdae.dto.request.SecondStageReq;
+import pizza.kkomdae.dto.request.ThirdStageReq;
 import pizza.kkomdae.dto.respond.*;
 import pizza.kkomdae.entity.Photo;
 import pizza.kkomdae.s3.S3Service;
 import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.FlaskService;
 //import pizza.kkomdae.service.PhotoService;
+import pizza.kkomdae.service.PdfService;
 import pizza.kkomdae.service.PhotoService;
 import pizza.kkomdae.service.StudentService;
 import pizza.kkomdae.service.TestResultService;
@@ -23,6 +26,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ApiController {
 
     private final StudentService studentService;
@@ -30,14 +34,9 @@ public class ApiController {
     private final PhotoService photoService;
     private final S3Service s3Service;
     private final FlaskService flaskService;
+    private final PdfService pdfService;
 
-    public ApiController(StudentService studentService, TestResultService testResultService, S3Service s3Service, FlaskService flaskService, PhotoService photoService) {
-        this.studentService = studentService;
-        this.testResultService = testResultService;
-        this.s3Service = s3Service;
-        this.flaskService = flaskService;
-        this.photoService = photoService;
-    }
+
 
 
     @GetMapping("/user-info")
@@ -49,9 +48,10 @@ public class ApiController {
 
     @PostMapping("/test")
     @Operation(summary = "테스트 저장을 위한 테스트 생성", description = "테스트가 시작될 때 호출, 테스트 아이디를 반환합니다.<br>" +
-            "테스트 아이디를 sharedPreference에 저장하고 사진 업로드할 때 사용 바랍니다.")
-    public long initTest(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return testResultService.initTest(userDetails.getUserId());
+            "테스트 아이디를 sharedPreference에 저장하고 사진 업로드할 때 사용 바랍니다.<br>" +
+            "반납일 경우 serialNum을 넣어주면 됩니다. 그냥 대여일 시 아무 것도 없이 그냥 전송")
+    public long initTest(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(required = false) String serialNum) {
+        return testResultService.initTest(userDetails.getUserId(), serialNum);
     }
 
 
@@ -84,8 +84,20 @@ public class ApiController {
     }
 
     @Operation(summary = "qr 정보 입력", description = "2단계 qr 정보 입력 및 단계 저장")
+    @PostMapping("/secondStage")
     public void secondStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody SecondStageReq secondStageReq) {
         testResultService.secondStage(userDetails, secondStageReq);
     }
 
+    @Operation(summary = "기기 정보 입력", description = "기기 모델명, 시리얼 넘버 등의 정보를 받는 api")
+    @PostMapping("/thirdStage")
+    public void thirdStage(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody ThirdStageReq thirdStageReq) {
+        testResultService.thirdStage(userDetails, thirdStageReq);
+    }
+
+    @Operation(summary = "pdf 생성", description = "")
+    @PostMapping("/pdf/{testId}")
+    public void makePdf(@PathVariable long testId) {
+        pdfService.makePdf();
+    }
 }
