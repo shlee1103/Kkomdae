@@ -556,7 +556,7 @@ class MainActivity : AppCompatActivity() {
                     // ✅ crop 된 이미지를 저장
                     val croppedFile = File(
                         externalMediaDirs.first(),
-                        "cropped_laptop_${System.currentTimeMillis()}.jpg"
+                        "cropped_laptop_${System.currentTimeMillis()}.png"
                     )
 
                     FileOutputStream(croppedFile).use { out ->

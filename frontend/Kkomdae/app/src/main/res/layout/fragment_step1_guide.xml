@@ -200,6 +200,41 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_description7"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <ImageView
+                android:id="@+id/iv_bullet3"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_bullet_gray"
+                app:layout_constraintStart_toStartOf="@id/iv_bullet2"
+                app:layout_constraintTop_toBottomOf="@id/tv_description8" />
+
+            <TextView
+                android:id="@+id/tv_description9"
+                style="@style/Body1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="-10dp"
+                android:text="상단 아이콘으로 촬영 진행 상황을 확인하세요."
+                android:textColor="@color/gray300"
+                app:layout_constraintStart_toEndOf="@id/iv_bullet3"
+                app:layout_constraintTop_toBottomOf="@id/tv_description8"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_description10"-->
+<!--                style="@style/Body1"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:lineSpacingExtra="-10dp"-->
+<!--                android:text="미완료 단계는 회색, 완료 단계는 파란색으로 표시됩니다."-->
+<!--                android:textColor="@color/gray300"-->
+<!--                app:layout_constraintStart_toStartOf="@id/tv_description9"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tv_description9"-->
+<!--                app:layout_constraintEnd_toEndOf="parent" />-->
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

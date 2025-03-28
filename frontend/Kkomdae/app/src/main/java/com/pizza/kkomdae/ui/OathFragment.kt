@@ -83,12 +83,9 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
         val title4 = view.findViewById<View>(R.id.oath_title4).findViewById<TextView>(R.id.tv_model_number)
         title4.text = "04 인수 확인"
 
-
-        // 뒤로가기 버튼 눌렀을 때 메인화면으로 이동
-        binding.topBar.btnBack.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, MainFragment())
-            transaction.commit()
+        // 뒤로가기 버튼
+        binding.topBar.backButtonContainer.setOnClickListener {
+            requireActivity().onBackPressed()
         }
 
         // 서약서 항목 클릭 이벤트
@@ -175,15 +172,6 @@ class OathFragment : BaseFragment<FragmentOathBinding>(
 
         }
 
-        // 다음 화면 기존 기기등록 화면으로 넘어가기
-//        binding.btnNext.setOnClickListener {
-//            if (isOath1Checked && isOath2Checked && isOath3Checked && isOath4Checked) {
-//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//                transaction.replace(R.id.fl_main, AllStepGuideFragment())
-//                transaction.addToBackStack(null)
-//                transaction.commit()
-//            }
-//        }
         // 다음 화면 수정한 기기등록 화면으로 넘어가기
         binding.btnNext.setOnClickListener {
             if (isOath1Checked && isOath2Checked && isOath3Checked && isOath4Checked) {

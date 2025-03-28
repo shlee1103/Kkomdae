@@ -7,14 +7,13 @@ import pizza.kkomdae.enums.PhotoType;
 @Getter
 public class PhotoWithUrl {
     private String name;
+    private int type;
     private String url;
-    private String aiUrl;
-    private PhotoType type;
 
-    public PhotoWithUrl(Photo photo) {
+    public PhotoWithUrl(Photo photo, String url) {
         this.name = photo.getName();
-        this.url = photo.getUrl();
-        this.aiUrl = photo.getResultUrl();
         this.type = photo.getType();
+        this.url = url;
     }
+
 }

@@ -4,7 +4,10 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentStep2ResultBinding
@@ -103,6 +106,34 @@ class Step2ResultFragment : BaseFragment<FragmentStep2ResultBinding>(
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
+        // X 클릭 이벤트 설정
+        binding.topBar.backButtonContainer.setOnClickListener {
+            showQuitBottomSheet()
+        }
+    }
+
+    private fun showQuitBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet, null)
+
+        // 계속하기 버튼 클릭 시 바텀시트 닫기
+        val btnContinue = bottomSheetView.findViewById<View>(R.id.btn_continue)
+        btnContinue.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // 그만두기 버튼 클릭 시 메인 화면으로 이동
+        val btnQuit = bottomSheetView.findViewById<View>(R.id.btn_quit)
+        btnQuit.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            // 메인 화면으로 이동
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
     }
 
     companion object {

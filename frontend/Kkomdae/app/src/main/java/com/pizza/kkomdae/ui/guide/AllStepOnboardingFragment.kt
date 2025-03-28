@@ -85,11 +85,9 @@ class AllStepOnboardingFragment : BaseFragment<FragmentAllStepOnboardingBinding>
         val topBarTitle = view.findViewById<View>(R.id.top_bar).findViewById<TextView>(R.id.tv_title)
         topBarTitle.text = "기기등록 가이드"
 
-        // 뒤로가기
-        binding.topBar.btnBack.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, OathFragment())
-            transaction.commit()
+        // 뒤로가기 버튼
+        binding.topBar.backButtonContainer.setOnClickListener {
+            requireActivity().onBackPressed()
         }
 
         // 등록 시작하기

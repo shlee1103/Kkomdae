@@ -30,11 +30,11 @@ class CameraSideOverlayView @JvmOverloads constructor(
         val height = height.toFloat()
         val isLandscape = width > height  // ✅ 가로 모드인지 체크
 
-        val overlayMargin = if (isLandscape) width * 0.15f else height * 0.1f  // ✅ 네모 틀 마진 조정
+        val overlayMargin = if (isLandscape) width * 0.05f else height * 0.05f  // ✅ 네모 틀 마진 조정
 
         // 16:9 비율로 크기 설정
         val rectWidth = width - overlayMargin * 2
-        val rectHeight = rectWidth / 229.1f * 20f  // 16:9 비율 유지
+        val rectHeight = rectWidth / 229.1f * 30f  // 16:9 비율 유지
 
         val left = (width - rectWidth) / 2
         val top = (height - rectHeight) / 2

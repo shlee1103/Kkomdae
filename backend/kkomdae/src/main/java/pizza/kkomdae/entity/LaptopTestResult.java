@@ -3,12 +3,16 @@ package pizza.kkomdae.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import pizza.kkomdae.dto.request.SecondStageReq;
+import pizza.kkomdae.dto.request.ThirdStageReq;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class LaptopTestResult {
     @Id
@@ -27,7 +31,16 @@ public class LaptopTestResult {
     private String batteryReportUrl;
     private LocalDate date;
     private String pdfUrl;
-    private int step = 0;
+    private Integer laptop;
+    private Integer powerCable;
+    private Integer adapter;
+    private Integer mouse;
+    private Integer bag;
+    private Integer mousePad;
+
+    private int stage = 0;
+    private int picStage = 0;
+
     @OneToMany(mappedBy = "laptopTestResult")
     private List<Photo> photos;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,4 +51,27 @@ public class LaptopTestResult {
         this.student = student;
     }
 
+    public void saveSecondStage(SecondStageReq secondStageReq) {
+        this.stage = 3;
+        this.keyboardStatus = secondStageReq.isKeyboardStatus();
+        this.failedKeys = secondStageReq.getFailedKeys();
+        this.usbStatus = secondStageReq.isUsbStatus();
+        this.failedPorts = secondStageReq.getFailedPorts();
+        this.cameraStatus = secondStageReq.isCameraStatus();
+        this.chargerStatus = secondStageReq.isChargerStatus();
+        this.batteryReport = secondStageReq.isBatteryReport();
+        this.batteryReportUrl = secondStageReq.getBatteryReportUrl();
+    }
+
+    public void saveThirdStage(ThirdStageReq thirdStageReq) {
+        this.stage = 4;
+        this.release = thirdStageReq.isRelease();
+        this.date = thirdStageReq.getLocalDate();
+        this.laptop = thirdStageReq.getLaptop();
+        this.powerCable = thirdStageReq.getPowerCable();
+        this.adapter = thirdStageReq.getAdapter();
+        this.mouse = thirdStageReq.getMouse();
+        this.bag = thirdStageReq.getBag();
+        this.mousePad = thirdStageReq.getMousePad();
+    }
 }

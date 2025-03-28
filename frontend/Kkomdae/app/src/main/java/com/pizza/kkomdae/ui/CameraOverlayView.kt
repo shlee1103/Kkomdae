@@ -30,7 +30,7 @@ class CameraOverlayView @JvmOverloads constructor(
         val height = height.toFloat()
         val isLandscape = width > height  // ✅ 가로 모드인지 체크
 
-        val overlayMargin = if (isLandscape) width * 0.2f else height * 0.1f  // ✅ 네모 틀 마진 조정
+        val overlayMargin = if (isLandscape) width * 0.05f else height * 0.05f  // ✅ 네모 틀 마진 조정
 
         // 16:9 비율로 크기 설정
         val rectWidth = width - overlayMargin * 2

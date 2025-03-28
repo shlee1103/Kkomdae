@@ -27,6 +27,7 @@ private lateinit var mainActivity: MainActivity
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private var step =0
 
 /**
  * A simple [Fragment] subclass.
@@ -42,6 +43,7 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -54,13 +56,12 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.topBar.tvTitle.text = "외관 촬영 가이드"
-        binding.topBar.pbStep.progress=100/3
+    override fun onResume() {
+        super.onResume()
+        step =AppData.step
         val color = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
 
-        val step =AppData.step
+
         when(step){
             1-> {
                 binding.layoutStep.flStep1.backgroundTintList=color
@@ -99,10 +100,35 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
 
             }
         }
+
+        // 버튼 텍스트 업데이트
+        updateButtonText()
+    }
+
+    private fun updateButtonText() {
+        when {
+            step == 6 -> {
+                binding.btnNext.text = "완료"
+                binding.btnNext.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
+            }
+            step > 0 -> {
+                binding.btnNext.text = "이어서 촬영하기"
+            }
+            else -> {
+                binding.btnNext.text = "촬영하기"
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.topBar.tvTitle.text = "STEP 1"
+        binding.topBar.pbStep.progress=100/3
+
         binding.layoutStep.flStep1
 
         // X 클릭 이벤트 설정
-        binding.topBar.btnCancel.setOnClickListener {
+        binding.topBar.backButtonContainer.setOnClickListener {
             showQuitBottomSheet()
         }
 

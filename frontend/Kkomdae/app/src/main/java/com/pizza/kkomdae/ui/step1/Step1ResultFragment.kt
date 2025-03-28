@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
@@ -18,6 +19,9 @@ import com.pizza.kkomdae.databinding.FragmentStep1ResultBinding
 import com.pizza.kkomdae.ui.MyAndroidViewModel
 import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import com.pizza.kkomdae.ui.guide.Step2GuideFragment
+import android.content.Context
+import androidx.fragment.app.FragmentManager
+import com.pizza.kkomdae.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +39,13 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
     FragmentStep1ResultBinding::bind,
     R.layout.fragment_step1_result
 ) {
+    private lateinit var mainActivity: MainActivity
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -53,7 +64,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
         viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
         Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
 
-        binding.topBar.tvTitle.text=""
+        binding.topBar.tvTitle.text = "STEP 1"
         binding.topBar.pbStep.progress=100/3
 
         binding.ivImage.setOnClickListener {
@@ -93,23 +104,54 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
             transaction.commit()
         }
 
+        // X 클릭 이벤트 설정
+        binding.topBar.backButtonContainer.setOnClickListener {
+            showQuitBottomSheet()
+        }
+
     }
 
-    fun changeImage(it: Int){
-        var a = AppData.frontUri
-        step=it
-        if(it ==1){
-            a=AppData.frontUri
-        }else if(it == 2){
-            a=AppData.backUri
+    private fun showQuitBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet, null)
 
-        }else if (it ==3){
+        // 계속하기 버튼 클릭 시 바텀시트 닫기
+        val btnContinue = bottomSheetView.findViewById<View>(R.id.btn_continue)
+        btnContinue.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // 그만두기 버튼 클릭 시 메인 화면으로 이동
+        val btnQuit = bottomSheetView.findViewById<View>(R.id.btn_quit)
+        btnQuit.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            // 메인 화면으로 이동
+            mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            val transaction = mainActivity.supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, com.pizza.kkomdae.ui.MainFragment())
+            transaction.commit()
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
+    }
+
+
+    fun changeImage(it: Int){
+        Log.d(TAG, "changeImage: $it")
+        var a = AppData.frontUri
+        step=it+1
+        if(step ==1){
+            a=AppData.frontUri
+        }else if(step == 2){
+            a=AppData.backUri
+        }else if (step ==3){
             a=AppData.leftUri
-        }else if (it ==4){
+        }else if (step ==4){
             a=AppData.rightUri
-        }else if (it ==5){
+        }else if (step ==5){
             a=AppData.screenUri
-        }else if (it ==6){
+        }else if (step ==6){
             a=AppData.keypadUri
         }
         Glide.with(binding.ivImage)
