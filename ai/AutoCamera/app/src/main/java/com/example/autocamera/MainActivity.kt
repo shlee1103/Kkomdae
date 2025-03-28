@@ -1,6 +1,7 @@
 package com.example.autocamera
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,9 @@ import java.io.ByteArrayOutputStream
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.SurfaceTexture
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import java.io.File
@@ -55,12 +59,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var tflite: Interpreter
     private lateinit var imageCapture: ImageCapture
-    private var count = 0
+    private var count = 0 // (삭제)
+    private var lastCapturedBox: BBox? = null // crop을 위해 best box를 저장하는 변수
+
 
     // 이전 프레임과 비교를 위한 상태
     private var lastBox: BBox? = null
     private var stableFrameCount = 0
-    private val requiredStableFrames = 10
+    private val requiredStableFrames = 5
     private val candidateBitmaps = mutableListOf<Bitmap>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,13 +112,21 @@ class MainActivity : AppCompatActivity() {
         cameraProviderFuture.addListener({
             // 카메라 관리 객체
             val cameraProvider = cameraProviderFuture.get()
+            val my_preview_resolution = Size(3840, 2160)
 
             // ✅ 1. Preview <- 미리 보기 구성. (Preview 화면 연결하여 미리보기 영상 출력)
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(binding.previewView.surfaceProvider)
-            }
+            val preview = Preview.Builder()
+                .setTargetResolution(my_preview_resolution) // 원하는 해상도 요청 <- 최대한 높은 걸로 달라고 요청
+                .build().also {
+                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
 
-            val resolution = Size(3840, 2160)
+                    // SurfaceProvider가 설정되고 나면 resolution 정보가 들어옴
+                    binding.previewView.post {
+                        val resolution = binding.previewView.width to binding.previewView.height
+                        Log.d("PreviewInfo", "previewView 크기: ${resolution.first} x ${resolution.second}")
+                    }
+                }
+
 
             // ✅ 2. ImageCapture (📸 이 줄이 바로 여기!)
             // 사진을 캡처(저장)할 수 있도록 ImageCapture 객체 생성
@@ -142,6 +156,21 @@ class MainActivity : AppCompatActivity() {
             // 후면 카메라 선택
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+            // ⬇️ 여기서 cameraId 알아내서 해상도 확인하기
+            val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val cameraId = cameraManager.cameraIdList.first {
+                val characteristics = cameraManager.getCameraCharacteristics(it)
+                val lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                lensFacing == CameraCharacteristics.LENS_FACING_BACK
+            }
+
+            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+            val configs = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+            val sizes = configs?.getOutputSizes(SurfaceTexture::class.java)
+            sizes?.forEach {
+                Log.d("지원해상도", "size: ${it.width}x${it.height}")
+            }
+
             try {
                 // 혹시 이전에 카메라에 묶인 기능들이 있으면 전부 해제
                 cameraProvider.unbindAll()
@@ -168,8 +197,6 @@ class MainActivity : AppCompatActivity() {
     private fun analyzeImage(imageProxy: ImageProxy) {
         // ImageProxy에서 가져온 카메라 프레임을 Bitmap으로 변환 (YOLO 입력용)
         val bitmap = imageProxyToBitmap(imageProxy)
-        val width = bitmap.width
-        val height = bitmap.height
         // YOLOv8 TFLite 모델에 넣기 위한 전처리 작업 (640x640 크기, float 정규화 등)
         val preprocessed = preprocessBitmap(bitmap)
         val input = preprocessed.input
@@ -186,7 +213,7 @@ class MainActivity : AppCompatActivity() {
         // 추론 결과
         val predictions = output[0]
         // confidence 90%이상만 검출
-        val threshold = 0.9f
+        val threshold = 0.8f
         // YOLO 입력은 항상 640x640
         val modelInputSize = 640f
 
@@ -222,7 +249,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("BBoxFinal", "BBox: RectF($left, $top, $right, $bottom)")
 
                 if (detectedBoxes.isNotEmpty()) {
-                    saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
+                    // saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
                 }
             }
         }
@@ -246,7 +273,7 @@ class MainActivity : AppCompatActivity() {
 
                 // 노트북이 화면의 20% 이상 차지할 때만 유효하다고 간주
                 //→ 너무 멀리 있거나 작게 보이는 건 촬영하지 않음
-                val minAreaRatio = 0.5f  // 화면의 20% 이상일 때만 인정
+                val minAreaRatio = 0.25f  // 화면의 20% 이상일 때만 인정
                 val isBigEnough = areaRatio > minAreaRatio
 
                 // 이전 프레임의 bestBox와 비교해서
@@ -255,13 +282,14 @@ class MainActivity : AppCompatActivity() {
                 val isPositionStable = lastBox?.let {
                     val dx = Math.abs(it.rect.centerX() - bestBox.rect.centerX())
                     val dy = Math.abs(it.rect.centerY() - bestBox.rect.centerY())
-                    dx < 10 && dy < 10  // 100px 이내 움직임이면 "안정"
+                    dx < 100 && dy < 100  // 100px 이내 움직임이면 "안정"
                 } ?: true
                 Log.d("StableFrames", "count = $stableFrameCount, 크기 통과: $isBigEnough, 위치 통과: $isPositionStable")
 
 
                 // 충분히 크고, 안정적인 위치에 있을 경우만
-                if (isBigEnough && isPositionStable) {
+                // if (isBigEnough && isPositionStable) {
+                if (isPositionStable) {
                     // 안정된 프레임으로 인정되면 카운트 증가 (stableFrameCount)
                     stableFrameCount++
                     // 현재 비트맵을 복사해서 candidateBitmaps에 저장
@@ -282,6 +310,8 @@ class MainActivity : AppCompatActivity() {
                 if (stableFrameCount >= requiredStableFrames) {
                     // 지금까지 모은 비트맵 중에서 가장 좋은 걸 선택해서 저장!
                     // 저장 후 초기화
+                    lastCapturedBox = bestBox
+                    saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
                     captureHighResImage()
                     stableFrameCount = 0
                     candidateBitmaps.clear()
@@ -392,46 +422,6 @@ class MainActivity : AppCompatActivity() {
         return PreprocessedResult(input, scale, dx, dy)
     }
 
-    // 가장 좋은 한 장을 골라 파일로 저장하는 함수
-    private fun selectBestAndSave(bitmaps: List<Bitmap>) {
-        // 후보 이미지가 하나도 없으면?
-        // → 그냥 아무 것도 하지 않고 함수 종료
-        if (bitmaps.isEmpty()) return
-
-        //  밝기 점수 (Luma)와 선명도 점수 (Sharpness) 기준으로 베스트 선택 (여기선 단순히 가장 밝은 이미지로)
-        // (이미 analyzeImage의 minAreaRatio로 노트북 면적이 50%이상일 때만 넘어옴)
-        //  각 비트맵을 평가해서
-        //  → 가장 점수가 높은 하나(maxByOrNull)를 best로 선택
-        val best = bitmaps.maxByOrNull { bitmap ->
-            val lumaScore = calculateLuma(bitmap)
-            val sharpnessScore = calculateSharpness(bitmap)
-            lumaScore * 1.0 + sharpnessScore * 1000  // 🔥 가중치 튜닝 가능
-            // 만약 best가 null이라면 (bitmaps가 empty일 때)
-            // → 저장 없이 종료
-        } ?: return
-
-        // 앱의 외부저장소 폴더에 "best_laptop_현재시간.jpg" 이름으로 파일 생성
-        val photoFile = File(
-            externalMediaDirs.first(),
-            "best_laptop_${System.currentTimeMillis()}.jpg"
-        )
-
-        // 선택된 best 이미지를 JPEG 포맷으로 압축해서 파일로 저장
-        // 100은 압축률 100% (최고 품질)
-        FileOutputStream(photoFile).use { out ->
-            best.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        }
-
-        // 안드로이드 갤러리에서 바로 인식되도록 미디어 스캔 요청
-        //→ 저장한 사진이 갤러리 앱에 바로 표시됨! 🎉
-        MediaScannerConnection.scanFile(
-            applicationContext,
-            arrayOf(photoFile.absolutePath),
-            arrayOf("image/jpeg"),
-            null
-        )
-    }
-
     // 실제 사람의 시각에 더 가까운 가중 평균 밝기 계산 (Luma 방식 (가중 평균))
     // Luma 방식은 디지털 이미지나 영상에서 **"사람이 느끼는 밝기(luminance)"**를 계산하기 위한 대표적인 방식
     // 사람의 눈은 색마다 밝기를 느끼는 민감도가 다르기 때문에, 각 색(R, G, B)에 가중치를 다르게
@@ -502,6 +492,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "✅ YOLO 디버그 이미지 저장됨: ${debugFile.absolutePath}")
     }
 
+    // 고화질 이미지 crop 후 저장
     private fun captureHighResImage() {
         val photoFile = File(
             externalMediaDirs.first(),
@@ -515,15 +506,73 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    val box = lastCapturedBox ?: return
+
+                    val highResBitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+                    val analyzedWidth = 1280f // 분석에 사용한 비율 그대로
+                    val analyzedHeight = 720f
+
+                    val scaleX = highResBitmap.width / analyzedWidth
+                    val scaleY = highResBitmap.height / analyzedHeight
+
+                    val rectF = RectF(
+                        box.rect.left * scaleX,
+                        box.rect.top * scaleY,
+                        box.rect.right * scaleX,
+                        box.rect.bottom * scaleY
+                    )
+
+                    // ✅ bbox를 중심으로 1.1배 확대
+                    val paddingScale = 1.1f
+                    val centerX = rectF.centerX()
+                    val centerY = rectF.centerY()
+                    val halfWidth = rectF.width() / 2 * paddingScale
+                    val halfHeight = rectF.height() / 2 * paddingScale
+
+                    val expandedRect = RectF(
+                        centerX - halfWidth,
+                        centerY - halfHeight,
+                        centerX + halfWidth,
+                        centerY + halfHeight
+                    )
+
+                    // ✅ [Crop] 이미지 경계 안으로 제한
+                    val cropRect = Rect(
+                        expandedRect.left.toInt().coerceAtLeast(0),
+                        expandedRect.top.toInt().coerceAtLeast(0),
+                        expandedRect.right.toInt().coerceAtMost(highResBitmap.width),
+                        expandedRect.bottom.toInt().coerceAtMost(highResBitmap.height)
+                    )
+
+                    // ✅ crop 된 비트맵 생성
+                    val croppedBitmap = Bitmap.createBitmap(
+                        highResBitmap,
+                        cropRect.left,
+                        cropRect.top,
+                        cropRect.width(),
+                        cropRect.height()
+                    )
+
+                    // ✅ crop 된 이미지를 저장
+                    val croppedFile = File(
+                        externalMediaDirs.first(),
+                        "cropped_laptop_${System.currentTimeMillis()}.jpg"
+                    )
+
+                    FileOutputStream(croppedFile).use { out ->
+                        croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                    }
+
                     MediaScannerConnection.scanFile(
                         applicationContext,
-                        arrayOf(photoFile.absolutePath),
+                        arrayOf(croppedFile.absolutePath),
                         arrayOf("image/jpeg"),
                         null
                     )
-                    Log.d("ImageCapture", "📸 고해상도 이미지 저장됨: ${photoFile.absolutePath}")
+                    Log.d("ImageCapture", "✅ crop된 이미지 저장됨: ${croppedFile.absolutePath}")
+
                     runOnUiThread {
-                        binding.text1.text = "📸 고해상도 촬영 완료! ${++count}"
+                        binding.text1.text = "📸 crop 완료! ${++count}"
                     }
                 }
 
@@ -533,6 +582,39 @@ class MainActivity : AppCompatActivity() {
             }
         )
     }
+
+//    // 고화질로 이미지를 저장
+//    private fun captureHighResImage() {
+//        val photoFile = File(
+//            externalMediaDirs.first(),
+//            "best_laptop_capture_${System.currentTimeMillis()}.jpg" // 사진 이름(변경)
+//        )
+//
+//        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+//
+//        imageCapture.takePicture(
+//            outputOptions,
+//            ContextCompat.getMainExecutor(this),
+//            object : ImageCapture.OnImageSavedCallback {
+//                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+//                    MediaScannerConnection.scanFile(
+//                        applicationContext,
+//                        arrayOf(photoFile.absolutePath),
+//                        arrayOf("image/jpeg"),
+//                        null
+//                    )
+//                    Log.d("ImageCapture", "📸 고해상도 이미지 저장됨: ${photoFile.absolutePath}")
+//                    runOnUiThread {
+//                        binding.text1.text = "📸 고해상도 촬영 완료! ${++count}"
+//                    }
+//                }
+//
+//                override fun onError(exception: ImageCaptureException) {
+//                    Log.e("ImageCapture", "촬영 실패", exception)
+//                }
+//            }
+//        )
+//    }
 
 
     companion object {
