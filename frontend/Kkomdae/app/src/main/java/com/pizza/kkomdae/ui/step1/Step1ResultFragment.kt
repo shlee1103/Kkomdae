@@ -13,7 +13,7 @@ import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.presenter.model.Step1Result
 import com.pizza.kkomdae.databinding.FragmentStep1ResultBinding
-import com.pizza.kkomdae.ui.MyAndroidViewModel
+import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import com.pizza.kkomdae.ui.guide.Step2GuideFragment
 import android.content.Context
 import androidx.fragment.app.FragmentManager
@@ -23,7 +23,7 @@ import com.pizza.kkomdae.MainActivity
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var viewModel: MyAndroidViewModel
+private lateinit var viewModel: CameraViewModel
 private const val TAG = "Step1ResultFragment"
 
 /**
@@ -57,7 +57,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(CameraViewModel::class.java)
         Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
 
         binding.topBar.tvTitle.text = "STEP 1"
