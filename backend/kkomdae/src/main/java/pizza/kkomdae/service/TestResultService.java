@@ -45,6 +45,7 @@ public class TestResultService {
         List<LaptopTestResultWithStudent> results = new ArrayList<>();
         for (LaptopTestResult laptopTestResult : laptopTestResults) {
             LaptopTestResultWithStudent laptopTestResultWithStudent = new LaptopTestResultWithStudent(laptopTestResult);
+            laptopTestResultWithStudent.setResultPdfUrl(s3Service.generatePresignedUrl(laptopTestResult.getPdfFileName()));
             results.add(laptopTestResultWithStudent);
         }
         return results;

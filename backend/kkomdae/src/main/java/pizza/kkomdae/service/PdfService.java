@@ -312,7 +312,7 @@ public class PdfService {
         // 첫 번째 라벨
         Cell labelCell1 = new Cell()
                 .add(new Paragraph(label1).setFont(font).setFontSize(10))
-                .setTextAlignment(TextAlignment.RIGHT)
+                .setTextAlignment(TextAlignment.LEFT)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setBorder(Border.NO_BORDER);
         table.addCell(labelCell1);
@@ -328,7 +328,7 @@ public class PdfService {
         // 두 번째 라벨
         Cell labelCell2 = new Cell()
                 .add(new Paragraph(label2).setFont(font).setFontSize(10))
-                .setTextAlignment(TextAlignment.RIGHT)
+                .setTextAlignment(TextAlignment.LEFT)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setBorder(Border.NO_BORDER);
         table.addCell(labelCell2);
@@ -415,7 +415,7 @@ public class PdfService {
 
         // 이미지 추가
 
-        String imagePath = PdfController.class.getClassLoader().getResource("static/test.jpg").getPath();
+        String imagePath = PdfController.class.getClassLoader().getResource("static/image/test.jpg").getPath();
         Image image = new Image(ImageDataFactory.create(new URL(url)));
 
         // 이미지 크기와 정렬 설정

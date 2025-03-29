@@ -53,6 +53,7 @@ public class ApiController {
 
 
     @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "사진 업로드", description = "사진을 업로드하여 분석하고 단계를 저장하는 api")
     public ApiResponse uploadPhoto(
             @RequestPart("photoReq") PhotoReq photoReq,
             @Parameter(required = false, description = "업로드할 이미지 파일 (선택)")
