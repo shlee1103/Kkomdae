@@ -80,6 +80,7 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
         // 서버에서 받아온 유저 정보
         viewModel.userInfoResult.observe(mainActivity){
             step=it.stage
+            binding.tvWelcomeMessage.text="${it.name}님 안녕하세요!"
         }
 
         // 노트북 카드뷰 클릭 이벤트

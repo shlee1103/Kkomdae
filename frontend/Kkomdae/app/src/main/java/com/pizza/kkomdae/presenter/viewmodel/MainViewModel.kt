@@ -81,6 +81,7 @@ class MainViewModel@Inject constructor(
                         onGoingTestId = it.onGoingTestId,
                         stage = it.stage,
                         picStage = it.picStage,
+                        name = it.name,
                         userRentTestRes = it.userRentTestRes.map {
                             UserRentTestResponse(
                                 modelCode = it.modelCode,
