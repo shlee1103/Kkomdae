@@ -53,24 +53,25 @@ public class ApiController {
 
 
     @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "사진 업로드", description = "사진을 업로드하여 분석하고 단계를 저장하는 api")
+    @Operation(summary = "사진 업로드", description = "사진을 업로드하고 분석 및 저장 / type에 -1 (음수) 전송 시 전체 스텝을 2로 변경")
     public ApiResponse uploadPhoto(
-            @RequestPart("photoReq") PhotoReq photoReq,
-            @Parameter(required = false, description = "업로드할 이미지 파일 (선택)")
+            @RequestParam("photoType") int photoType,
+            @RequestParam("testId") long testId,
             @RequestPart(value = "image", required = false) MultipartFile image) {
 
-        // 이미지 파일이 없고, photoType이 음수(-1 등)인 경우
-        if (photoReq.getPhotoType() < 0) {
-            // 테스트 결과의 stage를 2로 업데이트
-            photoService.updateStageTo2(photoReq.getTestId());
+        if (photoType < 0) {
+            photoService.updateStageTo2(testId);
             return new ApiResponse(true, "파일 없이 stage 2 업데이트 완료");
         } else {
-            // 파일이 있을 경우 S3 업로드 및 DB 저장, 분석 요청 진행
+            PhotoReq photoReq = new PhotoReq();
+            photoReq.setPhotoType(photoType);
+            photoReq.setTestId(testId);
             Photo photo = photoService.uploadPhotoSync(photoReq, image);
             photoService.analyzePhoto(photo.getPhotoId());
             return new ApiResponse(true, "사진 업로드 및 저장 성공");
         }
     }
+
 
     @GetMapping("photo")
     @Operation(summary = "테스트 id로 테스트의 사진을 얻는 api", description = "List<String>으로 반환")
