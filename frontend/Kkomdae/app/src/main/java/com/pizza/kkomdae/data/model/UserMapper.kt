@@ -10,7 +10,8 @@ object UserMapper {
         onGoingTestId= userResponseDto.onGoingTestId,
         stage = userResponseDto.stage,
         userRentTestRes = userResponseDto.userRentTestRes,
-        picStage = userResponseDto.picStage
+        picStage = userResponseDto.picStage,
+        name = userResponseDto.name,
 
     )
 }
