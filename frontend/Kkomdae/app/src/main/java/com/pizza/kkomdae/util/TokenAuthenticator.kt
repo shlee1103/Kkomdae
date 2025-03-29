@@ -1,6 +1,5 @@
-package com.pizza.kkomdae.remote
+package com.pizza.kkomdae.util
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -9,10 +8,10 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.pizza.kkomdae.LoginActivity
-import com.pizza.kkomdae.data.dto.RefreshTokenRequest
-import com.pizza.kkomdae.data.local.SecureTokenManager
-import com.pizza.kkomdae.data.local.TokenManager
-import com.pizza.kkomdae.remote.RetrofitUtil.Companion.loginService
+import com.pizza.kkomdae.data.model.dto.RefreshTokenRequest
+import com.pizza.kkomdae.data.source.local.SecureTokenManager
+import com.pizza.kkomdae.data.source.local.TokenManager
+import com.pizza.kkomdae.util.RetrofitUtil.Companion.loginService
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response

@@ -1,4 +1,4 @@
-package com.pizza.kkomdae.data.local
+package com.pizza.kkomdae.data.source.local
 
 import android.content.Context
 import android.content.SharedPreferences

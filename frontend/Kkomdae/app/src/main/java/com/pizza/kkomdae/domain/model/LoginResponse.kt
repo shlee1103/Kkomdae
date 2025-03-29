@@ -1,4 +1,4 @@
-package com.pizza.kkomdae.data.dto
+package com.pizza.kkomdae.domain.model
 
 data class LoginResponse(
     val jwt : String,

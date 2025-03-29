@@ -18,7 +18,6 @@ import pizza.kkomdae.security.dto.CustomUserDetails;
 import pizza.kkomdae.service.*;
 
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,6 +53,7 @@ public class ApiController {
 
 
     @PostMapping(value = "/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "사진 업로드", description = "사진을 업로드하여 분석하고 단계를 저장하는 api")
     public ApiResponse uploadPhoto(
             @RequestPart("photoReq") PhotoReq photoReq,
             @Parameter(required = false, description = "업로드할 이미지 파일 (선택)")
@@ -83,6 +83,15 @@ public class ApiController {
         return new ApiResponse(true, "사진 url 반환 완료", photoMap);
     }
 
+    @GetMapping("ai-photo")
+    @Operation(summary = "테스트 아이디로 ai로 분석된 사진을 얻는 api", description = "List<String>으로 반환")
+    public ApiResponse getAiPhoto(@RequestParam long testId) {
+        List<AiPhotoWithUrl> photoList = testResultService.getAiPhotos(testId);
+        Map<String, String> photoMap = photoList.stream()
+                .collect(Collectors.toMap(AiPhotoWithUrl::getAiName, AiPhotoWithUrl::getUrl));
+        return new ApiResponse(true, "분석 사진 url 반환 완료", photoMap);
+    }
+
     @Operation(summary = "파일 이름으로 URL 반환", description = "파일 이름으로 url을 돌려받기")
     @GetMapping("/test-file/{file-name}")
     public UrlResponse getFileName(@PathVariable("file-name") String fileName) {
@@ -104,9 +113,9 @@ public class ApiController {
         testResultService.thirdStage(userDetails, thirdStageReq);
     }
 
-    @Operation(summary = "pdf 생성", description = "")
+    @Operation(summary = "pdf 생성", description = "testId로 절차를 종료하고 pdf를 생성합니다.")
     @PostMapping("/pdf/{testId}")
-    public void makePdf(@PathVariable long testId) {
-        pdfService.makePdf();
+    public String makePdf(@PathVariable long testId) {
+        return pdfService.makeAndUploadPdf(testId);
     }
 }

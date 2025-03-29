@@ -1,6 +1,4 @@
-package com.pizza.kkomdae.data
-
-import android.net.Uri
+package com.pizza.kkomdae.presenter.model
 
 data class Step1Result(
     val image: Int,
