@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pizza.kkomdae.dto.request.SecondStageReq;
 import pizza.kkomdae.dto.request.ThirdStageReq;
+import pizza.kkomdae.dto.respond.AiPhotoWithUrl;
 import pizza.kkomdae.dto.respond.LaptopTestResultWithStudent;
 import pizza.kkomdae.dto.respond.PhotoWithUrl;
 import pizza.kkomdae.entity.*;
@@ -82,6 +83,16 @@ public class TestResultService {
                 .collect(Collectors.toList());
     }
 
+    public List<AiPhotoWithUrl> getAiPhotos(long testId) {
+        LaptopTestResult laptopResult = lapTopTestResultRepository.getReferenceById(testId);
+        List<Photo> photos = photoRepository.getPhotosByLaptopTestResult(laptopResult);
+        return photos.stream()
+                .map(photo -> {
+                    String presignedUrl = s3Service.generatePresignedUrl(photo.getAiName());
+                    return new AiPhotoWithUrl(photo, presignedUrl);
+                })
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public void secondStage(CustomUserDetails userDetails, SecondStageReq secondStageReq) {

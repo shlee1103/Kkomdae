@@ -82,6 +82,15 @@ public class ApiController {
         return new ApiResponse(true, "사진 url 반환 완료", photoMap);
     }
 
+    @GetMapping("ai-photo")
+    @Operation(summary = "테스트 아이디로 ai로 분석된 사진을 얻는 api", description = "List<String>으로 반환")
+    public ApiResponse getAiPhoto(@RequestParam long testId) {
+        List<AiPhotoWithUrl> photoList = testResultService.getAiPhotos(testId);
+        Map<String, String> photoMap = photoList.stream()
+                .collect(Collectors.toMap(AiPhotoWithUrl::getAiName, AiPhotoWithUrl::getUrl));
+        return new ApiResponse(true, "분석 사진 url 반환 완료", photoMap);
+    }
+
     @Operation(summary = "파일 이름으로 URL 반환", description = "파일 이름으로 url을 돌려받기")
     @GetMapping("/test-file/{file-name}")
     public UrlResponse getFileName(@PathVariable("file-name") String fileName) {
