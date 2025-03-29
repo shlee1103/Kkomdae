@@ -413,7 +413,7 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
         dialog.show()
     }
 
-    // 종료 다이얼로그 추가
+    // 종료 다이얼로그
     private fun showEndDialog() {
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
