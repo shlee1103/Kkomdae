@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.pizza.kkomdae.BuildConfig
+import com.pizza.kkomdae.util.AddAuthInterceptor
 import com.pizza.kkomdae.util.DateUtil
 import com.pizza.kkomdae.util.TokenAuthenticator
 import dagger.Module
@@ -39,7 +40,8 @@ object RetrofitModule {
     @Provides
     fun providesOkHttpClient(
         @ApplicationContext context: Context, // Hilt를 통해 Application Context 주입
-        tokenAuthenticator: TokenAuthenticator
+        tokenAuthenticator: TokenAuthenticator,
+        addAuthInterceptor: AddAuthInterceptor
     ) : OkHttpClient.Builder{
         val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
@@ -54,6 +56,7 @@ object RetrofitModule {
             writeTimeout(5, TimeUnit.SECONDS)
             addInterceptor(logging)
             authenticator(tokenAuthenticator)
+            addInterceptor(addAuthInterceptor)
         }
     }
     // TokenAuthenticator를 제공하는 추가 메서드

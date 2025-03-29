@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pizza.kkomdae.domain.model.LoginResponse
 import com.pizza.kkomdae.domain.usecase.LoginUseCase
+import com.pizza.kkomdae.domain.usecase.MainUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

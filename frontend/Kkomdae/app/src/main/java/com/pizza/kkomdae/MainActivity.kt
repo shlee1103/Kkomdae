@@ -17,8 +17,10 @@ import com.pizza.kkomdae.data.source.local.SecureTokenManager
 import com.pizza.kkomdae.data.source.local.TokenManager
 import com.pizza.kkomdae.databinding.LayoutLogoutDialogBinding
 import android.view.WindowManager
-
+import dagger.hilt.android.AndroidEntryPoint
 private const val TAG = "MainActivity"
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }

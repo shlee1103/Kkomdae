@@ -1,6 +1,7 @@
 package com.pizza.kkomdae.di
 
 import com.pizza.kkomdae.data.source.remote.LoginService
+import com.pizza.kkomdae.data.source.remote.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,5 +15,10 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun providesContentService(retrofit: Retrofit) : LoginService = retrofit.create(LoginService::class.java)
+    fun providesLoginService(retrofit: Retrofit) : LoginService = retrofit.create(LoginService::class.java)
+
+
+    @Singleton
+    @Provides
+    fun providesUserService(retrofit: Retrofit) : UserService = retrofit.create(UserService::class.java)
 }
