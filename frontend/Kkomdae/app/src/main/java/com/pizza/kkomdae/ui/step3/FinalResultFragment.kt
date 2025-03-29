@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.TextView
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentFinalResultBinding
 import com.pizza.kkomdae.databinding.FragmentOathBinding
+import com.pizza.kkomdae.ui.SubmitCompleteFragment
 import com.pizza.kkomdae.ui.guide.AllStepOnboardingFragment
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,8 +49,51 @@ class FinalResultFragment : BaseFragment<FragmentFinalResultBinding>(
 
         showIntroDialog()
 
+        // 제출하기 클릭 이벤트
+        binding.btnSubmit.setOnClickListener {
+            showSubmitDialog()
+        }
+
     }
 
+    // 제출하기 다이얼로그
+    private fun showSubmitDialog() {
+        // 다이얼로그 생성
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.layout_dialog_submit_confirm)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // 취소 버튼
+        val btnCancel = dialog.findViewById<TextView>(R.id.btn_cancel)
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 제출하기 버튼
+        val btnConfirm = dialog.findViewById<TextView>(R.id.btn_confirm)
+        btnConfirm.setOnClickListener {
+            // 다이얼로그 닫기
+            dialog.dismiss()
+
+            // 제출완료 화면으로 전환
+            val submitCompleteFragment = SubmitCompleteFragment.newInstance("", "")
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fl_main, submitCompleteFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        dialog.show()
+    }
+
+
+    // 인트로 다이얼로그
     private fun showIntroDialog() {
         // 다이얼로그 생성
         val dialog = Dialog(requireContext())
