@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageCapture: ImageCapture
     private var count = 0 // (삭제)
     private var lastCapturedBox: BBox? = null // crop을 위해 best box를 저장하는 변수
+    private var isCapturing = false // 중복 캡처 방지
+
+
 
 
     // 이전 프레임과 비교를 위한 상태
@@ -122,6 +125,14 @@ class MainActivity : AppCompatActivity() {
 
                     // SurfaceProvider가 설정되고 나면 resolution 정보가 들어옴
                     binding.previewView.post {
+                        val guideMargin = 0.15f // 화면의 15% 마진
+                        val left = binding.overlay.width * guideMargin * 1.2f
+                        val top = binding.overlay.height * guideMargin
+                        val right = binding.overlay.width * (1 - guideMargin) *0.8f
+                        val bottom = binding.overlay.height * (1 - guideMargin)
+                        val guideRect = RectF(left, top, right, bottom)
+                        binding.overlay.setGuideRect(guideRect)
+
                         val resolution = binding.previewView.width to binding.previewView.height
                         Log.d("PreviewInfo", "previewView 크기: ${resolution.first} x ${resolution.second}")
                     }
@@ -131,9 +142,9 @@ class MainActivity : AppCompatActivity() {
             // ✅ 2. ImageCapture (📸 이 줄이 바로 여기!)
             // 사진을 캡처(저장)할 수 있도록 ImageCapture 객체 생성
             imageCapture = ImageCapture.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_DEFAULT) // 📌 비율 설정
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3) // 📌 비율 설정
                 // .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY) // 빠른 캡처 모드
-                //.setTargetResolution(resolution)
+//                .setTargetResolution(my_preview_resolution)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY) // 고화질 우선
                 .build()
 
@@ -204,6 +215,7 @@ class MainActivity : AppCompatActivity() {
         val dx = preprocessed.dx
         val dy = preprocessed.dy
 
+
         // YOLO 모델 실행
         // 입력: input
         // 출력: [1, 5, 8400] 형식 (YOLOv8의 head 출력 → center x/y, width/height, confidence)
@@ -262,19 +274,27 @@ class MainActivity : AppCompatActivity() {
 
             // 탐지된 객체가 있을 때만 아래 로직 실행
             if (bestBox != null) {
+                val guideRect = binding.overlay.getGuideRect() ?: return@runOnUiThread
+
+                // 1️⃣ 비율 구하기 (bbox → overlay 변환)
+                val scaleX = binding.overlay.width / bitmap.width.toFloat()
+                val scaleY = binding.overlay.height / bitmap.height.toFloat()
+
+                // 2️⃣ bbox를 overlay 좌표계로 변환
+                val transformedRect = RectF(
+                    bestBox.rect.left * scaleX,
+                    bestBox.rect.top * scaleY,
+                    bestBox.rect.right * scaleX,
+                    bestBox.rect.bottom * scaleY
+                )
+                val iou = computeIoU(transformedRect, guideRect)
+
                 // bestBox가 화면 전체에서 차지하는 비율(면적 비율) 계산
-                //  → 나중에 노트북이 충분히 클 때만 촬영하기 위해
-                val viewWidth = binding.previewView.width.toFloat()
-                val viewHeight = binding.previewView.height.toFloat()
+                //  → 나중에 노트북이 충분히 클 때만 촬영하기 위해\
                 val bitmapWidth = bitmap.width.toFloat()
                 val bitmapHeight = bitmap.height.toFloat()
                 Log.d("화면", "bestBox.rect.width(): ${bestBox.rect.width()} bestBox.rect.height():${bestBox.rect.height()}")
                 val areaRatio = (bestBox.rect.width() * bestBox.rect.height()) / (bitmapWidth * bitmapHeight)
-
-                // 노트북이 화면의 20% 이상 차지할 때만 유효하다고 간주
-                //→ 너무 멀리 있거나 작게 보이는 건 촬영하지 않음
-                val minAreaRatio = 0.25f  // 화면의 20% 이상일 때만 인정
-                val isBigEnough = areaRatio > minAreaRatio
 
                 // 이전 프레임의 bestBox와 비교해서
                 // 중심좌표의 이동이 100px 이하이면 → "카메라 흔들림 없음"으로 간주
@@ -284,11 +304,10 @@ class MainActivity : AppCompatActivity() {
                     val dy = Math.abs(it.rect.centerY() - bestBox.rect.centerY())
                     dx < 100 && dy < 100  // 100px 이내 움직임이면 "안정"
                 } ?: true
-                Log.d("StableFrames", "count = $stableFrameCount, 크기 통과: $isBigEnough, 위치 통과: $isPositionStable")
+                Log.d("StableFrames", "count = $stableFrameCount, 위치 통과: $isPositionStable")
 
 
-                // 충분히 크고, 안정적인 위치에 있을 경우만
-                // if (isBigEnough && isPositionStable) {
+                // 안정적인 위치에 있을 경우만
                 if (isPositionStable) {
                     // 안정된 프레임으로 인정되면 카운트 증가 (stableFrameCount)
                     stableFrameCount++
@@ -305,21 +324,35 @@ class MainActivity : AppCompatActivity() {
 
                 // 다음 프레임 비교를 위해 현재 박스를 저장
                 lastBox = bestBox
+                Log.d("IOU", "iou : $iou")
+                if (iou > 0.8f) {  // 📌 IoU가 90% 이상일 때만 촬영 로직 실행
+                    // ✅ 10프레임 연속 안정된 상태
+                    if (stableFrameCount >= requiredStableFrames && !isCapturing) {
+                        isCapturing = true
+                        // 지금까지 모은 비트맵 중에서 가장 좋은 걸 선택해서 저장!
+                        // 저장 후 초기화
+                        val bestBitmap = candidateBitmaps.maxByOrNull {
+                            val lumaScore = calculateLuma(it).toDouble()
+                            val sharpnessScore = calculateSharpness(it) * 5000 // 가중치 조정 가능
+                            lumaScore + sharpnessScore
+                        }
+                        if (bestBitmap != null) {
+                            lastCapturedBox = bestBox
+//                            saveDebugBitmapWithBoxes(bestBitmap, detectedBoxes)
+                            captureHighResImage()
+                        }
 
-                // ✅ 10프레임 연속 안정된 상태
-                if (stableFrameCount >= requiredStableFrames) {
-                    // 지금까지 모은 비트맵 중에서 가장 좋은 걸 선택해서 저장!
-                    // 저장 후 초기화
-                    lastCapturedBox = bestBox
-                    saveDebugBitmapWithBoxes(bitmap, detectedBoxes)
-                    captureHighResImage()
-                    stableFrameCount = 0
-                    candidateBitmaps.clear()
+                        stableFrameCount = 0
+                        candidateBitmaps.clear()
+
+                        // 캡처 완료 후 2초 뒤에 다시 풀어줌
+                        Handler().postDelayed({ isCapturing = false }, 2000)
+                    }
                 }
 
                 // 오버레이에 감지된 박스 하나만 그리기
                 // → 화면에 사각형이 표시됨
-                binding.overlay.setBoxes(listOf(bestBox), bitmap.width, bitmap.height)
+                binding.overlay.setBoxes(listOf(bestBox), bitmap.width, bitmap.height) // (삭제)
             }
         }
 
@@ -615,6 +648,22 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        )
 //    }
+
+    private fun computeIoU(rect1: RectF, rect2: RectF): Float {
+        val intersectionLeft = maxOf(rect1.left, rect2.left)
+        val intersectionTop = maxOf(rect1.top, rect2.top)
+        val intersectionRight = minOf(rect1.right, rect2.right)
+        val intersectionBottom = minOf(rect1.bottom, rect2.bottom)
+
+        val intersectionArea = maxOf(0f, intersectionRight - intersectionLeft) *
+                maxOf(0f, intersectionBottom - intersectionTop)
+        val rect1Area = rect1.width() * rect1.height()
+        val rect2Area = rect2.width() * rect2.height()
+
+        val unionArea = rect1Area + rect2Area - intersectionArea
+
+        return if (unionArea == 0f) 0f else intersectionArea / unionArea
+    }
 
 
     companion object {
