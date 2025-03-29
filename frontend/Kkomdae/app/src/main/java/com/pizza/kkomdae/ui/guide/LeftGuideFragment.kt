@@ -21,6 +21,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
@@ -30,14 +31,12 @@ import com.pizza.kkomdae.databinding.FragmentLeftGuideBinding
 import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import java.io.File
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private var imageCapture: ImageCapture? = null
 private var camera: Camera? = null
 private lateinit var cameraActivity: CameraActivity
-private lateinit var viewModel: CameraViewModel
 /**
  * A simple [Fragment] subclass.
  * Use the [LeftGuideFragment.newInstance] factory method to
@@ -50,6 +49,7 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val viewModel: CameraViewModel by activityViewModels()
     override fun onAttach(context: Context) {
         super.onAttach(context)
         cameraActivity = context as CameraActivity
@@ -68,8 +68,6 @@ class LeftGuideFragment : BaseFragment<FragmentLeftGuideBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startCamera()
-
-        viewModel = ViewModelProvider(requireActivity()).get(CameraViewModel::class.java)
 
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false

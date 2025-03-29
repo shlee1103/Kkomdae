@@ -53,7 +53,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
     private var param1: String? = null
     private var param2: String? = null
 
-//    private val viewModel: CameraViewModel by activityViewModels()
+    private val viewModel: CameraViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -178,8 +178,8 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
                     Log.d("CameraFragment", "사진 저장됨: $savedUri")
 
                     // ✅ ViewModel에 사진 저장
-//                    viewModel.setFront(savedUri)
-//                    viewModel.setStep(1)
+                    viewModel.setFront(savedUri)
+                    viewModel.setStep(1)
                     AppData.frontUri = savedUri
                     AppData.step=1
 

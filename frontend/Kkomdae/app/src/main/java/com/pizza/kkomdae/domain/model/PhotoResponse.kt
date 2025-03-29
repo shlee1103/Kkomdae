@@ -1,6 +1,6 @@
 package com.pizza.kkomdae.domain.model
 
 data class PhotoResponse(
-    val statusCode : Int,
+    val success : Boolean,
     val message : String,
 )

@@ -22,6 +22,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
@@ -54,7 +55,7 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var viewModel: CameraViewModel
+    private val viewModel: CameraViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -75,7 +76,7 @@ class BackShotGuideFragment :  BaseFragment<FragmentBackShotGuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         startCamera()
 
-        viewModel = ViewModelProvider(requireActivity()).get(CameraViewModel::class.java)
+
         // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false

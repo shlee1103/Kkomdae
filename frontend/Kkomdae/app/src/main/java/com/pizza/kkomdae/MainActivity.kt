@@ -104,8 +104,9 @@ class MainActivity : AppCompatActivity() {
         showToast("로그아웃 되었습니다")
     }
 
-    fun next(){
+    fun next(type:Int){
        val intent = Intent(this, CameraActivity::class.java)
+           .putExtra("type",type)
         cameraResultLauncher.launch(intent)
     }
 

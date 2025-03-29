@@ -38,6 +38,10 @@ class MainViewModel@Inject constructor(
     val testId: LiveData<Long>
         get() = _testId
 
+    private val _picStage = MutableLiveData<Int>()
+    val picStage: LiveData<Int>
+        get() = _picStage
+
     private val _userInfoResult = MutableLiveData<UserInfoResponse>()
     val userInfoResult: LiveData<UserInfoResponse>
         get() = _userInfoResult
@@ -52,6 +56,7 @@ class MainViewModel@Inject constructor(
                 testResponse?.let {
                     _testId.postValue(it)
                     saveTestId(it)
+
                 }
 
 
@@ -75,6 +80,8 @@ class MainViewModel@Inject constructor(
                     if(it.onGoingTestId!=0){
                         saveTestId(it.onGoingTestId.toLong())
                     }
+
+                    _picStage.postValue(it.picStage)
 
 
                     val data = UserInfoResponse(

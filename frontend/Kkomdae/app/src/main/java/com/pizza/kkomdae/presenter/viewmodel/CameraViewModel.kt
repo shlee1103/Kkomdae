@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pizza.kkomdae.domain.model.PhotoResponse
 import com.pizza.kkomdae.domain.usecase.LoginUseCase
 import com.pizza.kkomdae.domain.usecase.Step1UseCase
 import dagger.hilt.android.internal.Contexts.getApplication
@@ -34,6 +35,9 @@ class CameraViewModel @Inject constructor(
     application: Application,
 ) : AndroidViewModel(application) {
 
+    private val sharedPreferences: SharedPreferences =
+        application.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
 
     private val _myPageOrderId = MutableLiveData<Int>()
     val myPageOrderId: LiveData<Int>
@@ -42,6 +46,10 @@ class CameraViewModel @Inject constructor(
     private val _step = MutableLiveData<Int?>()
     val step: LiveData<Int?>
         get() = _step
+
+    private val _postResult= MutableLiveData<PhotoResponse?>()
+    val postResult: LiveData<PhotoResponse?>
+        get() = _postResult
 
 
     private val _frontUri = MutableLiveData<Uri?>()
@@ -98,9 +106,14 @@ class CameraViewModel @Inject constructor(
         _step.value = step
     }
 
+    fun clearResult(){
+        _postResult.postValue(null)
+    }
+
     fun postPhoto(){
         var uri = frontUri.value
-        val testId = 3
+        val testId = sharedPreferences.getLong("test_id",0)
+        Log.d("Post", "postPhoto: ${step.value}")
         when(step.value){
             1->{
                 uri=frontUri.value
@@ -121,88 +134,102 @@ class CameraViewModel @Inject constructor(
                 uri=keypadUri.value
             }
         }
-//        uri?.let {
-//            viewModelScope.launch {
-//                val file = uriToImagePart(uri)
-//                step1UseCase.postPhoto(
-//                    testId = 3L,
-//                    photoType = step.value?:0,
-//                    file = file
-//                )
-//
-//            }
-//        }
+        uri?.let {
+            viewModelScope.launch {
+                val file = uriToImagePart(uri)
+                val result =step1UseCase.postPhoto(
+                    testId = testId,
+                    photoType = step.value?:0,
+                    file = file
+                )
+
+                result.onSuccess { testResponse ->
+                    // 로그인 성공 시 실제 데이터 처리
+                    testResponse?.let {
+
+                        _postResult.postValue(it)
+
+                    }
+
+
+                }.onFailure { exception ->
+                    // 로그인 정보 불러오기 실패
+
+                }
+
+            }
+        }
 
 
     }
 
-//    suspend fun uriToImagePart(uri: Uri):MultipartBody. Part{
-//        // 이미지 압축 추가
-//        val compressedFile = compressImage(uri)
-//
-//        // RequestBody 생성
-//        val requestFile = compressedFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
-//
-//        // MultipartBody.Part 형식으로 파일 데이터 준비
-//        val imagePart = MultipartBody.Part.createFormData("image", compressedFile.name, requestFile)
-//
-//        return imagePart
-//    }
-//
-//    // 이미지 압축 함수
-//    private suspend fun compressImage(imageUri: Uri): File {
-//        return withContext(Dispatchers.IO) {
-//            val contentResolver = getApplication<Application>().contentResolver
-//
-//            // 비트맵으로 변환
-//            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//                val source = ImageDecoder.createSource(contentResolver, imageUri)
-//                ImageDecoder.decodeBitmap(source)
-//            } else {
-//                MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-//            }
-//
-//            // 원하는 크기로 리사이징 (선택 사항)
-//            val resizedBitmap = resizeBitmap(bitmap, maxWidth = 1024, maxHeight = 1024)
-//
-//            // 압축을 위한 파일 생성
-//            val compressedFile = File(
-//                getApplication<Application>().cacheDir,
-//                "compressed_${System.currentTimeMillis()}.jpg"
-//            )
-//
-//            // 압축 품질 설정 (0-100)
-//            val compressQuality = 70
-//
-//            FileOutputStream(compressedFile).use { fos ->
-//                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, fos)
-//                fos.flush()
-//            }
-//
-//            // 원본 비트맵 리소스 해제
-//            bitmap.recycle()
-//            if (bitmap != resizedBitmap) {
-//                resizedBitmap.recycle()
-//            }
-//
-//            compressedFile
-//        }
-//    }
-//
-//    // 이미지 리사이징 함수
-//    private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
-//        val width = bitmap.width
-//        val height = bitmap.height
-//
-//        if (width <= maxWidth && height <= maxHeight) {
-//            return bitmap
-//        }
-//
-//        val ratio = Math.min(maxWidth.toFloat() / width, maxHeight.toFloat() / height)
-//        val newWidth = (width * ratio).toInt()
-//        val newHeight = (height * ratio).toInt()
-//
-//        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
-//    }
+    suspend fun uriToImagePart(uri: Uri):MultipartBody. Part{
+        // 이미지 압축 추가
+        val compressedFile = compressImage(uri)
+
+        // RequestBody 생성
+        val requestFile = compressedFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+
+        // MultipartBody.Part 형식으로 파일 데이터 준비
+        val imagePart = MultipartBody.Part.createFormData("image", compressedFile.name, requestFile)
+
+        return imagePart
+    }
+
+    // 이미지 압축 함수
+    private suspend fun compressImage(imageUri: Uri): File {
+        return withContext(Dispatchers.IO) {
+            val contentResolver = getApplication<Application>().contentResolver
+
+            // 비트맵으로 변환
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val source = ImageDecoder.createSource(contentResolver, imageUri)
+                ImageDecoder.decodeBitmap(source)
+            } else {
+                MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+            }
+
+            // 원하는 크기로 리사이징 (선택 사항)
+            val resizedBitmap = resizeBitmap(bitmap, maxWidth = 1024, maxHeight = 1024)
+
+            // 압축을 위한 파일 생성
+            val compressedFile = File(
+                getApplication<Application>().cacheDir,
+                "compressed_${System.currentTimeMillis()}.jpg"
+            )
+
+            // 압축 품질 설정 (0-100)
+            val compressQuality = 70
+
+            FileOutputStream(compressedFile).use { fos ->
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, fos)
+                fos.flush()
+            }
+
+            // 원본 비트맵 리소스 해제
+            bitmap.recycle()
+            if (bitmap != resizedBitmap) {
+                resizedBitmap.recycle()
+            }
+
+            compressedFile
+        }
+    }
+
+    // 이미지 리사이징 함수
+    private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+
+        if (width <= maxWidth && height <= maxHeight) {
+            return bitmap
+        }
+
+        val ratio = Math.min(maxWidth.toFloat() / width, maxHeight.toFloat() / height)
+        val newWidth = (width * ratio).toInt()
+        val newHeight = (height * ratio).toInt()
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+    }
 
 }

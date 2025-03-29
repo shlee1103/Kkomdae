@@ -21,6 +21,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
@@ -36,7 +37,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private var imageCapture: ImageCapture? = null
 private var camera: Camera? = null
-private lateinit var viewModel: CameraViewModel
+
 private lateinit var cameraActivity: CameraActivity
 
 /**
@@ -51,6 +52,7 @@ class KeypadGuideFragment : BaseFragment<FragmentKeypadGuideBinding>(
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val viewModel: CameraViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,7 +70,7 @@ class KeypadGuideFragment : BaseFragment<FragmentKeypadGuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         startCamera()
 
-        viewModel = ViewModelProvider(requireActivity()).get(CameraViewModel::class.java)
+
         // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false

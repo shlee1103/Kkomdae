@@ -5,7 +5,7 @@ import com.pizza.kkomdae.domain.model.PhotoResponse
 
 object Step1Mapper {
     fun toPhotoResponse(photoResponseDto: PhotoResponseDto)= PhotoResponse(
-        statusCode = photoResponseDto.statusCode,
+        success = photoResponseDto.success,
         message = photoResponseDto.message
         )
 }

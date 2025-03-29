@@ -18,6 +18,7 @@ import com.pizza.kkomdae.ui.step1.ResultFragment
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
@@ -26,12 +27,16 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CameraActivity : BaseActivity() {
-    private lateinit var myAndroidViewModel: CameraViewModel
+
 
     private val binding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
+        setContentView(binding.root)
+
+        val type = intent.getIntExtra("type",0)
         // ✅ 상태바 제거 (전체 화면 모드)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -39,15 +44,15 @@ class CameraActivity : BaseActivity() {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 )
 
-        setContentView(binding.root)
         var step = AppData.step+1
+        if (AppData.step==0){
+            step=type+1
+        }
 
+        Log.d("Post", "onCreate: $step")
         changeFragment(step)
 
-        myAndroidViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        ).get(CameraViewModel::class.java)
+
 
         // 상태바 뒤로가기 처리를 위한 콜백 등록 로직
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
