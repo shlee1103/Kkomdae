@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.domain.model.LoginResponse
 import com.pizza.kkomdae.domain.model.UserResponse
+import com.pizza.kkomdae.domain.usecase.InspectUseCase
 import com.pizza.kkomdae.domain.usecase.LoginUseCase
 import com.pizza.kkomdae.domain.usecase.MainUseCase
 import com.pizza.kkomdae.presenter.model.UserInfoResponse
@@ -22,23 +23,48 @@ import javax.inject.Inject
 private const val TAG = "MainViewModel"
 @HiltViewModel
 class MainViewModel@Inject constructor(
-    private val mainUseCase: MainUseCase
+    private val mainUseCase: MainUseCase,
+    private val inspectUseCase: InspectUseCase
 ): ViewModel() {
+
+    private val _testId = MutableLiveData<Long>()
+    val testId: LiveData<Long>
+        get() = _testId
 
     private val _userInfoResult = MutableLiveData<UserInfoResponse>()
     val userInfoResult: LiveData<UserInfoResponse>
         get() = _userInfoResult
 
+    fun postTest(serialNum: String?){
+        viewModelScope.launch {
+            val result = inspectUseCase.postTest(serialNum = serialNum)
+            Log.d(TAG, "getUserInfo: $result")
 
+            result.onSuccess { testResponse ->
+                // 로그인 성공 시 실제 데이터 처리
+                testResponse?.let {
+                    _testId.postValue(it)
+                }
+
+
+            }.onFailure { exception ->
+                // 로그인 정보 불러오기 실패
+
+            }
+
+        }
+    }
+
+    // 유저 정보 불러오기
     fun getUserInfo(){
         viewModelScope.launch {
             val result = mainUseCase.getUserInfo()
             Log.d(TAG, "getUserInfo: $result")
 
-            result.onSuccess { loginResponse ->
+            result.onSuccess { userInfoResponse ->
                 // 로그인 성공 시 실제 데이터 처리
-                loginResponse?.let {
-                    val userRentTestRes = it.userRentTestRes
+                userInfoResponse?.let {
+                    _testId.postValue(it.onGoingTestId.toLong())
 
                     val data = UserInfoResponse(
                         onGoingTestId = it.onGoingTestId,

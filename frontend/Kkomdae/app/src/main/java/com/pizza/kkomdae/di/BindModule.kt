@@ -1,7 +1,10 @@
 package com.pizza.kkomdae.di
 
+import com.pizza.kkomdae.data.repository.InspectRepositoryImpl
 import com.pizza.kkomdae.data.repository.LoginRepositoryImpl
 import com.pizza.kkomdae.data.repository.UserInfoRepositoryImpl
+import com.pizza.kkomdae.domain.model.TestResponse
+import com.pizza.kkomdae.domain.repository.InspectRepository
 import com.pizza.kkomdae.domain.repository.LoginRepository
 import com.pizza.kkomdae.domain.repository.UserRepository
 import dagger.Binds
@@ -25,4 +28,10 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         impl: UserInfoRepositoryImpl
     ): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindInspectRepository(
+        impl: InspectRepositoryImpl
+    ): InspectRepository
 }
