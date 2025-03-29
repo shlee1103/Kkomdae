@@ -21,15 +21,15 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.AndroidViewModel
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentFontShotGuideBinding
-import com.pizza.kkomdae.ui.MyAndroidViewModel
+import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import java.io.File
 
 // TODO: Rename parameter arguments, choose names that match
@@ -53,7 +53,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var viewModel: MyAndroidViewModel
+//    private val viewModel: CameraViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -72,7 +72,7 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         startCamera()
 
-        viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
+
         // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false
@@ -178,8 +178,8 @@ class FrontShotGuideFragment : BaseFragment<FragmentFontShotGuideBinding>(
                     Log.d("CameraFragment", "사진 저장됨: $savedUri")
 
                     // ✅ ViewModel에 사진 저장
-                    viewModel.setFront(savedUri)
-                    viewModel.setStep(1)
+//                    viewModel.setFront(savedUri)
+//                    viewModel.setStep(1)
                     AppData.frontUri = savedUri
                     AppData.step=1
 

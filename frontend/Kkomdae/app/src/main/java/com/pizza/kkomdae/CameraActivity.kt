@@ -7,7 +7,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.pizza.kkomdae.base.BaseActivity
 import com.pizza.kkomdae.databinding.ActivityCameraBinding
-import com.pizza.kkomdae.ui.MyAndroidViewModel
+import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import com.pizza.kkomdae.ui.guide.BackShotGuideFragment
 import com.pizza.kkomdae.ui.guide.FrontShotGuideFragment
 import com.pizza.kkomdae.ui.guide.KeypadGuideFragment
@@ -22,9 +22,11 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CameraActivity : BaseActivity() {
-    private lateinit var myAndroidViewModel: MyAndroidViewModel
+    private lateinit var myAndroidViewModel: CameraViewModel
 
     private val binding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +47,7 @@ class CameraActivity : BaseActivity() {
         myAndroidViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        ).get(MyAndroidViewModel::class.java)
+        ).get(CameraViewModel::class.java)
 
         // 상태바 뒤로가기 처리를 위한 콜백 등록 로직
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

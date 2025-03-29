@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -26,12 +25,10 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.pizza.kkomdae.AppData
 import com.pizza.kkomdae.CameraActivity
-import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
-import com.pizza.kkomdae.databinding.FragmentBackShotGuideBinding
 import com.pizza.kkomdae.databinding.FragmentScreenShotGuideBinding
-import com.pizza.kkomdae.ui.MyAndroidViewModel
+import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import java.io.File
 
 // TODO: Rename parameter arguments, choose names that match
@@ -40,7 +37,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private var imageCapture: ImageCapture? = null
 private var camera: Camera? = null
-private lateinit var viewModel: MyAndroidViewModel
+private lateinit var viewModel: CameraViewModel
 private lateinit var cameraActivity: CameraActivity
 
 
@@ -73,7 +70,7 @@ class ScreenShotGuideFragment :  BaseFragment<FragmentScreenShotGuideBinding>(
         super.onViewCreated(view, savedInstanceState)
         startCamera()
 
-        viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(CameraViewModel::class.java)
         // 가이드 닫기 버튼 눌렀을 때
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false
