@@ -1,6 +1,9 @@
 package com.pizza.kkomdae.presenter.viewmodel
 
+import android.app.Application
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -23,9 +26,13 @@ import javax.inject.Inject
 private const val TAG = "MainViewModel"
 @HiltViewModel
 class MainViewModel@Inject constructor(
+    application: Application,
     private val mainUseCase: MainUseCase,
     private val inspectUseCase: InspectUseCase
 ): ViewModel() {
+
+    private val sharedPreferences: SharedPreferences =
+        application.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
     private val _testId = MutableLiveData<Long>()
     val testId: LiveData<Long>
@@ -44,6 +51,7 @@ class MainViewModel@Inject constructor(
                 // 로그인 성공 시 실제 데이터 처리
                 testResponse?.let {
                     _testId.postValue(it)
+                    saveTestId(it)
                 }
 
 
@@ -64,7 +72,10 @@ class MainViewModel@Inject constructor(
             result.onSuccess { userInfoResponse ->
                 // 로그인 성공 시 실제 데이터 처리
                 userInfoResponse?.let {
-                    _testId.postValue(it.onGoingTestId.toLong())
+                    if(it.onGoingTestId!=0){
+                        saveTestId(it.onGoingTestId.toLong())
+                    }
+
 
                     val data = UserInfoResponse(
                         onGoingTestId = it.onGoingTestId,
@@ -95,6 +106,10 @@ class MainViewModel@Inject constructor(
             }
 
         }
+    }
+
+    private fun saveTestId(testId: Long) {
+        sharedPreferences.edit().putLong("test_id", testId).apply()
     }
 
 

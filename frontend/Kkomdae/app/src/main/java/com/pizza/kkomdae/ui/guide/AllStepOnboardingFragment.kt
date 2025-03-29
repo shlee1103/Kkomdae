@@ -6,12 +6,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentAllStepOnboardingBinding
 import com.pizza.kkomdae.presenter.viewmodel.MainViewModel
 import com.pizza.kkomdae.ui.OathFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +26,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 private const val TAG = "AllStepOnboardingFragme"
+@AndroidEntryPoint
 class AllStepOnboardingFragment : BaseFragment<FragmentAllStepOnboardingBinding>(
     FragmentAllStepOnboardingBinding::bind,
     R.layout.fragment_all_step_onboarding
@@ -31,7 +34,7 @@ class AllStepOnboardingFragment : BaseFragment<FragmentAllStepOnboardingBinding>
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private val viewModel : MainViewModel by activityViewModels()
+    private val viewModel : MainViewModel by viewModels()
 
     data class OnboardingStep(
         val title: String,
@@ -97,6 +100,7 @@ class AllStepOnboardingFragment : BaseFragment<FragmentAllStepOnboardingBinding>
 
         // 등록 시작하기
         binding.btnFinish.setOnClickListener {
+            Log.d(TAG, "onViewCreated: asdafdsf ")
             viewModel.postTest(null)
             
         }
