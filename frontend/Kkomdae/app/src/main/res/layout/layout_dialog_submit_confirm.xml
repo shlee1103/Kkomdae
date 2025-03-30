@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="40dp"
-    android:paddingEnd="40dp"
+    android:paddingStart="30dp"
+    android:paddingEnd="30dp"
     android:paddingTop="25dp"
     android:paddingBottom="25dp"
     android:layout_margin="20dp"
@@ -26,9 +26,9 @@
 
     <TextView
         android:id="@+id/tv_dialog_subtitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="검사 내용은 PDF로 생성되어관리자에게 전송됩니다."
+        android:text="검사 내용은 PDF로 생성되어 관리자에게 전송됩니다."
         style="@style/Label3"
         android:textColor="@color/gray400"
         android:textAlignment="center"
