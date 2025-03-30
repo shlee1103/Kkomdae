@@ -47,6 +47,8 @@ class FinalResultFragment : BaseFragment<FragmentFinalResultBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.topBar.tvTitle.text = "제출 내용 확인"
+
         showIntroDialog()
 
         // 제출하기 클릭 이벤트
