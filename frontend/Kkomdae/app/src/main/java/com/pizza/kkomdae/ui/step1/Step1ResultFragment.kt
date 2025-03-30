@@ -17,13 +17,14 @@ import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import com.pizza.kkomdae.ui.guide.Step2GuideFragment
 import android.content.Context
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import com.pizza.kkomdae.MainActivity
+import com.pizza.kkomdae.presenter.viewmodel.MainViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var viewModel: CameraViewModel
 private const val TAG = "Step1ResultFragment"
 
 /**
@@ -36,6 +37,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
     R.layout.fragment_step1_result
 ) {
     private lateinit var mainActivity: MainActivity
+    private val viewModel : MainViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -46,6 +48,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
     private var param1: String? = null
     private var param2: String? = null
     private var step = 1
+    private var imageList : List<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +60,8 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(CameraViewModel::class.java)
-        Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
+
+        viewModel.getPhoto(1)
 
         binding.topBar.tvTitle.text = "STEP 1"
         binding.topBar.pbStep.progress=100/3
@@ -105,6 +108,11 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
             showQuitBottomSheet()
         }
 
+        viewModel.resultImage.observe(viewLifecycleOwner){
+            imageList = it
+            changeImage(0)
+        }
+
     }
 
     private fun showQuitBottomSheet() {
@@ -135,8 +143,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 
     fun changeImage(it: Int){
         Log.d(TAG, "changeImage: $it")
-        var a = "AppData.frontUri"
-        step=it+1
+        step=it
 //        if(step ==1){
 //            a=AppData.frontUri
 //        }else if(step == 2){
@@ -151,7 +158,7 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
 //            a=AppData.keypadUri
 //        }
         Glide.with(binding.ivImage)
-            .load(a)
+            .load(imageList?.get(step) ?:"")
             .into(binding.ivImage)
     }
 

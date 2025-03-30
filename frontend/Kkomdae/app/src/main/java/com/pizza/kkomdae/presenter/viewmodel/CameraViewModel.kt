@@ -236,11 +236,11 @@ class CameraViewModel @Inject constructor(
     }
 
     fun getPhotoStage():Int{
-        return sharedPreferences.getInt("step",0)
+        return sharedPreferences.getInt("photoStage",0)
     }
 
     private fun savePhotoStage(step: Int) {
-        sharedPreferences.edit().putInt("step", step).apply()
+        sharedPreferences.edit().putInt("photoStage", step).apply()
     }
 
 }
