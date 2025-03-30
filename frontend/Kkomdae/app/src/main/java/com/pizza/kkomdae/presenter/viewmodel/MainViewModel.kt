@@ -17,6 +17,7 @@ import com.pizza.kkomdae.domain.model.UserResponse
 import com.pizza.kkomdae.domain.usecase.InspectUseCase
 import com.pizza.kkomdae.domain.usecase.LoginUseCase
 import com.pizza.kkomdae.domain.usecase.MainUseCase
+import com.pizza.kkomdae.domain.usecase.Step1UseCase
 import com.pizza.kkomdae.presenter.model.UserInfoResponse
 import com.pizza.kkomdae.presenter.model.UserRentTestResponse
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ private const val TAG = "MainViewModel"
 class MainViewModel@Inject constructor(
     application: Application,
     private val mainUseCase: MainUseCase,
+    private val step1UseCase: Step1UseCase,
     private val inspectUseCase: InspectUseCase
 ): ViewModel() {
 
@@ -45,6 +47,10 @@ class MainViewModel@Inject constructor(
     private val _userInfoResult = MutableLiveData<UserInfoResponse>()
     val userInfoResult: LiveData<UserInfoResponse>
         get() = _userInfoResult
+
+    private val _resultImage = MutableLiveData<List<String>>()
+    val resultImage: LiveData<List<String>>
+        get() = _resultImage
 
     fun postTest(serialNum: String?){
         viewModelScope.launch {
@@ -67,6 +73,29 @@ class MainViewModel@Inject constructor(
 
         }
     }
+    
+    // 사진 정보 불러오기
+    fun getPhoto(testId: Long){
+        viewModelScope.launch {
+            val result = step1UseCase.getPhoto(testId)
+            result.onSuccess { testResponse ->
+                // 로그인 성공 시 실제 데이터 처리
+                val sortedMap = testResponse.data.toSortedMap()
+                // URL만 리스트에 담기
+                val urlList = sortedMap.values.toList()
+                _resultImage.postValue(urlList)
+
+                Log.d(TAG, "getPhoto: ${testResponse.data}")
+                Log.d(TAG, "getPhoto: ${urlList}")
+
+
+            }.onFailure { exception ->
+                // 로그인 정보 불러오기 실패
+
+            }
+        }
+    }
+    
 
     // 유저 정보 불러오기
     fun getUserInfo(){
