@@ -25,7 +25,7 @@ image_save_path = "filtered_result_vis.jpg"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class_names = ["background", "damage_bbox"]
 
-client = openai.OpenAI(api_key="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")
+client = openai.OpenAI(api_key="")
 # ------------------------------
 
 # ✅ 1, Faster R-CNN 모델 로드
@@ -142,7 +142,7 @@ def classify_damage_with_gpt(crop_image):
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": "이미지는 분석해서 다음 클래스를 구분해줘.\n 1. 스크래치야 아님 흠집이야야?\n2. 각 손상에 대해서 손상도를 판단해줘.(상, 중, 하)"},
+                    {"type": "text", "text": "이미지는 분석해서 다음 클래스를 구분해줘.\n 1. 스크래치야 아님 흠집이야?\n2. 각 손상에 대해서 손상도를 판단해줘.(상, 중, 하)"},
                     {
                         "type": "image_url",
                         "image_url": {
