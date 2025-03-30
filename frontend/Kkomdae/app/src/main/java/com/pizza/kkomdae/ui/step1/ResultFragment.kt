@@ -62,6 +62,7 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
         super.onViewCreated(view, savedInstanceState)
 
         Log.d(TAG, "onViewCreated: ${viewModel.frontUri.value}")
+        Log.d(TAG, "onViewCreated stage: ${viewModel.step.value}")
         var url :Uri? = null
         if(viewModel.step.value ==1){
             url = viewModel.frontUri.value
@@ -77,7 +78,7 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
             url = viewModel.keypadUri.value
         }
         binding.ivProduct?.let {
-            Log.d(TAG, "CameraFragment: ")
+            Log.d(TAG, "CameraFragment uri: $it")
             Glide.with(it)
                 .load(url)
                 .into(it)

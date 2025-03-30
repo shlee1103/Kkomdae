@@ -23,6 +23,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,13 +31,14 @@ class CameraActivity : BaseActivity() {
 
 
     private val binding by lazy { ActivityCameraBinding.inflate(layoutInflater) }
-
+    private val viewModel : CameraViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val type = intent.getIntExtra("type",0)
+
+        val type = viewModel.getPhotoStage()
         // ✅ 상태바 제거 (전체 화면 모드)
         window.decorView.systemUiVisibility = (
                 View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -44,10 +46,8 @@ class CameraActivity : BaseActivity() {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 )
 
-        var step = AppData.step+1
-        if (AppData.step==0){
-            step=type+1
-        }
+        var step = type+1
+
 
         Log.d("Post", "onCreate: $step")
         changeFragment(step)
@@ -72,40 +72,39 @@ class CameraActivity : BaseActivity() {
             0->{ // 촬영 확인
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fl_camera, ResultFragment())
-                    .addToBackStack("sadfa")
                     .commit()
             }
             1->{ // 전면부 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_camera, FrontShotGuideFragment())
+                    .add(R.id.fl_camera, FrontShotGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }
             2->{ // 후면부 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_camera, BackShotGuideFragment())
+                    .add(R.id.fl_camera, BackShotGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }
             3->{ // 좌측 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_camera, LeftGuideFragment())
+                    .add(R.id.fl_camera, LeftGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }
             4->{ // 우측 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_camera, RightGuideFragment())
+                    .add(R.id.fl_camera, RightGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }5->{ // 화면 촬영 가이드
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_camera, ScreenShotGuideFragment())
+                .add(R.id.fl_camera, ScreenShotGuideFragment())
                 .addToBackStack("sadfa")
                 .commit()
             }6->{ // 키패드 촬영 가이드
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fl_camera, KeypadGuideFragment())
+                .add(R.id.fl_camera, KeypadGuideFragment())
                 .addToBackStack("sadfa")
                 .commit()
         }7->{ // 키패드 촬영 가이드

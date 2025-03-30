@@ -83,6 +83,7 @@ class MainViewModel@Inject constructor(
 
                     _picStage.postValue(it.picStage)
 
+                    savePhotoStage(it.picStage)
 
                     val data = UserInfoResponse(
                         onGoingTestId = it.onGoingTestId,
@@ -116,8 +117,15 @@ class MainViewModel@Inject constructor(
         }
     }
 
+    fun getPhotoStage():Int{
+        return sharedPreferences.getInt("photoStage",0)
+    }
+
     private fun saveTestId(testId: Long) {
         sharedPreferences.edit().putLong("test_id", testId).apply()
+    }
+    private fun savePhotoStage(step: Int) {
+        sharedPreferences.edit().putInt("photoStage", step).apply()
     }
 
 
