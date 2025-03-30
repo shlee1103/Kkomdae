@@ -30,6 +30,12 @@ android {
 
         // Server URL 추가
         buildConfigField("String", "SERVER_URL", "\"${localProperties.getProperty("SERVER_URL", "")}\"")
+        // Vision API 추가
+        buildConfigField(
+            "String",
+            "VISION_API_KEY",
+            "\"${localProperties.getProperty("VISION_API_KEY")}\""
+        )
     }
 
     buildFeatures {
@@ -137,4 +143,8 @@ dependencies {
     // hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-compiler:2.48")
+
+    //OCR
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation ("org.json:json:20210307")
 }

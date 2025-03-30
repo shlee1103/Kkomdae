@@ -78,7 +78,7 @@ class MainFragment :  BaseFragment<FragmentMainBinding>(
         }
 
         // 서버에서 받아온 유저 정보
-        viewModel.userInfoResult.observe(mainActivity){
+        viewModel.userInfoResult.observe(viewLifecycleOwner){
             step=it.stage
             binding.tvWelcomeMessage.text="${it.name}님 안녕하세요!"
         }

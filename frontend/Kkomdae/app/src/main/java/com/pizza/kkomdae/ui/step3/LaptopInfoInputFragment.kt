@@ -1,10 +1,17 @@
 package com.pizza.kkomdae.ui.step3
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +20,25 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentBackShotGuideBinding
 import com.pizza.kkomdae.databinding.FragmentLaptopInfoInputBinding
+import com.pizza.kkomdae.di.GoogleVisionApi
+import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,13 +53,20 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var imageUri: Uri? = null
     private var laptopCount=1
     private var powerCount=1
     private var adapterCount=1
     private var mouseCount=1
     private var bagCount=1
     private var padCount=1
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
+    private val cameraViewModel: CameraViewModel by activityViewModels()
+    private lateinit var imageFile: File
 
+
+//    private lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +79,26 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.topBar.pbStep.progress=100
+        // ✅ LiveData observe 추가 (OCR 결과 처리)
+        cameraViewModel.ocrSerial.observe(viewLifecycleOwner) {
+            Log.d("OCR", "LiveData observe - serial: $it")  // 👈 LiveData로 전달받은 값
+            binding.etSerial.setText(it)
+            Log.d("OCR", "serial: $it")
+        }
+
+        cameraViewModel.ocrBarcode.observe(viewLifecycleOwner) {
+            Log.d("OCR", "LiveData observe - barcode: $it")  // 👈 LiveData로 전달받은 값
+            binding.etBarcode.setText(it)
+            Log.d("OCR", "barcode: $it")
+        }
+
+        binding.topBar.pbStep.progress = 100
         binding.topBar.tvTitle.text = "Step3"
 
         showIntroDialog()
 
         binding.etSerial.doOnTextChanged { text, start, before, count ->
-           // 유효성 검사
+            // 유효성 검사
             checkNext()
         }
 
@@ -70,9 +106,6 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
             // 유효성 검사
             checkNext()
         }
-
-
-
 
         // 날짜 설정
         settingDate()
@@ -105,7 +138,48 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
             transaction.commit()
         }
 
+        // OCR
+
+
+        // OCR 카메라 초기화
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                if (::imageFile.isInitialized) {
+                    val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+                    bitmap?.let {
+                        Log.d("OCR", "bitmap loaded from file!")
+                        cameraViewModel.callOcrFromBitmap(requireContext(), it)
+                    }
+                } else {
+                    Log.e("OCR", "imageFile is not initialized")
+                }
+            }
+        }
+
+
+
+        binding.btnOcrSerial.setOnClickListener {
+            imageFile = File(requireContext().cacheDir, "ocr_image_${System.currentTimeMillis()}.jpg")
+            imageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                imageFile
+            )
+
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)  // 👉 고해상도 저장 설정
+            cameraLauncher.launch(intent)
+        }
+
+
+
+
+//        dialog.setOnDismissListener {
+//            Log.d("Dialog", "Dialog dismissed")
+//        }
+
     }
+
 
     private fun checkNext() {
         if (binding.etSerial.text.toString() != "" && binding.etBarcode.text.toString() != "") {
