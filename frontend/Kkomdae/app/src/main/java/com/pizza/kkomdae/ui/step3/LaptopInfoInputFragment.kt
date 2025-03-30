@@ -23,6 +23,7 @@ import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentBackShotGuideBinding
 import com.pizza.kkomdae.databinding.FragmentLaptopInfoInputBinding
+import com.pizza.kkomdae.ui.LoadingFragment
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -442,8 +443,14 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
             dialog.dismiss() // 다이얼로그 닫기
 
             // AiResultFragment로 전환
+//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//            transaction.replace(R.id.fl_main, AiResultFragment())
+//            transaction.addToBackStack(null) // 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 설정
+//            transaction.commit()
+
+            // LoadingFragment 전환
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, AiResultFragment())
+            transaction.replace(R.id.fl_main, LoadingFragment())
             transaction.addToBackStack(null) // 뒤로 가기 버튼으로 이전 화면으로 돌아갈 수 있도록 설정
             transaction.commit()
         }
