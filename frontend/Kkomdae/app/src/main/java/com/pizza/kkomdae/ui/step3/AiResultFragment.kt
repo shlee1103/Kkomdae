@@ -1,31 +1,38 @@
 package com.pizza.kkomdae.ui.step3
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.pizza.kkomdae.AppData
+import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
+import com.pizza.kkomdae.data.Step1Result
 import com.pizza.kkomdae.databinding.FragmentAiResultBinding
-import com.pizza.kkomdae.databinding.FragmentOathBinding
-import com.pizza.kkomdae.ui.guide.AllStepOnboardingFragment
+import com.pizza.kkomdae.ui.MyAndroidViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private lateinit var viewModel: MyAndroidViewModel
+private const val TAG = "AiResultFragment"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AiResultFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AiResultFragment : BaseFragment<FragmentAiResultBinding>(
     FragmentAiResultBinding::bind,
     R.layout.fragment_ai_result
 ) {
-    // TODO: Rename and change types of parameters
+    private lateinit var mainActivity: MainActivity
+    private var step = 1
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -39,8 +46,51 @@ class AiResultFragment : BaseFragment<FragmentAiResultBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(MyAndroidViewModel::class.java)
 
-        // 다음 최종결과 화면으로 넘어가기
+        binding.topBar.tvTitle.text = ""
+
+        // 초기 이미지 설정
+        Glide.with(binding.ivImage)
+            .load(AppData.frontUri)
+            .into(binding.ivImage)
+
+        // 이미지 클릭 이벤트 설정
+        binding.ivImage.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("param1", step)
+
+            // ImageDetailFragment 생성
+            val imageDetailFragment = com.pizza.kkomdae.ui.step1.ImageDetailFragment()
+            imageDetailFragment.arguments = bundle
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, imageDetailFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        // RecyclerView 데이터 설정
+        val data = listOf(
+            Step1Result(R.drawable.ic_front_laptop, "전면부"),
+            Step1Result(R.drawable.ic_guide_back, "후면부"),
+            Step1Result(R.drawable.ic_camera_left, "좌측"),
+            Step1Result(R.drawable.ic_camera_right, "우측"),
+            Step1Result(R.drawable.ic_guide_screen, "화면"),
+            Step1Result(R.drawable.ic_guide_keypad, "키판")
+        )
+
+        // RecyclerView 어댑터 및 레이아웃 매니저 설정
+        binding.rvPosition.adapter = AiResultAdapter(data) { position ->
+            changeImage(position)
+        }
+        binding.rvPosition.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        // 버튼 이벤트 설정
+        binding.btnRetake.setOnClickListener {
+            // 재촬영 기능 구현 (이전 화면으로 돌아가기)
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         binding.btnConfirm.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fl_main, FinalResultFragment())
@@ -49,16 +99,25 @@ class AiResultFragment : BaseFragment<FragmentAiResultBinding>(
         }
     }
 
+    private fun changeImage(position: Int) {
+        Log.d(TAG, "changeImage: $position")
+        step = position + 1
+        var imageUri = when(step) {
+            1 -> AppData.frontUri
+            2 -> AppData.backUri
+            3 -> AppData.leftUri
+            4 -> AppData.rightUri
+            5 -> AppData.screenUri
+            6 -> AppData.keypadUri
+            else -> AppData.frontUri
+        }
+
+        Glide.with(binding.ivImage)
+            .load(imageUri)
+            .into(binding.ivImage)
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AiResultFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             AiResultFragment().apply {
