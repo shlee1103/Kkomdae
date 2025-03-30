@@ -379,7 +379,6 @@ class TestApp(ttkb.Window):
         try:
             font = ImageFont.truetype(font_path, font_size)
         except IOError:
-            print(f"⚠️ 폰트 '{font_path}'을 찾을 수 없습니다. 기본 폰트 사용")
             font = ImageFont.load_default()
 
         # 텍스트 위치 계산
@@ -629,7 +628,7 @@ class TestApp(ttkb.Window):
                 try:
                     devices = json.loads(result.stdout)
                     if not devices:
-                        print("장치를 찾을 수 없습니다.")
+                        pass
                     else:
                         # 단일 장치인 경우 리스트로 변환
                         if isinstance(devices, dict):
@@ -641,7 +640,7 @@ class TestApp(ttkb.Window):
                                 # USB 장치인지 확인 (앞부분이 "USB\\"여야 함)
                                 if instance_id.startswith("USB\\"):
                                     # 정규 표현식으로 "&0&숫자" 패턴을 추출 (숫자는 한 자리 이상)
-                                    match = re.search(r'&0&(\d+)$', instance_id)
+                                    match = re.search(r'&0&(\d)$', instance_id)
                                     if match:
                                         port_number = int(match.group(1))
                                         # 여기서 원하는 포트 번호만 처리 (예: 1, 2, 3번)
@@ -657,7 +656,7 @@ class TestApp(ttkb.Window):
             cmd_connected = (
                 'powershell.exe -WindowStyle Hidden -NonInteractive -Command "'
                 '$OutputEncoding = [System.Text.UTF8Encoding]::new(); '
-                'Get-PnpDevice -Class USB -Status OK | '
+                'Get-PnpDevice -Class USB -PresentOnly:$true | '
                 'Select-Object InstanceId | '
                 'ConvertTo-Json'
                 '"'
@@ -683,7 +682,7 @@ class TestApp(ttkb.Window):
                         if 'InstanceId' in device:
                             instance_id = device['InstanceId']
                             if instance_id.startswith("USB\\"):
-                                match = re.search(r'&0&(\d+)$', instance_id)
+                                match = re.search(r'&0&(\d)$', instance_id)
                                 if match:
                                     port_number = int(match.group(1))
                                     # 원하는 포트 번호만 처리
@@ -931,11 +930,9 @@ class TestApp(ttkb.Window):
                                 self.last_key_time[vkey] = current_time
 
                                 logging.debug(f"raw_input_wnd_proc: 키 입력 감지, vkey={vkey}")
-                                print(f"입력 키 정보\nVK: 0x{make_code}\nFlags: 0x{flags}\nvkey: {vkey}")
 
                                 # 키 심볼 결정 (별도 메서드 호출)
                                 key_sym = self.get_key_symbol(raw, flags)
-                                print("key_sym: ", key_sym)
                                 if key_sym:
                                     # 내부 장치 여부 판단
                                     device_name = get_device_name(raw.header.hDevice)
@@ -1134,7 +1131,6 @@ class TestApp(ttkb.Window):
         """
         try:
             # 예시: WMI를 통해 USB 장치 정보를 가져와 각 포트의 연결 여부를 업데이트
-            import win32com.client
             wmi_obj = win32com.client.GetObject("winmgmts:")
             pnp_entities = wmi_obj.InstancesOf("Win32_PnPEntity")
 
@@ -1148,7 +1144,7 @@ class TestApp(ttkb.Window):
                         continue
 
                     # 정규 표현식으로 "&0&숫자" 패턴을 추출
-                    match = re.search(r'&0&(\d+)$', device_path)
+                    match = re.search(r'&0&(\d)$', device_path)
                     if match:
                         port_number = int(match.group(1))
                         if port_number in [1, 2, 3]:
@@ -1183,7 +1179,6 @@ class TestApp(ttkb.Window):
         # 기존의 포트 상태 위젯 모두 삭제
         for widget in self.usb_ports_frame.winfo_children():
             widget.destroy()
-        messagebox.showinfo('usb연결 상태 확인', f'{self.usb_ports}')
         # USB 포트 딕셔너리를 정렬하여 왼쪽부터 순서대로 배치 (예: port1, port3)
         for key in sorted(self.usb_ports.keys(), key=lambda x: int(x.replace("port", ""))):
             status = self.usb_ports[key]  # True면 연결된 상태, False면 미연결
