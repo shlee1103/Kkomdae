@@ -17,8 +17,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import com.pizza.kkomdae.MainActivity
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentBackShotGuideBinding
@@ -96,6 +99,11 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
         // 마우스패드 개수 설정
         settingPadCount()
 
+        // X 클릭 이벤트 설정
+        binding.topBar.backButtonContainer.setOnClickListener {
+            showQuitBottomSheet()
+        }
+
         // 완료 버튼
         binding.btnConfirm.setOnClickListener {
             val serialValid = binding.etSerial.text.toString().isNotEmpty()
@@ -119,6 +127,30 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
             }
         }
     }
+
+    private fun showQuitBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.layout_bottom_sheet, null)
+
+        // 계속하기 버튼 클릭 시 바텀시트 닫기
+        val btnContinue = bottomSheetView.findViewById<View>(R.id.btn_continue)
+        btnContinue.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        // 그만두기 버튼 클릭 시 메인 화면으로 이동
+        val btnQuit = bottomSheetView.findViewById<View>(R.id.btn_quit)
+        btnQuit.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            // 메인 화면으로 이동
+            val mainActivity = requireActivity() as MainActivity
+            mainActivity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
+    }
+
 
     private fun checkNext() {
         val serialValid = binding.etSerial.text.toString().isNotEmpty()

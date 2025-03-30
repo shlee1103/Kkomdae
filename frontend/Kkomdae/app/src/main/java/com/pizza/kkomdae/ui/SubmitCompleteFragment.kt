@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.pizza.kkomdae.R
 import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentOathBinding
@@ -54,7 +55,7 @@ class SubmitCompleteFragment : BaseFragment<FragmentSubmitCompleteBinding>(
     private fun setupButtonListeners() {
         // 닫기 버튼
         binding.btnClose.setOnClickListener {
-            requireActivity().onBackPressed()
+            requireActivity().supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
 
         // PDF 다운로드 버튼
