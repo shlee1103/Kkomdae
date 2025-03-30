@@ -21,6 +21,7 @@ import cv2
 import win32com.client
 import psutil
 import qrcode
+import threading
 
 # ===============================
 # Windows API 상수 및 구조체 정의
@@ -1197,42 +1198,48 @@ class TestApp(ttkb.Window):
     # -------------------------------
     # 카메라 테스트 관련 메서드
     # -------------------------------
+
+        self.camera_test_running = False
+        self.camera_closing = False
+        self.cap = None
+        self.camera_update_after_id = None
+        self.window_name = None
+
     def open_camera_test(self) -> None:
         """
         카메라(웹캠) 테스트 창을 열어 프레임을 표시합니다.
         """
         # 이미 카메라 테스트가 실행 중인지 확인
-        if getattr(self, "camera_test_running", False):
+        if getattr(self, "camera_test_running", False) or getattr(self, "cap", None) is not None:
             messagebox.showinfo("정보", "카메라 테스트가 이미 실행 중입니다.")
+            return
+
+        # 진행 중인 종료 절차가 있는지(혹은 바로 전에 종료되었는지) 확인
+        if getattr(self, "camera_closing", False):
+            messagebox.showinfo("정보", "카메라 종료 처리가 끝날 때까지 기다려 주세요.")
             return
 
         # 테스트 시작 플래그 설정
         self.camera_test_running = True
+        self.camera_closing = False
 
-        # 기본 카메라(인덱스 0)를 CAP_DSHOW 옵션으로 열기
-        self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-        if not self.cap.isOpened():
-            messagebox.showerror("카메라 오류", "카메라를 열 수 없습니다. 장치를 확인해주세요.")
+        try:
+            # 기본 카메라(인덱스 0)를 CAP_DSHOW 옵션으로 열기
+            self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+            self.window_name = "Camera Test - ESC to exit"
+            cv2.namedWindow(self.window_name)
+            # 카메라 프레임 업데이트 시작
+            self.update_camera_frame()
+
+        except Exception as e:
+            messagebox.showerror("카메라 오류", f"카메라를 열 수 없습니다: {str(e)}")
             self.update_status("카메라", "오류 발생")
-            self.camera_test_running = False
-            return
-
-        # 테스트 창 이름 설정 및 창 생성
-        self.window_name = "Camera Test - X to exit"
-        cv2.namedWindow(self.window_name)
-
-        # 예약된 after() 콜백 ID 초기화
-        self.camera_update_after_id = None
-
-        # 카메라 프레임 업데이트 시작
-        self.update_camera_frame()
-
+            self.close_camera_test()
 
     def update_camera_frame(self) -> None:
         """
         Tkinter의 after()를 이용하여 주기적으로 카메라 프레임을 업데이트합니다.
         """
-        # 테스트가 중지된 경우 함수 종료
         if not self.camera_test_running:
             return
 
@@ -1240,61 +1247,68 @@ class TestApp(ttkb.Window):
             # 카메라에서 프레임 읽기
             ret, frame = self.cap.read()
             if not ret or frame is None:
-                messagebox.showerror("카메라 오류", "카메라 프레임을 읽을 수 없습니다.")
-                self.update_status("카메라", "오류 발생")
-                self.close_camera_test()
-                return
+                raise Exception("카메라 프레임을 읽을 수 없습니다.")
 
             # 읽은 프레임을 테스트 창에 표시
             cv2.imshow(self.window_name, frame)
 
-            # 1ms 동안 키 입력 감지 (ESC 키 또는 창 닫힘 시 테스트 종료)
+            # 키 입력 감지 (ESC 키 또는 창 닫힘 시 테스트 종료)
             key = cv2.waitKey(1) & 0xFF
-            if key == 27 or cv2.getWindowProperty(self.window_name, cv2.WND_PROP_VISIBLE) < 1:
+            if key == 27:  # ESC
                 self.close_camera_test()
                 return
 
+            # OpenCV 창이 닫혔는지 검사
+            if cv2.getWindowProperty(self.window_name, cv2.WND_PROP_VISIBLE) < 1:
+                self.close_camera_test()
+                return
+
+            # 다음 프레임 업데이트 예약 (카메라가 실행 중일 때만)
+            if self.camera_test_running:
+                # 10ms 후 update_camera_frame 재호출
+                self.camera_update_after_id = self.after(5, self.update_camera_frame)
+
         except Exception as e:
-            # 예외 발생 시 사용자에게 오류 메시지 출력 및 테스트 종료
             messagebox.showerror("카메라 오류", f"예외 발생: {str(e)}")
-            self.update_status("카메라", "오류 발생")
             self.close_camera_test()
-            return
-
-        # 10ms 후 재호출하여 프레임 업데이트 반복
-        self.camera_update_after_id = self.after(10, self.update_camera_frame)
-
 
     def close_camera_test(self) -> None:
         """
         카메라 테스트 종료 후 자원 해제 및 상태 복원.
         """
-        # 예약된 after() 콜백이 있으면 취소
+        # 이미 종료 절차가 진행 중인 경우
+        if getattr(self, "camera_closing", False):
+            return  # 두 번 처리 방지
+
+        # 종료 절차 시작
+        self.camera_closing = True
+
+        # 테스트 중지 플래그 설정
+        self.camera_test_running = False
+
+        # after 콜백 취소
         if hasattr(self, "camera_update_after_id") and self.camera_update_after_id is not None:
-            self.after_cancel(self.camera_update_after_id)
+            try:
+                self.after_cancel(self.camera_update_after_id)
+            except Exception as ex_cancel:
+                pass
             self.camera_update_after_id = None
 
-        try:
-            # 카메라 객체가 존재하면 해제하고 None으로 초기화
-            if hasattr(self, "cap") and self.cap is not None:
-                self.cap.release()
-                self.cap = None
-        except Exception as e:
-            messagebox.showerror("카메라 종료 오류", f"카메라 해제 중 오류 발생: {str(e)}")
+        # 카메라 자원 해제
+        if hasattr(self, "cap") and self.cap is not None:
+            self.cap.release()
+            self.cap = None
 
+        # OpenCV 창 닫기
         try:
-            # 테스트 창이 존재하면 해당 창만 닫기
-            if hasattr(self, "window_name"):
-                cv2.destroyWindow(self.window_name)
-            else:
-                cv2.destroyAllWindows()
-        except Exception as e:
-            # 창 닫기 중 오류 발생 시 모든 창 닫기 시도
+            cv2.destroyWindow(self.window_name)
+        except Exception as ex_destroy:
             cv2.destroyAllWindows()
 
-        # 테스트 완료 처리 및 상태 복원
         self.mark_test_complete("카메라")
-        self.camera_test_running = False
+
+        # 종료 절차 끝
+        self.camera_closing = False
 
     # -------------------------------
     # 충전 테스트 관련 메서드
@@ -1332,6 +1346,16 @@ class TestApp(ttkb.Window):
         """
         powercfg 명령어를 통해 배터리 리포트를 생성합니다.
         """
+        # 리포트 생성 작업을 별도의 스레드에서 실행
+        threading.Thread(target=self._generate_battery_report_thread).start()
+
+        # 사용자에게 진행 중임을 알리는 메시지 표시
+        self.update_status("배터리", "생성 중")
+
+    def _generate_battery_report_thread(self) -> None:
+        """
+        실제로 배터리 리포트를 생성하는 작업을 수행하는 메서드 (별도의 스레드에서 실행)
+        """
         try:
             # 다운로드 폴더 경로를 가져옵니다.
             downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
@@ -1353,51 +1377,49 @@ class TestApp(ttkb.Window):
 
             # 리포트 생성
             temp_report_path = os.path.join(downloads_path, "battery_report.html")
-            subprocess.run(["powercfg", "/batteryreport", "/output", temp_report_path],
-                           check=True, capture_output=True, text=True)
+            
+            # 디버깅 정보 추가: 명령어 실행 전 시간 측정
+            start_time = time.time()
+            
+            result = subprocess.run(
+                ["powercfg", "/batteryreport", "/output", temp_report_path],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                check=False  # check=False로 변경
+            )
+        
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+
             # 리포트 파일 이름 변경
             os.rename(temp_report_path, new_report_path)
 
             self.report_path = new_report_path
-            messagebox.showinfo("배터리 리포트", f"배터리 리포트가 생성되었습니다.\n파일 경로:\n{self.report_path}")
-            self.battery_report_button.config(bootstyle="info")
-            self.update_status("배터리", "생성 완료")
-            self.mark_test_complete("배터리")
-            self.upload_battery_report(self.report_path)
+            # GUI 업데이트는 메인 스레드에서 실행해야 함
+            self.after(0, self._on_battery_report_generated)
         except subprocess.CalledProcessError as e:
-            messagebox.showerror("배터리 리포트 오류", f"명령 실행 중 오류 발생:\n{e.stderr}")
-            self.update_status("배터리", "오류 발생")
+            self.after(0, lambda: self._on_battery_report_error(f"명령 실행 중 오류 발생:\n{e.stderr}"))
         except Exception as e:
-            messagebox.showerror("배터리 리포트 오류", f"오류 발생:\n{e}")
-            self.update_status("배터리", "오류 발생")
+            self.after(0, lambda: self._on_battery_report_error(f"오류 발생:\n{e}"))
 
-    def get_computer_name(self):
+    def _on_battery_report_generated(self) -> None:
         """
-        컴퓨터 이름을 가져옵니다.
+        배터리 리포트 생성 완료 후 실행되는 콜백 메서드 (메인 스레드에서 실행)
         """
-        try:
-            computer_name = os.getenv("COMPUTERNAME")
-            if computer_name is None:
-                computer_name = "Unknown"
-            return computer_name
-        except Exception as e:
-            messagebox.showerror("컴퓨터 이름 오류", f"컴퓨터 이름을 가져오는 중 오류 발생:\n{e}")
-            return "Unknown"
+        messagebox.showinfo("배터리 리포트", f"배터리 리포트가 생성되었습니다.\n파일 경로:\n{self.report_path}")
+        self.battery_report_button.config(bootstyle="info")
+        self.update_status("배터리", "생성 완료")
+        self.mark_test_complete("배터리")
+        # Django 서버 업로드는 백그라운드에서 진행
+        threading.Thread(target=self.upload_battery_report, args=(self.report_path,)).start()
 
-    def view_battery_report(self) -> None:
+    def _on_battery_report_error(self, error_message: str) -> None:
         """
-        생성된 배터리 리포트 파일을 엽니다.
+        배터리 리포트 생성 중 오류 발생 시 실행되는 콜백 메서드 (메인 스레드에서 실행)
         """
-        if self.report_path and os.path.exists(self.report_path):
-            try:
-                os.startfile(self.report_path)
-            except Exception as e:
-                messagebox.showerror("리포트 확인 오류", f"리포트를 열 수 없습니다:\n{e}")
-                self.update_status("배터리", "오류 발생")
-
-        else:
-            messagebox.showwarning("리포트 없음", "아직 배터리 리포트가 생성되지 않았습니다.\n먼저 '배터리 리포트 생성' 버튼을 눌러주세요.")
-            self.update_status("배터리", "생성 전")
+        messagebox.showerror("배터리 리포트 오류", error_message)
+        self.update_status("배터리", "오류 발생")
 
     def upload_battery_report(self, report_path):
         """
@@ -1421,6 +1443,22 @@ class TestApp(ttkb.Window):
                     messagebox.showerror("업로드 오류", f"status={resp.status_code}, body={resp.text}")
         except Exception as e:
             messagebox.showerror("업로드 예외", f"Django 서버 업로드 중 오류 발생: {e}")
+
+    def view_battery_report(self) -> None:
+        """
+        생성된 배터리 리포트 파일을 엽니다.
+        """
+        if self.report_path and os.path.exists(self.report_path):
+            try:
+                os.startfile(self.report_path)
+            except Exception as e:
+                messagebox.showerror("리포트 확인 오류", f"리포트를 열 수 없습니다:\n{e}")
+                self.update_status("배터리", "오류 발생")
+
+        else:
+            messagebox.showwarning("리포트 없음", "아직 배터리 리포트가 생성되지 않았습니다.\n먼저 '배터리 리포트 생성' 버튼을 눌러주세요.")
+            self.update_status("배터리", "생성 전")
+
 
     # -------------------------------
     # QR 코드 생성 관련 메서드
