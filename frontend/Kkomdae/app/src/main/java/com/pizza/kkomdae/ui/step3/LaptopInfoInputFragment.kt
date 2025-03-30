@@ -95,38 +95,45 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
         // 마우스패드 개수 설정
         settingPadCount()
 
-        binding.btnConfirm.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, FinalResultFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
-
         // 완료 버튼
         binding.btnConfirm.setOnClickListener {
-            showConfirmDialog()
+            val serialValid = binding.etSerial.text.toString().isNotEmpty()
+            val barcodeValid = binding.etBarcode.text.toString().isNotEmpty()
+            val modelValid = binding.atvModelName.text.toString().isNotEmpty()
+            val dateValid = binding.tvDate.text.toString() != "날짜 선택"
+
+            if (serialValid && barcodeValid && modelValid && dateValid) {
+                // 모든 필수 정보가 입력됨 - 다이얼로그 표시
+                showConfirmDialog()
+            } else {
+                // 어떤 필드가 누락되었는지 사용자에게 알려줍니다
+                val missingFields = mutableListOf<String>()
+                if (!serialValid) missingFields.add("시리얼 번호")
+                if (!barcodeValid) missingFields.add("바코드 번호")
+                if (!modelValid) missingFields.add("모델명")
+                if (!dateValid) missingFields.add("수령일자")
+
+                val message = "노트북 정보를 모두 입력해주세요."
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun checkNext() {
-        if (binding.etSerial.text.toString() != "" && binding.etBarcode.text.toString() != "") {
-            binding.btnConfirm.backgroundTintList = ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.blue500
-                )
-            )
-            binding.btnConfirm.isClickable = true
-        } else {
+        val serialValid = binding.etSerial.text.toString().isNotEmpty()
+        val barcodeValid = binding.etBarcode.text.toString().isNotEmpty()
+        val modelValid = binding.atvModelName.text.toString().isNotEmpty()
+        val dateValid = binding.tvDate.text.toString() != "날짜 선택"
 
-            binding.btnConfirm.isClickable = false
-            binding.btnConfirm.backgroundTintList = ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.blue200
-                )
+        val allValid = serialValid && barcodeValid && modelValid && dateValid
+
+        binding.btnConfirm.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(
+                requireContext(),
+                if (allValid) R.color.blue500 else R.color.blue200
             )
-        }
+        )
+        binding.btnConfirm.isClickable = allValid
     }
 
     // 마우스패드 개수 설정
@@ -337,7 +344,7 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
     private fun settingDate() {
         binding.btnDate.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("날짜 선택") // 상단 제목
+                .setTitleText("날짜 선택")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds()) // 기본 선택 날짜 (오늘)
                 .build()
 
@@ -346,6 +353,7 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
                 val sdf = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
                 val selectedDate = sdf.format(Date(selection))
                 binding.tvDate.text = selectedDate
+                checkNext()
 
             }
 
@@ -365,6 +373,10 @@ class LaptopInfoInputFragment : BaseFragment<FragmentLaptopInfoInputBinding>(
         val adapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
         binding.atvModelName.setAdapter(adapter)
+
+        binding.atvModelName.setOnItemClickListener { _, _, _, _ ->
+            checkNext()
+        }
     }
 
     // 시작 다이얼로그
