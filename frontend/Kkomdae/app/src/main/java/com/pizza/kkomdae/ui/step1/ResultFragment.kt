@@ -96,7 +96,7 @@ class ResultFragment : BaseFragment<FragmentFontResultBinding>(
             showStopCameraDialog()
         }
 
-        viewModel.postResult.observe(requireActivity()){
+        viewModel.postResult.observe(viewLifecycleOwner){
             if(it?.success == true){
                 cameraActivity.changeFragment((viewModel.step.value?:-1)+1)
                 viewModel.clearResult()

@@ -80,8 +80,9 @@ class Step1ResultFragment : BaseFragment<FragmentStep1ResultBinding>(
         }
 
         Glide.with(binding.ivImage)
-            .load(AppData.frontUri)
+            .load("")
             .into(binding.ivImage)
+
         val data = listOf(
             Step1Result(R.drawable.ic_front_laptop, "전면부"),
             Step1Result(R.drawable.ic_guide_back, "후면부"),
