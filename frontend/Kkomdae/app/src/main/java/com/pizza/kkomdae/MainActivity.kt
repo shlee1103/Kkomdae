@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                 val transaction = supportFragmentManager.beginTransaction()
                 supportFragmentManager.popBackStack()
                 transaction.replace(R.id.fl_main, Step1ResultFragment())
-
+                    .addToBackStack("")
                 transaction.commit()
                 checkCameraPermission()
             }
