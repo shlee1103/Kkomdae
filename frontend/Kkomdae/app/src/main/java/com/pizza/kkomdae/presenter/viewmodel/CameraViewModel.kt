@@ -104,6 +104,8 @@ class CameraViewModel @Inject constructor(
     // ✅ 사진 저장 메서드
     fun setStep(step: Int) {
         _step.value = step
+        savePhotoStage(step)
+
     }
 
     fun clearResult(){
@@ -112,7 +114,8 @@ class CameraViewModel @Inject constructor(
 
     fun postPhoto(){
         var uri = frontUri.value
-        val testId = sharedPreferences.getLong("test_id",0)
+        val testId = 2L
+//        val testId = sharedPreferences.getLong("test_id",0)
         Log.d("Post", "postPhoto: ${step.value}")
         when(step.value){
             1->{
@@ -230,6 +233,14 @@ class CameraViewModel @Inject constructor(
         val newHeight = (height * ratio).toInt()
 
         return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+    }
+
+    fun getPhotoStage():Int{
+        return sharedPreferences.getInt("step",0)
+    }
+
+    private fun savePhotoStage(step: Int) {
+        sharedPreferences.edit().putInt("step", step).apply()
     }
 
 }

@@ -63,10 +63,9 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
 
     override fun onResume() {
         super.onResume()
-        step =AppData.step
-        if (AppData.step==0){
-            step=viewModel.picStage.value?:0
-        }
+
+            step=viewModel.getPhotoStage()
+
         val color = ContextCompat.getColorStateList(requireContext(), R.color.blue500)
 
 
@@ -141,8 +140,7 @@ class Step1GuideFragment : BaseFragment<FragmentStep1GuideBinding>(
         }
 
         binding.btnNext.setOnClickListener {
-            mainActivity.next(viewModel.picStage.value?:1)
-            Log.d("Post", "onViewCreated: ${viewModel.picStage.value}")
+            mainActivity.next()
         }
 
         showIntroDialog()

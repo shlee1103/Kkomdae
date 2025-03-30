@@ -17,6 +17,7 @@ import com.pizza.kkomdae.data.source.local.SecureTokenManager
 import com.pizza.kkomdae.data.source.local.TokenManager
 import com.pizza.kkomdae.databinding.LayoutLogoutDialogBinding
 import android.view.WindowManager
+import com.pizza.kkomdae.ui.guide.Step1GuideFragment
 import dagger.hilt.android.AndroidEntryPoint
 private const val TAG = "MainActivity"
 
@@ -104,9 +105,8 @@ class MainActivity : AppCompatActivity() {
         showToast("로그아웃 되었습니다")
     }
 
-    fun next(type:Int){
+    fun next(){
        val intent = Intent(this, CameraActivity::class.java)
-           .putExtra("type",type)
         cameraResultLauncher.launch(intent)
     }
 

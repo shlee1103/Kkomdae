@@ -30,13 +30,17 @@ import com.pizza.kkomdae.base.BaseFragment
 import com.pizza.kkomdae.databinding.FragmentRightGuideBinding
 import com.pizza.kkomdae.presenter.viewmodel.CameraViewModel
 import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private var imageCapture: ImageCapture? = null
+private var cameraProvider: ProcessCameraProvider? = null
 private var camera: Camera? = null
+private var cameraExecutor: ExecutorService? = null
 private lateinit var cameraActivity: CameraActivity
 
 /**
@@ -44,6 +48,7 @@ private lateinit var cameraActivity: CameraActivity
  * Use the [RightGuideFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+private const val TAG = "RightGuideFragment"
 class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
     FragmentRightGuideBinding::bind,
     R.layout.fragment_right_guide
@@ -67,9 +72,11 @@ class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+// 카메라 초기화
+        cameraExecutor = Executors.newSingleThreadExecutor()
         startCamera()
-
-
 
         binding.btnCancel?.setOnClickListener {
             binding.clGuide?.isVisible = false
@@ -127,10 +134,11 @@ class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
     }
 
     private fun startCamera() {
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
+             cameraProvider = cameraProviderFuture.get()
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             // ✅ ImageCapture 설정 (16:9 비율 유지)
@@ -148,8 +156,8 @@ class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
                 }
 
             try {
-                cameraProvider.unbindAll()
-                camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+                cameraProvider?.unbindAll()
+                camera = cameraProvider?.bindToLifecycle(this, cameraSelector, preview, imageCapture)
             } catch (e: Exception) {
                 Log.e("CameraFragment", "카메라 실행 오류: ${e.message}")
             }
@@ -176,11 +184,10 @@ class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
                     // ✅ ViewModel에 사진 저장
                     viewModel.setRight(savedUri)
                     viewModel.setStep(4)
-                    AppData.rightUri = savedUri
-                    AppData.step=4
 
 
 
+                    shutdownCamera()
                     cameraActivity.changeFragment(0)
                 }
 
@@ -208,5 +215,21 @@ class RightGuideFragment : BaseFragment<FragmentRightGuideBinding>(
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+
+    private fun shutdownCamera() {
+        try {
+            // 카메라 사용 중지
+            camera?.cameraControl?.enableTorch(false) // 플래시 사용 중이면 종료
+            cameraProvider?.unbindAll() // 모든 카메라 바인딩 해제
+
+            // 실행자 종료
+            cameraExecutor?.shutdown()
+            cameraExecutor = null
+            camera = null
+        } catch (e: Exception) {
+            Log.e(TAG, "카메라 종료 중 오류 발생", e)
+        }
     }
 }
