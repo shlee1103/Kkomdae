@@ -76,35 +76,35 @@ class CameraActivity : BaseActivity() {
             }
             1->{ // 전면부 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fl_camera, FrontShotGuideFragment())
+                    .replace(R.id.fl_camera, FrontShotGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }
             2->{ // 후면부 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fl_camera, BackShotGuideFragment())
+                    .replace(R.id.fl_camera, BackShotGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }
             3->{ // 좌측 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fl_camera, LeftGuideFragment())
+                    .replace(R.id.fl_camera, LeftGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }
             4->{ // 우측 촬영 가이드
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fl_camera, RightGuideFragment())
+                    .replace(R.id.fl_camera, RightGuideFragment())
                     .addToBackStack("sadfa")
                     .commit()
             }5->{ // 화면 촬영 가이드
             supportFragmentManager.beginTransaction()
-                .add(R.id.fl_camera, ScreenShotGuideFragment())
+                .replace(R.id.fl_camera, ScreenShotGuideFragment())
                 .addToBackStack("sadfa")
                 .commit()
             }6->{ // 키패드 촬영 가이드
             supportFragmentManager.beginTransaction()
-                .add(R.id.fl_camera, KeypadGuideFragment())
+                .replace(R.id.fl_camera, KeypadGuideFragment())
                 .addToBackStack("sadfa")
                 .commit()
         }7->{ // 키패드 촬영 가이드
