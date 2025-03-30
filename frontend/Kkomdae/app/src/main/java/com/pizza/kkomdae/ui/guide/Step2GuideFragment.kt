@@ -57,7 +57,7 @@ class Step2GuideFragment : BaseFragment<FragmentStep2GuideBinding>(
             playAnimation()
         }
 
-        // 배경 원형 애니메이션 설정
+        // 배경 원형 애니메이션
         binding.animationBg.apply {
             setAnimation(R.raw.laptop_connection)
             repeatCount = LottieDrawable.INFINITE
