@@ -114,15 +114,22 @@ public class TestResultService {
             throw new RuntimeException("저장된 테스트 없음");
         }
         testResult.saveThirdStage(thirdStageReq);
-        Rent rent = new Rent();
-        rent.setStudent(student);
-        rent.setRentDateTime(thirdStageReq.getLocalDate());
         Device device = deviceRepository.findDeviceBySerialNum(thirdStageReq.getSerialNum());
         if (device == null) {
             throw new RuntimeException("deivce 시리얼 에러");
         }
-        testResult.setDevice(device);
-        rent.setDevice(device);
+        Rent rent;
+        if (testResult.getRelease() == false) { // 대여로직
+            rent = new Rent();
+            rent.setStudent(student);
+            rent.setRentDateTime(thirdStageReq.getLocalDate());
+            testResult.setDevice(device);
+            rent.setDevice(device);
+        } else { // 반납 로직
+            rent = rentRepository.findByDeviceAndStudent(device, student);
+            rent.setReleaseDateTime(testResult.getDate());
+        }
+
         rentRepository.save(rent);
     }
 }

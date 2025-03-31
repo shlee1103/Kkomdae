@@ -33,6 +33,7 @@ public class UserRentTestRes {
         }
         if (rent.getDevice().getLaptopTestResults().size() > 1) { // 진행 중인 테스트가 있다면 getRentsByStudentInfo order by를 device Id, laptopId로 해두어서 0번이 대여, 1번이 반납인 것을 확정
             LaptopTestResult result = rent.getDevice().getLaptopTestResults().get(1);
+            this.release=false;
             this.onGoingTestId = result.getLaptopTestResultId();
             this.stage = result.getStage();
             this.picStage = result.getPhotos().size();
