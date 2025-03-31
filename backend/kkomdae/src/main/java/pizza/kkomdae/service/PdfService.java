@@ -50,6 +50,7 @@ public class PdfService {
             throw new RuntimeException(e);
         }
         result.setPdfFileName(fileName);
+        result.setStage(5);
         lapTopTestResultRepository.save(result);
         return fileName;
     }
