@@ -48,6 +48,7 @@ public class LaptopTestResult {
     // Todo ai 결과를 어떻게 저장할 지 고민
 
     public LaptopTestResult(Student student) {
+        this.release = false;
         this.student = student;
     }
 
