@@ -14,6 +14,7 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pizza.kkomdae.controller.PdfController;
 import pizza.kkomdae.dto.PdfInfo;
@@ -29,6 +30,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Service
 public class PdfService {
     private final S3Service s3Service;
@@ -282,17 +284,13 @@ public class PdfService {
         Table signatureTable = new Table(UnitValue.createPercentArray(new float[]{2, 3, 2, 3}));
         signatureTable.setWidth(UnitValue.createPercentValue(100));
 
-        String rentDate;
-        if (info.getReturnDate() == null) {
-            rentDate = "";
-        }else{
-            rentDate = info.getRentDate().toString();
-        }
-        String returnDate;
-        if (info.getReturnDate() == null) {
-            returnDate = "";
-        }else{
+        String rentDate="";
+        String returnDate="";
+        if (info.getReturnDate() != null) {
             returnDate = info.getReturnDate().toString();
+        }
+        if (info.getRentDate() != null) {
+            rentDate = info.getRentDate().toString();
         }
         // 첫 번째 행
         addSignatureRow(signatureTable, font, "수 령 일 자 :", rentDate, "반 납 일 자 :", returnDate);

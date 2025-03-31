@@ -2,11 +2,13 @@ package pizza.kkomdae.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import pizza.kkomdae.entity.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @Getter
 @Setter
 public class PdfInfo {
@@ -46,8 +48,5 @@ public class PdfInfo {
         }else{
             this.rentDate = result.getDate();
         }
-
     }
-
-
 }
