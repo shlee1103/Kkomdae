@@ -39,6 +39,7 @@ public class LaptopTestResult {
     private Integer mousePad;
     private Integer stage = 1;
     private Integer picStage = 0;
+    private String description;
 
 
     @OneToMany(mappedBy = "laptopTestResult")

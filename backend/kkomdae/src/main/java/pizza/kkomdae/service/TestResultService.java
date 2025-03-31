@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pizza.kkomdae.dto.request.ForthStageReq;
 import pizza.kkomdae.dto.request.SecondStageReq;
 import pizza.kkomdae.dto.request.ThirdStageReq;
 import pizza.kkomdae.dto.respond.AiPhotoWithUrl;
@@ -20,6 +21,7 @@ import pizza.kkomdae.security.dto.CustomUserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -131,5 +133,12 @@ public class TestResultService {
         }
 
         rentRepository.save(rent);
+    }
+
+    @Transactional
+    public void fourthStage(ForthStageReq forthStageReq) {
+        LaptopTestResult result = lapTopTestResultRepository.findById(forthStageReq.getTestId()).orElseThrow(()->new RuntimeException("testId 오류"));
+        result.setDescription(forthStageReq.getDescription());
+        result.setStage(5);
     }
 }

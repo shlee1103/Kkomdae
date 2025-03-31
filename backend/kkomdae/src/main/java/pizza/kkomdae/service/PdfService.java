@@ -52,7 +52,8 @@ public class PdfService {
             throw new RuntimeException(e);
         }
         result.setPdfFileName(fileName);
-        result.setStage(5);
+        result.setStage(6);
+        result.getDevice().setRelease(true);
         lapTopTestResultRepository.save(result);
         return fileName;
     }
@@ -186,12 +187,18 @@ public class PdfService {
         addComponentRow(table, font, "어댑터", Integer.toString(info.getAdapterCount()), "마우스패드", Integer.toString(info.getMousePadCount()), info);
 
         // 특이사항 행
-        Cell specialCell = new Cell(1, 8)
+        Cell specialCell = new Cell(1, 1)
                 .add(new Paragraph("특이사항").setFont(font).setFontSize(10))
-                .setTextAlignment(TextAlignment.LEFT)
+                .setTextAlignment(TextAlignment.CENTER)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setBorder(new SolidBorder(ColorConstants.BLACK, 1));
         table.addCell(specialCell);
+        Cell descriptionCell = new Cell(1, 7)
+                .add(new Paragraph(info.getDescription()).setFont(font).setFontSize(10))
+                .setTextAlignment(TextAlignment.CENTER)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setBorder(new SolidBorder(ColorConstants.BLACK, 1));
+        table.addCell(descriptionCell);
 
         document.add(table);
     }
@@ -271,7 +278,7 @@ public class PdfService {
                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                     .setBorder(new SolidBorder(ColorConstants.BLACK, 1));
             table.addCell(cell8);
-        }else{ // 대여
+        } else { // 대여
             // 첫 번째 항목
             Cell cell1 = new Cell()
                     .add(new Paragraph(item1).setFont(font).setFontSize(10))
@@ -365,7 +372,7 @@ public class PdfService {
             log.info("returndate : null");
             returnDate = "";
         } else {
-            log.info("rentdate : {}", info.getReturnDate());
+            log.info("returndate : {}", info.getReturnDate());
             returnDate = info.getReturnDate().toString();
         }
         // 첫 번째 행
@@ -400,7 +407,7 @@ public class PdfService {
         // 첫 번째 값
         Cell valueCell1 = new Cell()
                 .add(new Paragraph(value1).setFont(font).setFontSize(10))
-                .setTextAlignment(TextAlignment.RIGHT)
+                .setTextAlignment(TextAlignment.LEFT)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setBorder(Border.NO_BORDER);
         table.addCell(valueCell1);
@@ -408,7 +415,7 @@ public class PdfService {
         // 두 번째 라벨
         Cell labelCell2 = new Cell()
                 .add(new Paragraph(label2).setFont(font).setFontSize(10))
-                .setTextAlignment(TextAlignment.RIGHT)
+                .setTextAlignment(TextAlignment.LEFT)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                 .setBorder(Border.NO_BORDER);
         table.addCell(labelCell2);
@@ -444,10 +451,11 @@ public class PdfService {
         document.add(new Paragraph("\n"));
         document.add(new Paragraph("\n"));
         addPhotoItem(document, font, "[좌측 사진]", s3Service.generatePresignedUrl(photos.get(3).getName()));
-        document.add(new Paragraph("\n"));
-        document.add(new Paragraph("\n"));
+        // 세 번째 페이지 후 페이지 나누기
+        document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         // 세 번째 페이지: 액정과 키판 사진
         addPhotoItem(document, font, "[액정 사진/카메라 랜즈 포함]", s3Service.generatePresignedUrl(photos.get(4).getName()));
+        document.add(new Paragraph("\n"));
         document.add(new Paragraph("\n"));
         addPhotoItem(document, font, "[키판 사진]", s3Service.generatePresignedUrl(photos.get(5).getName()));
 
@@ -487,14 +495,14 @@ public class PdfService {
 
         // 사진 셀 추가
         Cell photoCell = new Cell()
-                .setHeight(265) // 모든 사진 셀의 높이 동일하게 설정
+                .setHeight(266) // 모든 사진 셀의 높이 동일하게 설정
                 .setBorder(new SolidBorder(ColorConstants.BLACK, 2))
                 .setTextAlignment(TextAlignment.CENTER)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE);
 
         // 이미지 추가
 
-        String imagePath = PdfController.class.getClassLoader().getResource("static/image/test.jpg").getPath();
+
         Image image = new Image(ImageDataFactory.create(new URL(url)));
 
         // 이미지 크기와 정렬 설정

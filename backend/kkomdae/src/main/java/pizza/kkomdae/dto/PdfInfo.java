@@ -23,6 +23,7 @@ public class PdfInfo {
     private int mouseCount;
     private int bagCount;
     private int mousePadCount;
+    private String description;
     private LocalDate returnDate;
     private LocalDate rentDate;
     private List<Photo>photos;
@@ -48,5 +49,6 @@ public class PdfInfo {
         }else{
             this.rentDate = result.getDate();
         }
+        this.description = result.getDescription();
     }
 }
